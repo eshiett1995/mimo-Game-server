@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>GAMEBEAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.2/plyr.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen and (max-width: 768px)" href="style/GAMBEAT-mobile.css" />
+    <link rel="stylesheet" type="text/css" media="screen and (min-width: 1100px)" href="style/GAMBEAT-widescreen.css" />
+    <link rel="stylesheet" type="text/css" href="style/GAMBEAT.css" />
+    <link rel="stylesheet" type="text/css" href="/style/animate.css" />
+    <script src="script/GAMBEAT.js"></script>
+</head>
+
+<body id="home">
+<div>
+    <!-- navbar -->
+    <nav id="navbar" class="pl-5">
+        <h3>Gam<span class="beat">beat</span></h3>
+        <ul>
+            <li><a id="home-link" href="#home" class="trn">home nav menu</a></li>
+            <li><a id="what-we-offer-link" href="#what-we-offer" class="trn">what we offer nav menu</a></li>
+            <li><a id="how-to-play-link" href="#how-to-play" class="trn">how to play nav menu</a></li>
+            <li><a id="contact-us-link" href="#contact-us" class="trn">contact us nav menu</a></li>
+            <a id="country-dropdown" title="Country" href="#" class="nav-link has-submenu"
+               aria-haspopup="true" aria-controls="sm-15530205559473606-6" aria-expanded="false">
+                <!-- Country dropdown -->
+                <span>
+            <span><img id="selectedCountry" width="30" src="image/flags/united-states.svg"
+                       alt="Selected Country"></span>
+          </span>
+                <span class="sub-arrow"></span>
+                <div class="c-dropdown c-dropdown--flip c-dropdown--reversed c-dropdown--sm">
+                    <ul class="c-nav-menu" style="list-style: none; text-align:left">
+                        <li onclick="changeToFrench()" class="c-nav-menu__item">
+                <span class="u-flag-icon u-flag-icon--gh">
+                  <img  width="30" src="image/flags/france.svg" alt="Selected Country">
+                </span>
+                            <span>French</span>
+                        </li>
+                        <li class="c-nav-menu__item" onclick="changeToSpanish()">
+                <span class="u-flag-icon u-flag-icon--gh">
+                  <img  width="30" src="image/flags/spain.svg" alt="Selected Country">
+                </span>
+                            <span>Spanish</span>
+                        </li>
+                        <li class="c-nav-menu__item" onclick="changeToChinese()">
+                <span class="u-flag-icon u-flag-icon--gh">
+                  <img width="30" src="image/flags/china.svg" alt="Selected Country">
+                </span>
+                            <span>Chinese</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </a>
+        </ul>
+    </nav>
+    <div class="c pt-5 pb-5">
+        <!-- header -->
+        <header id="welcome-to-gambeat" class="mb-5">
+            <div class="container">
+                <div class="heading">
+                    <h1>Welcome To</h1>
+                    <h1>Gam<span class="beat">beat</span></h1>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p class="text-sm-left trn" style="line-height: 250%">welcome note</p>
+                    </div>
+                    <div class="col-sm-6" style="position: absolute">
+                        <img id="game-carousel" class="animated infinite bounce delay-2s" src="image/games/angry-bird.png"
+                             width="350px" alt="games">
+
+                    </div>
+
+                </div>
+                <button type="button" class="btn btn-md btn-primary transition-3d-hover trn">login button message</button>
+                <button type="button" class="btn btn-md btn-outline-primary transition-3d-hover trn">sign up button message</button>
+
+            </div>
+        </header>
+    </div>
+
+    <!-- what we offer -->
+    <section id="what-we-offer" class="container mt-5 mb-5">
+        <h1 class="mb-5 trn">what we offer header</h1>
+        <div class="mb-4">
+            <div class="card-deck">
+                <div class="card bg-white shadow-sm transition-3d-hover">
+                    <div class="card-body text-center row ">
+              <span class="py-2 px-2">
+                <img width="60" src="/front-office/image/how-to-play/success.svg" alt="Selected Country">
+              </span>
+               <span style="word-wrap: break-word" class="py-2 px-2 trn">compete message</span>
+                    </div>
+                </div>
+                <div class="card bg-white shadow-sm transition-3d-hover">
+                    <div class="card-body text-center row ">
+              <span class="py-2 px-2">
+                <img width="60" src="/front-office/image/how-to-play/location.svg" alt="Selected Country">
+              </span>
+                        <span style="word-wrap: break-word" class="py-2 px-2 trn">stay connected message</span>
+                    </div>
+                </div>
+                <div class="card bg-white shadow-sm transition-3d-hover">
+                    <div class="card-body text-center row ">
+              <span class="py-2 px-2">
+                <img width="60" src="/front-office/image/how-to-play/location.svg" alt="Selected Country">
+              </span>
+                        <span style="word-wrap: break-word" class="py-2 px-2">
+
+              </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="card-deck">
+                <div class="card bg-white shadow-sm transition-3d-hover">
+                    <div class="card-body text-center row ">
+              <span class="py-2 px-2">
+                <img width="60" src="/front-office/image/how-to-play/money-bag.svg" alt="Selected Country">
+              </span>
+                    <span style="word-wrap: break-word" class="py-2 px-2 trn">earn a living message</span>
+                    </div>
+                </div>
+                <div class="card bg-white shadow-sm transition-3d-hover">
+                    <div class="card-body text-center row ">
+              <span class="py-2 px-2">
+                <img width="60" src="/front-office/image/how-to-play/chat.svg" alt="Selected Country">
+              </span>
+                    <span style="word-wrap: break-word" class="py-2 px-2 trn">chat and socialize message</span>
+                    </div>
+                </div>
+                <div class="card bg-white shadow-sm transition-3d-hover">
+                    <div class="card-body text-center row ">
+              <span class="py-2 px-2">
+                <img width="60" src="/front-office/image/how-to-play/jigsaw.svg" alt="Selected Country">
+              </span>
+                  <span style="word-wrap: break-word" class="py-2 px-2 trn">catalogue of games message</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+    <!-- how to play -->
+
+    <section id="how-to-play" class=" mt-5 mb-5 pt-1 shadow-sm">
+        <div class="container">
+            <div style="position: absolute;">
+                <img style="position: absolute; top: -77px; left : -150px" src="/front-office/image/games/robot-peek.png" width="100px"
+                     alt="games">
+
+            </div>
+            <div class="heading mb-5">
+                <h1 class="trn">how to play header</h1>
+            </div>
+
+            <div style="width:700px; height: 500px; margin:auto">
+                <div class="plyr__video-embed shadow-lg" id="player">
+                    <iframe
+                    src="https://www.youtube.com/embed/ItkKf162LDU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+                    allowtransparency ></iframe>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+
+    <!-- contact us -->
+    <section name="contact-us" id="contact-us" class="aliceblue mt-5 mb-5">
+        <div class="container">
+            <div class="heading">
+                <h1 class="trn">contact us header</h1>
+            </div>
+
+            <p class="trn">contact us message</p>
+            <div id="four-center">
+                <div class="four-center_inner">
+                    <i class="four-items four-center_icon fas fa-map-marker-alt shadow-sm"></i>
+                    <span>Road 40, H36, VGC, Lagos, Nigeria</span>
+                </div>
+                <div class="four-center_inner">
+                    <i class="four-items four-center_icon fas fa-phone-square"></i>
+                    <span>+2348098516969</span>
+                </div>
+                <div class="four-center_inner">
+                    <i class="four-items four-center_icon fab fa-skype"></i> <span>Gambeat</span>
+                </div>
+                <div class="four-center_inner">
+                    <i class="four-items four-center_icon fas fa-envelope"></i>
+                    <span>info@Gambeat.com</span>
+                </div>
+            </div>
+            <div id="form_container">
+                <div class="items">
+                    <form action="">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Recipient's username"
+                                   aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text">jerry1987</span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Sender's email"
+                                   aria-label="Sender's email" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text">@example.com</span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Subject"
+                                   aria-label="Subject" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">I need help</span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <select class="custom-select" id="inputGroupSelect02">
+                                <option selected>Choose...</option>
+                                <option value="1">Excellent</option>
+                                <option value="2">Good</option>
+                                <option value="3">Average</option>
+                                <option value="4">Bad</option>
+                                <option value="5">Horrible</option>
+                            </select>
+                            <div class="input-group-append">
+                                <label class="input-group-text" for="inputGroupSelect02">Options</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="items">
+                    <div class="form-group">
+                        <textarea class="form-control" name="Message" id="" cols="60" rows="10" placeholder="Message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-md btn-primary transition-3d-hover trn">submit button message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer id="end">
+        <div id="footer-container">
+            <div class="footer-items">
+                <i class="five-item facebook fab fa-facebook"></i>
+                <i class="five-item twitter fab fa-twitter-square"></i>
+                <i class="five-item google-plus fab fa-google-plus-square"></i>
+                <i class="five-item snap-chat fab fa-instagram"></i>
+            </div>
+            <div class="footer-items">
+                <div class="footer-right">
+                    <i class="five-item-right far fa-copyright footer-right"></i>
+                    <span class="five-item-right footer-right">2019 Gambeat</span>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+</div>
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://cdn.plyr.io/3.5.2/plyr.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script src="script/dictionary.js"></script>
+
+<script src="/generic-assets/js/vendors/translate/jquery.translate.js"></script>
+
+<script>
+
+    $("#country-dropdown").mouseover(function () {
+
+        $(".c-dropdown").css("opacity", "1");
+        $(".c-dropdown").css("visibility", "visible");
+
+        setTimeout(function () {
+            if ($('.c-dropdown:hover').length != 0) {
+                // do something ;)
+            } else{
+                $(".c-dropdown").css("opacity", "0");
+                $(".c-dropdown").css("visibility", "visible");
+            }
+
+        }, 1000);
+    });
+
+</script>
+
+<script>
+
+
+    var translator = $('body').translate({lang: "english", t: dictionary}); //use English
+
+
+    function changeToFrench() {
+
+        translator.lang("french"); //change to French
+        event.preventDefault();
+    }
+
+    function changeToChinese() {
+
+        translator.lang("chinese"); //change to Chinese
+        event.preventDefault();
+    }
+
+    function changeToSpanish() {
+
+        translator.lang("spanish"); //change to Spanish
+        event.preventDefault();
+    }
+</script>
+</body>
+
+</html>
