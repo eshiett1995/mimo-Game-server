@@ -7,6 +7,8 @@ public class User {
     private Enum.LoginType loginType;
     private String email;
     private Wallet wallet;
+    private Statistics statistics;
+
 
     public String getUsername() {
         return username;
@@ -56,4 +58,7 @@ public class User {
         this.wallet = wallet;
     }
 
+    public Statistics getStatistics() { return statistics;}
+
+    public void setStatistics(Statistics statistics) {this.statistics = statistics; }
 }

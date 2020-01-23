@@ -30,4 +30,12 @@ public class RankController {
         LeaderBoardResponse leaderBoardResponse = new LeaderBoardResponse(ranks, userRank);
         return new ResponseEntity<>(leaderBoardResponse, HttpStatus.OK);
     }
+
+
+    /***********************
+     *
+     * POST HIGH SCORE API
+     *
+     *
+     * *********************/
 }

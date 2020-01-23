@@ -9,6 +9,10 @@ public class ProfileResponse {
     private String email;
     private String loginProvider;
     private long walletBalance;
+    private long wins;
+    private long losses;
+    private long draws;
+    private long highestScore;
 
 
     public ProfileResponse(User user){
@@ -17,6 +21,11 @@ public class ProfileResponse {
         this.email = user.getEmail();
         this.loginProvider = "Facebook";
         this.walletBalance = user.getWallet().getBalance();
+        this.wins = user.getStatistics().getWins();
+        this.losses = user.getStatistics().getLosses();
+        this.draws = user.getStatistics().getDraws();
+        this.highestScore = user.getStatistics().getHighestScore();
+
     }
 
     public String getFirstName() {
@@ -57,5 +66,37 @@ public class ProfileResponse {
 
     public void setWalletBalance(long walletBalance) {
         this.walletBalance = walletBalance;
+    }
+
+    public long getWins() {
+        return wins;
+    }
+
+    public void setWins(long wins) {
+        this.wins = wins;
+    }
+
+    public long getLosses() {
+        return losses;
+    }
+
+    public void setLosses(long losses) {
+        this.losses = losses;
+    }
+
+    public long getDraws() {
+        return draws;
+    }
+
+    public void setDraws(long draws) {
+        this.draws = draws;
+    }
+
+    public long getHighestScore() {
+        return highestScore;
+    }
+
+    public void setHighestScore(long highestScore) {
+        this.highestScore = highestScore;
     }
 }
