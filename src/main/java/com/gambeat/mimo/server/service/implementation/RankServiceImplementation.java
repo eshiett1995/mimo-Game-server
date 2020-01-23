@@ -16,6 +16,16 @@ public class RankServiceImplementation implements RankService {
     RankRepository rankRepository;
 
     @Override
+    public Rank save(Rank rank) {
+        return rankRepository.save(rank);
+    }
+
+    @Override
+    public Rank update(Rank rank) {
+        return rankRepository.save(rank);
+    }
+
+    @Override
     public List<Rank> getTopTwentyPlayers() {
         return rankRepository.findFirst20ByScoreDesc();
     }

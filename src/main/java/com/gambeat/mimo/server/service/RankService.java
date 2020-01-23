@@ -10,6 +10,10 @@ import java.util.List;
 @Service
 public interface RankService {
 
+    Rank save(Rank rank);
+
+    Rank update(Rank rank);
+
     List<Rank> getTopTwentyPlayers();
 
     Rank getUserRank(User user);

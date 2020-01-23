@@ -3,17 +3,20 @@ package com.gambeat.mimo.server.controller;
 
 import com.gambeat.mimo.server.model.Rank;
 import com.gambeat.mimo.server.model.User;
+import com.gambeat.mimo.server.model.request.HighScoreRequest;
 import com.gambeat.mimo.server.model.response.LeaderBoardResponse;
+import com.gambeat.mimo.server.model.response.ResponseModel;
+import com.gambeat.mimo.server.repository.UserRepository;
 import com.gambeat.mimo.server.service.RankService;
+import com.gambeat.mimo.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/leader-board")
@@ -21,6 +24,9 @@ public class RankController {
 
     @Autowired
     RankService rankService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping(produces = "application/json")
     public @ResponseBody
@@ -32,10 +38,37 @@ public class RankController {
     }
 
 
-    /***********************
-     *
-     * POST HIGH SCORE API
-     *
-     *
-     * *********************/
+
+    @PostMapping(produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<ResponseModel> saveHighScore(@RequestBody HighScoreRequest highScoreRequest) {
+
+
+        User foundUser = userService.getUserByEmail("email");
+
+        if(foundUser.getStatistics().getHighestScore() < highScoreRequest.getScore()){
+            long newHighScore = highScoreRequest.getScore();
+            foundUser.getStatistics().setHighestScore(newHighScore);
+            userService.update(foundUser);
+        }
+
+        Rank foundUserRank = rankService.getUserRank(foundUser);
+
+        if("if rank is not found" == ""){
+            Rank newRank = new Rank();
+            newRank.setUser(foundUser);
+            newRank.setPosition(0);
+            newRank.setScore(highScoreRequest.getScore());
+
+        }else if(foundUserRank.getScore() < highScoreRequest.getScore()){
+            long newHighScore = highScoreRequest.getScore();
+            foundUserRank.setScore(newHighScore);
+            rankService.update(foundUserRank);
+        }
+
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.setSuccessful(true);
+        responseModel.setMessage("High score has been Successfully Saved");
+        return new ResponseEntity<>(responseModel, HttpStatus.OK);
+    }
 }

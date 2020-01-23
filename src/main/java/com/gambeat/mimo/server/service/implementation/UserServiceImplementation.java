@@ -20,6 +20,11 @@ public class UserServiceImplementation  implements UserService{
     }
 
     @Override
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public User getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
