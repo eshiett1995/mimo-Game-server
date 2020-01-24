@@ -1,6 +1,6 @@
-package com.gambeat.mimo.server.model.request;
+package com.gambeat.mimo.server.model;
 
-public class FacebookLoginRequest {
+public class FacebookCredential {
 
     private String firstName;
 
@@ -42,5 +42,3 @@ public class FacebookLoginRequest {
         this.id = id;
     }
 }
-
-

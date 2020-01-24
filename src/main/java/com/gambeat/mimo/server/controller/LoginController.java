@@ -29,8 +29,8 @@ public class LoginController {
     @PostMapping(value = "/facebook", produces = "application/json") public @ResponseBody
     ResponseEntity<ResponseModel> getEvent(@RequestBody FacebookLoginRequest faceBookLoginRequest) {
       User user = new User();
-      user.setFirstName(faceBookLoginRequest.getFirst_name());
-      user.setLastName(faceBookLoginRequest.getLast_name());
+      user.setFirstName(faceBookLoginRequest.getFirstName());
+      user.setLastName(faceBookLoginRequest.getLastName());
       user.setEmail(faceBookLoginRequest.getEmail());
       user.setLoginType(Enum.LoginType.Facebook);
 

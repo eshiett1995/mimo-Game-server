@@ -8,6 +8,7 @@ public class User {
     private String email;
     private Wallet wallet;
     private Statistics statistics;
+    private FacebookCredential facebookCredential;
 
 
     public String getUsername() {
@@ -61,4 +62,12 @@ public class User {
     public Statistics getStatistics() { return statistics;}
 
     public void setStatistics(Statistics statistics) {this.statistics = statistics; }
+
+    public FacebookCredential getFacebookCredential() {
+        return facebookCredential;
+    }
+
+    public void setFacebookCredential(FacebookCredential facebookCredential) {
+        this.facebookCredential = facebookCredential;
+    }
 }

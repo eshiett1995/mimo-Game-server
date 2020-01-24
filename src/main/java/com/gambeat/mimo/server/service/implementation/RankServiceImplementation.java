@@ -27,7 +27,7 @@ public class RankServiceImplementation implements RankService {
 
     @Override
     public List<Rank> getTopTwentyPlayers() {
-        return rankRepository.findFirst20ByScoreDesc();
+        return rankRepository.findRankByHighestScore(20);
     }
 
     @Override

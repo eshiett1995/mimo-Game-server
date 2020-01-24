@@ -6,7 +6,6 @@ import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.HighScoreRequest;
 import com.gambeat.mimo.server.model.response.LeaderBoardResponse;
 import com.gambeat.mimo.server.model.response.ResponseModel;
-import com.gambeat.mimo.server.repository.UserRepository;
 import com.gambeat.mimo.server.service.RankService;
 import com.gambeat.mimo.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/leader-board")
