@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 
@@ -33,7 +33,7 @@ public class JwtServiceImplementation implements JwtService {
         Date now = new Date(nowMillis);
 
         //We will sign our JWT with our ApiKey secret
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtSecret);
+        byte[] apiKeySecretBytes = Base64.getDecoder().decode(jwtSecret);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
@@ -52,7 +52,7 @@ public class JwtServiceImplementation implements JwtService {
     public Claims decodeToken(String token) {
         //This line will throw an exception if it is not a signed JWS (as expected)
         Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(jwtSecret))
+                .setSigningKey(Base64.getDecoder().decode(jwtSecret))
                 .parseClaimsJws(token).getBody();
         return claims;
     }
