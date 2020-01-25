@@ -11,4 +11,9 @@ public class Enum {
         Facebook,
         Google
     }
+
+    public enum lauv{
+        Facebook,
+        Google
+    }
 }
