@@ -22,7 +22,7 @@ public class MimoSeverApplication {
 
 
 class EchoServer extends Thread {
-
+     //crisp for me
 	private DatagramSocket socket;
 	private boolean running;
 	private byte[] buf = new byte[256];
