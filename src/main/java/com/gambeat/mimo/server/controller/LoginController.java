@@ -2,6 +2,7 @@ package com.gambeat.mimo.server.controller;
 
 
 import com.gambeat.mimo.server.model.Enum;
+import com.gambeat.mimo.server.model.FacebookCredential;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.FacebookLoginRequest;
 import com.gambeat.mimo.server.model.response.ResponseModel;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/auth")
 public class LoginController {
@@ -28,18 +31,34 @@ public class LoginController {
 
     @PostMapping(value = "/facebook", produces = "application/json") public @ResponseBody
     ResponseEntity<ResponseModel> getEvent(@RequestBody FacebookLoginRequest faceBookLoginRequest) {
-      User user = new User();
-      user.setFirstName(faceBookLoginRequest.getFirstName());
-      user.setLastName(faceBookLoginRequest.getLastName());
-      user.setEmail(faceBookLoginRequest.getEmail());
-      user.setLoginType(Enum.LoginType.Facebook);
+        User user = new User();
+        ResponseModel responseModel = new ResponseModel();
+        Optional<User>  optionalUser = userService.findExistingFacebookUser(faceBookLoginRequest.getId(), faceBookLoginRequest.getEmail());
 
-      User savedUser = userService.save(user);
+        if(optionalUser.isPresent()){
+            responseModel.setMessage("Log in is successful");
+            responseModel.setJtwToken(jwtService.createToken(optionalUser.get()));
+            responseModel.setSuccessful(true);
+        }else{
 
-      ResponseModel responseModel = new ResponseModel();
-      responseModel.setMessage("Log in is successful");
-      responseModel.setJtwToken(jwtService.createToken(savedUser));
-      responseModel.setSuccessful(true);
+            FacebookCredential facebookCredential = new FacebookCredential();
+            facebookCredential.setEmail(faceBookLoginRequest.getEmail());
+            facebookCredential.setId(faceBookLoginRequest.getId());
+            facebookCredential.setFirstName(faceBookLoginRequest.getFirstName());
+            facebookCredential.setLastName(faceBookLoginRequest.getLastName());
+
+            user.setFirstName(faceBookLoginRequest.getFirstName());
+            user.setLastName(faceBookLoginRequest.getLastName());
+            user.setEmail(faceBookLoginRequest.getEmail());
+            user.setLoginType(Enum.LoginType.Facebook);
+            user.setFacebookCredential(facebookCredential);
+
+            User savedUser = userService.save(user);
+
+            responseModel.setMessage("Registration is successful");
+            responseModel.setJtwToken(jwtService.createToken(savedUser));
+            responseModel.setSuccessful(true);
+        }
 
       return new ResponseEntity<>(responseModel, HttpStatus.OK);
     }
