@@ -5,6 +5,10 @@ import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.repository.RankRepository;
 import com.gambeat.mimo.server.service.RankService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +31,7 @@ public class RankServiceImplementation implements RankService {
 
     @Override
     public List<Rank> getTopTwentyPlayers() {
-        return rankRepository.findRankByHighestScore(20);
+        return rankRepository.findAll(PageRequest.of(1, 20, Sort.by("score").descending())).getContent();
     }
 
     @Override

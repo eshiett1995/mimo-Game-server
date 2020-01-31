@@ -51,8 +51,11 @@ public class JwtServiceImplementation implements JwtService {
     @Override
     public Claims decodeToken(String token) {
         //This line will throw an exception if it is not a signed JWS (as expected)
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+        byte[] apiKeySecretBytes = Base64.getDecoder().decode(jwtSecret);
+        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         Claims claims = Jwts.parser()
-                .setSigningKey(Base64.getDecoder().decode(jwtSecret))
+                .setSigningKey(signingKey)
                 .parseClaimsJws(token).getBody();
         return claims;
     }

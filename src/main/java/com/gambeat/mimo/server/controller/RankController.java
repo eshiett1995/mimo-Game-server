@@ -6,13 +6,17 @@ import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.HighScoreRequest;
 import com.gambeat.mimo.server.model.response.LeaderBoardResponse;
 import com.gambeat.mimo.server.model.response.ResponseModel;
+import com.gambeat.mimo.server.service.JwtService;
 import com.gambeat.mimo.server.service.RankService;
 import com.gambeat.mimo.server.service.UserService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -25,13 +29,31 @@ public class RankController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    JwtService jwtService;
+
     @GetMapping(produces = "application/json")
     public @ResponseBody
-      ResponseEntity<LeaderBoardResponse> getLeaderBoard() {
-        List<Rank> ranks = rankService.getTopTwentyPlayers();
-        Rank userRank = rankService.getUserRank(new User());
-        LeaderBoardResponse leaderBoardResponse = new LeaderBoardResponse(ranks, userRank);
-        return new ResponseEntity<>(leaderBoardResponse, HttpStatus.OK);
+      ResponseEntity<LeaderBoardResponse> getLeaderBoard(HttpServletRequest request) {
+        LeaderBoardResponse leaderBoardResponse;
+        if(request.getHeader("Authorization") == null) {
+            return new ResponseEntity<>(new LeaderBoardResponse(false, "User not authorized"), HttpStatus.OK);
+        }
+
+        try {
+            jwtService.decodeToken(request.getHeader("Authorization"));
+            List<Rank> ranks = rankService.getTopTwentyPlayers();
+            Rank userRank = rankService.getUserRank(new User());
+            leaderBoardResponse = new LeaderBoardResponse(ranks, userRank);
+            leaderBoardResponse.setMessage("Successful");
+            leaderBoardResponse.setSuccessful(true);
+            return new ResponseEntity<>(leaderBoardResponse, HttpStatus.OK);
+
+        }catch (Exception error){
+            System.out.println(error);
+            return new ResponseEntity<>(new LeaderBoardResponse(false, "User not authorized"), HttpStatus.OK);
+        }
+
     }
 
 

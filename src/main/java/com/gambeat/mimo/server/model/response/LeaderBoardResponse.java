@@ -1,25 +1,40 @@
 package com.gambeat.mimo.server.model.response;
 
 import com.gambeat.mimo.server.model.Rank;
-
+import org.springframework.util.CollectionUtils;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class LeaderBoardResponse {
+public class LeaderBoardResponse extends ResponseModel{
+
+    public LeaderBoardResponse(List<Rank> ranks, Rank rank){
+        if(CollectionUtils.isEmpty(ranks)){
+            this.ranks = Collections.EMPTY_LIST;
+            this.hasRank = !Objects.isNull(rank);
+            this.userRank = Objects.isNull(rank) ? new FormattedRank() : new FormattedRank(rank);
+        }else{
+            for(int index = 0; index < ranks.size(); index++){
+                this.ranks.add(new FormattedRank(ranks.get(index)));
+            }
+            this.hasRank = !Objects.isNull(rank);
+            this.userRank = Objects.isNull(rank) ? new FormattedRank() : new FormattedRank(rank);
+            this.isOnList = ranks.contains(rank);
+        }
+    }
+
+    public LeaderBoardResponse(boolean successful, String message){
+        this.setSuccessful(successful);
+        this.setMessage(message);
+    }
 
     private List<FormattedRank> ranks;
+
+    private boolean hasRank;
 
     private FormattedRank userRank;
 
     private boolean isOnList;
-
-    public LeaderBoardResponse(List<Rank> ranks, Rank rank){
-
-        for(int index = 0; index < ranks.size(); index++){
-            this.ranks.add(new FormattedRank(ranks.get(index)));
-        }
-        this.userRank = new FormattedRank(rank);
-        this.isOnList = ranks.contains(rank);
-    }
 
     public List<FormattedRank> getRanks() {
         return ranks;
@@ -45,6 +60,14 @@ public class LeaderBoardResponse {
         isOnList = onList;
     }
 
+    public boolean isHasRank() {
+        return hasRank;
+    }
+
+    public void setHasRank(boolean hasRank) {
+        this.hasRank = hasRank;
+    }
+
     class FormattedRank {
 
         private String firstname;
@@ -53,7 +76,15 @@ public class LeaderBoardResponse {
         private long score;
         private long position;
 
-        public FormattedRank(Rank rank){
+        private FormattedRank(){
+            this.firstname = "";
+            this.lastname = "";
+            this.email = "";
+            this.score = 0;
+            this.position = 0;
+        }
+
+        private FormattedRank(Rank rank){
             this.firstname = rank.getUser().getFirstName();
             this.lastname = rank.getUser().getLastName();
             this.email = rank.getUser().getEmail();
