@@ -3,6 +3,7 @@ package com.gambeat.mimo.server.controller;
 
 import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.FacebookCredential;
+import com.gambeat.mimo.server.model.Statistics;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.FacebookLoginRequest;
 import com.gambeat.mimo.server.model.response.ResponseModel;
@@ -52,6 +53,8 @@ public class LoginController {
             user.setEmail(faceBookLoginRequest.getEmail());
             user.setLoginType(Enum.LoginType.Facebook);
             user.setFacebookCredential(facebookCredential);
+
+            user.setStatistics(new Statistics());
 
             User savedUser = userService.save(user);
 

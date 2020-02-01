@@ -1,6 +1,9 @@
 package com.gambeat.mimo.server.model;
 
-public class User {
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+public class User extends Default {
     private String username;
     private String firstName;
     private String lastName;

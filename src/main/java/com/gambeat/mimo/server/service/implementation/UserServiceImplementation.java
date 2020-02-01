@@ -28,7 +28,7 @@ public class UserServiceImplementation  implements UserService{
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
 

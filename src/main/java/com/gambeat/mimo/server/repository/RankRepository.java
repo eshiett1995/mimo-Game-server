@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RankRepository extends MongoRepository<Rank, String> {
@@ -14,5 +15,5 @@ public interface RankRepository extends MongoRepository<Rank, String> {
     @Query("sort: {score:-1}, limit: ?0 }")
     List<Rank> findRankByHighestScore(int limit);
 
-    Rank findByUser(User user);
+    Optional<Rank> findByUser(User user);
 }

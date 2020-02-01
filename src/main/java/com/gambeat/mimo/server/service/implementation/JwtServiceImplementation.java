@@ -1,5 +1,6 @@
 package com.gambeat.mimo.server.service.implementation;
 
+import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.service.JwtService;
 import io.jsonwebtoken.Claims;
@@ -13,6 +14,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -36,11 +39,18 @@ public class JwtServiceImplementation implements JwtService {
         byte[] apiKeySecretBytes = Base64.getDecoder().decode(jwtSecret);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
+        Map<String, Object> claims = new HashMap();
+        claims.put("provider", user.getLoginType() == Enum.LoginType.Facebook ? "facebook" : "google");
+        claims.put("provider_credential", user.getLoginType() == Enum.LoginType.Facebook ? user.getFacebookCredential() : "google");
+        claims.put("email", user.getEmail());
         //Let's set the JWT Claims
+        System.out.println("this is the email " + user.getEmail());
         JwtBuilder builder = Jwts.builder().setId(user.getEmail())
                 .setIssuedAt(now)
-                .setSubject("Auth")
+
+                .setClaims(claims)
                 .setIssuer("Gambeat")
+                .setSubject("Auth")
                 .signWith(signingKey, signatureAlgorithm);
 
         //Builds the JWT and serializes it to a compact, URL-safe string

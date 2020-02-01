@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/leader-board")
@@ -41,17 +42,18 @@ public class RankController {
         }
 
         try {
-            jwtService.decodeToken(request.getHeader("Authorization"));
+            Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
             List<Rank> ranks = rankService.getTopTwentyPlayers();
-            Rank userRank = rankService.getUserRank(new User());
-            leaderBoardResponse = new LeaderBoardResponse(ranks, userRank);
+            Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+            if(!optionalUser.isPresent()) return new ResponseEntity<>(new LeaderBoardResponse(false, "User not found"), HttpStatus.OK);
+            Optional<Rank>  optionalRank = rankService.getUserRank(optionalUser.get());
+            leaderBoardResponse = new LeaderBoardResponse(ranks, optionalRank.orElse(null));
             leaderBoardResponse.setMessage("Successful");
             leaderBoardResponse.setSuccessful(true);
             return new ResponseEntity<>(leaderBoardResponse, HttpStatus.OK);
 
         }catch (Exception error){
-            System.out.println(error);
-            return new ResponseEntity<>(new LeaderBoardResponse(false, "User not authorized"), HttpStatus.OK);
+            return new ResponseEntity<>(new LeaderBoardResponse(false, "Oops! unable to get ranks"), HttpStatus.OK);
         }
 
     }
@@ -60,34 +62,50 @@ public class RankController {
 
     @PostMapping(produces = "application/json")
     public @ResponseBody
-    ResponseEntity<ResponseModel> saveHighScore(@RequestBody HighScoreRequest highScoreRequest) {
-
-
-        User foundUser = userService.getUserByEmail("email");
-
-        if(foundUser.getStatistics().getHighestScore() < highScoreRequest.getScore()){
-            long newHighScore = highScoreRequest.getScore();
-            foundUser.getStatistics().setHighestScore(newHighScore);
-            userService.update(foundUser);
+    ResponseEntity<ResponseModel> saveHighScore(@RequestBody HighScoreRequest highScoreRequest, HttpServletRequest request) {
+        if(request.getHeader("Authorization") == null) {
+            return new ResponseEntity<>(new ResponseModel(false, "User not authorized"), HttpStatus.OK);
         }
 
-        Rank foundUserRank = rankService.getUserRank(foundUser);
+        //try{
+            Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
 
-        if("if rank is not found" == ""){
-            Rank newRank = new Rank();
-            newRank.setUser(foundUser);
-            newRank.setPosition(0);
-            newRank.setScore(highScoreRequest.getScore());
+            Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+            if(!optionalUser.isPresent()){
+                return new ResponseEntity<>( new ResponseModel(false,"User not found"), HttpStatus.OK);
+            }
+            User foundUser = optionalUser.get();
+            if(foundUser.getStatistics().getHighestScore() < highScoreRequest.getScore()){
+                long newHighScore = highScoreRequest.getScore();
+                foundUser.getStatistics().setHighestScore(newHighScore);
+                userService.update(foundUser);
+            }
 
-        }else if(foundUserRank.getScore() < highScoreRequest.getScore()){
-            long newHighScore = highScoreRequest.getScore();
-            foundUserRank.setScore(newHighScore);
-            rankService.update(foundUserRank);
-        }
+            Optional<Rank> optionalRank = rankService.getUserRank(foundUser);
+            Rank rank;
 
-        ResponseModel responseModel = new ResponseModel();
-        responseModel.setSuccessful(true);
-        responseModel.setMessage("High score has been Successfully Saved");
-        return new ResponseEntity<>(responseModel, HttpStatus.OK);
+            if(!optionalRank.isPresent()){
+                System.out.println("not present");
+                rank = new Rank();
+                rank.setUser(foundUser);
+                rank.setPosition(0);
+                rank.setScore(highScoreRequest.getScore());
+                rankService.save(rank);
+
+            }else {
+                rank = optionalRank.get();
+                System.out.println("is present");
+                System.out.println("is present " + rank.getId());
+                if(rank.getScore() < highScoreRequest.getScore()) {
+                long newHighScore = highScoreRequest.getScore();
+                    rank.setScore(newHighScore);
+                rankService.update(rank);
+              }
+            }
+            return new ResponseEntity<>( new ResponseModel(true,"High score has been successfully saved"), HttpStatus.OK);
+       //}catch (Exception exception){
+         //   System.out.println(exception);
+           // return new ResponseEntity<>( new ResponseModel(false,"Error occurred saving score"), HttpStatus.OK);
+        //}
     }
 }

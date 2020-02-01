@@ -1,6 +1,9 @@
 package com.gambeat.mimo.server.model;
 
-public class Wallet {
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+public class Wallet extends Default {
     private long balance;
 
     public long getBalance() {

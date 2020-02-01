@@ -6,6 +6,7 @@ import com.gambeat.mimo.server.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface RankService {
@@ -16,7 +17,7 @@ public interface RankService {
 
     List<Rank> getTopTwentyPlayers();
 
-    Rank getUserRank(User user);
+    Optional<Rank> getUserRank(User user);
 
 
 }

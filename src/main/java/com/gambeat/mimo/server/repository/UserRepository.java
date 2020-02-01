@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserRepository extends MongoRepository<User, String>{
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     Optional<User> getFacebookUserByLoginTypeAndFacebookCredentialIdAndFacebookCredentialEmail(Enum.LoginType loginType, String id, String email);
 

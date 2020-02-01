@@ -22,7 +22,7 @@ public class UserController {
     @GetMapping(produces = "application/json")
     public @ResponseBody
     ResponseEntity<ProfileResponse> getUserProfile() {
-        User foundUser = userService.getUserByEmail("email");
+        User foundUser = userService.getUserByEmail("email").get();
         ProfileResponse profileResponse = new ProfileResponse(foundUser);
         return new ResponseEntity<>(profileResponse, HttpStatus.OK);
     }

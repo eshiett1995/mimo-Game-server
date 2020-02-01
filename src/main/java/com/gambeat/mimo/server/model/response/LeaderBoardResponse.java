@@ -2,6 +2,8 @@ package com.gambeat.mimo.server.model.response;
 
 import com.gambeat.mimo.server.model.Rank;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +30,7 @@ public class LeaderBoardResponse extends ResponseModel{
         this.setMessage(message);
     }
 
-    private List<FormattedRank> ranks;
+    private List<FormattedRank> ranks = new ArrayList<>();
 
     private boolean hasRank;
 

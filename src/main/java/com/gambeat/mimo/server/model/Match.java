@@ -1,8 +1,11 @@
 package com.gambeat.mimo.server.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 
-public class Match {
+@Document
+public class Match extends Default {
     private String name;
     private boolean isCompetition;
     private User winner;

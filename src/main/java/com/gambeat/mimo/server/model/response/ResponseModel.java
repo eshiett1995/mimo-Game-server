@@ -2,6 +2,12 @@ package com.gambeat.mimo.server.model.response;
 
 public class ResponseModel {
 
+    public ResponseModel(){}
+    public ResponseModel(boolean isSuccessful, String message){
+        this.isSuccessful = isSuccessful;
+        this.message = message;
+    }
+
     private String message;
     private boolean isSuccessful;
     private String jtwToken;

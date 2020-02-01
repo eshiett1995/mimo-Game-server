@@ -1,7 +1,12 @@
 package com.gambeat.mimo.server.model;
 
-public class Rank {
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document
+public class Rank extends Default {
+
+    @DBRef
     private User user;
     private long score;
     private  long position;

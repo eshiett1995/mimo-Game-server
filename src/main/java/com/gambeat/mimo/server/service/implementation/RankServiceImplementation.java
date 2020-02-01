@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RankServiceImplementation implements RankService {
@@ -31,11 +32,11 @@ public class RankServiceImplementation implements RankService {
 
     @Override
     public List<Rank> getTopTwentyPlayers() {
-        return rankRepository.findAll(PageRequest.of(1, 20, Sort.by("score").descending())).getContent();
+        return rankRepository.findAll(PageRequest.of(0, 20, Sort.by("score").descending())).getContent();
     }
 
     @Override
-    public Rank getUserRank(User user) {
+    public Optional<Rank> getUserRank(User user) {
         return rankRepository.findByUser(user);
     }
 }
