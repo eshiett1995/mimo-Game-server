@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WelcomeController {
-    @GetMapping(value = "/{id}")
-    public  String getEvent() {
+    @GetMapping(value = "/")
+    public  String getWelcomePage() {
        return "index";
     }
 }

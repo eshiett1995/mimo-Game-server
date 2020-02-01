@@ -10,6 +10,8 @@ public interface UserRepository extends MongoRepository<User, String>{
 
     Optional<User> getUserByEmail(String email);
 
+    Optional<User> getUserById(String id);
+
     Optional<User> getFacebookUserByLoginTypeAndFacebookCredentialIdAndFacebookCredentialEmail(Enum.LoginType loginType, String id, String email);
 
 }
