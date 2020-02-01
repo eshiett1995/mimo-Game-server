@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,6 +32,7 @@ public class UserController {
     @GetMapping(produces = "application/json")
     public @ResponseBody
     ResponseEntity<ProfileResponse> getUserProfile(HttpServletRequest request) {
+        System.out.println("i am here it");
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new ProfileResponse(false, "User not authorized"), HttpStatus.OK);
         }
@@ -39,6 +41,26 @@ public class UserController {
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
             if(!optionalUser.isPresent()) return new ResponseEntity<>(new ProfileResponse(false, "User not found"), HttpStatus.OK);
             ProfileResponse profileResponse = new ProfileResponse(optionalUser.get());
+            profileResponse.setMessage("Success");
+            profileResponse.setSuccessful(true);
+            return new ResponseEntity<>(profileResponse, HttpStatus.OK);
+        }catch (Exception exception){
+            return new ResponseEntity<>(new ProfileResponse(false, "Oops! failed to fetch user profile"), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(path="/{id}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<ProfileResponse> getUserProfileById(HttpServletRequest request, @PathVariable("id") String id) {
+        if(request.getHeader("Authorization") == null) {
+            return new ResponseEntity<>(new ProfileResponse(false, "User not authorized"), HttpStatus.OK);
+        }
+        try {
+            Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+            Optional<User> optionalUser = userService.getUserById(id);
+            if(!optionalUser.isPresent()) return new ResponseEntity<>(new ProfileResponse(false, "User not found"), HttpStatus.OK);
+            ProfileResponse profileResponse = new ProfileResponse(optionalUser.get());
+            profileResponse.setWalletBalance(0);
             profileResponse.setMessage("Success");
             profileResponse.setSuccessful(true);
             return new ResponseEntity<>(profileResponse, HttpStatus.OK);

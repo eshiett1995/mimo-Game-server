@@ -10,4 +10,5 @@ public interface UserService {
     User update(User user);
     Optional<User> getUserByEmail(String email);
     Optional<User> findExistingFacebookUser(String id, String email);
+    Optional<User> getUserById(String id);
 }

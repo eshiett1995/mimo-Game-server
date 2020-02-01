@@ -36,4 +36,9 @@ public class UserServiceImplementation  implements UserService{
     public Optional<User> findExistingFacebookUser(String id, String email) {
         return userRepository.getFacebookUserByLoginTypeAndFacebookCredentialIdAndFacebookCredentialEmail(Enum.LoginType.Facebook, id,email);
     }
+
+    @Override
+    public Optional<User> getUserById(String id) {
+        return userRepository.getUserById(id);
+    }
 }
