@@ -32,7 +32,7 @@ public class LoginController {
 
     @PostMapping(value = "/facebook", produces = "application/json") public @ResponseBody
     ResponseEntity<ResponseModel> getEvent(@RequestBody FacebookLoginRequest faceBookLoginRequest) {
-        try {
+        //try {
             User user = new User();
             ResponseModel responseModel = new ResponseModel();
             Optional<User> optionalUser = userService.findExistingFacebookUser(faceBookLoginRequest.getId(), faceBookLoginRequest.getEmail());
@@ -68,8 +68,8 @@ public class LoginController {
                 responseModel.setSuccessful(true);
             }
             return new ResponseEntity<>(responseModel, HttpStatus.OK);
-        }catch (Exception exception){
-            return new ResponseEntity<>(new ResponseModel(false, "An error occurred registering user"), HttpStatus.OK);
-        }
+        //}catch (Exception exception){
+          //  return new ResponseEntity<>(new ResponseModel(false, "An error occurred registering user"), HttpStatus.OK);
+        //}
     }
 }
