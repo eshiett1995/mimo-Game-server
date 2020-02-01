@@ -2,7 +2,25 @@ package com.gambeat.mimo.server.model.response;
 
 import com.gambeat.mimo.server.model.User;
 
-public class ProfileResponse {
+import java.util.Objects;
+
+public class ProfileResponse extends ResponseModel {
+
+    public ProfileResponse(boolean isSuccessful, String message){
+        this.setSuccessful(isSuccessful);
+        this.setMessage(message);
+    }
+    public ProfileResponse(User user){
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.loginProvider = "Facebook";
+        this.walletBalance = Objects.isNull(user.getWallet()) ? 0 : user.getWallet().getBalance();
+        this.wins = user.getStatistics().getWins();
+        this.losses = user.getStatistics().getLosses();
+        this.draws = user.getStatistics().getDraws();
+        this.highestScore = user.getStatistics().getHighestScore();
+    }
 
     private String firstName;
     private String lastName;
@@ -14,19 +32,6 @@ public class ProfileResponse {
     private long draws;
     private long highestScore;
 
-
-    public ProfileResponse(User user){
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.loginProvider = "Facebook";
-        this.walletBalance = user.getWallet().getBalance();
-        this.wins = user.getStatistics().getWins();
-        this.losses = user.getStatistics().getLosses();
-        this.draws = user.getStatistics().getDraws();
-        this.highestScore = user.getStatistics().getHighestScore();
-
-    }
 
     public String getFirstName() {
         return firstName;

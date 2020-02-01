@@ -1,5 +1,6 @@
 package com.gambeat.mimo.server.model;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -9,6 +10,7 @@ public class User extends Default {
     private String lastName;
     private Enum.LoginType loginType;
     private String email;
+    @DBRef
     private Wallet wallet;
     private Statistics statistics;
     private FacebookCredential facebookCredential;
