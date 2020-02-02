@@ -37,6 +37,12 @@ var dictionary = {
         spanish: "Mantente conectado con los jugadores en nuestra plataforma.",
         english: "Stay connected with gamers on our platform."
     },
+    "instant withdraw message": {
+        chinese: "随时 可以 随时 随时。。。。。。。",
+        french: "Retirez instantanément vos fonds de votre portefeuille à tout moment et en tout temps.",
+        spanish: "Retira instantáneamente tus fondos de tu billetera en cualquier momento y cualquier dia.",
+        english: "Instantly Withdraw funds from your wallet anytime anyday."
+    },
     "earn a living message": {
         chinese: "遊戲不僅應該是有趣的，你可以從中獲益。",
         french: "Le jeu ne doit pas seulement être amusant, vous pouvez en tirer profit.",
@@ -50,11 +56,12 @@ var dictionary = {
         english: "Chat and socialize with various gamers on our platform."
     },
     "catalogue of games message": {
-        chinese: "我們有很多遊戲。",
-        french: "Nous avons un large catalogue de jeux.",
-        spanish: "Disponemos de un amplio catálogo de juegos.",
-        english: "We have a wide catalogue of games."
+        chinese: "有趣 的 休闲 游戏 繁多。。",
+        french: "Large catalogue de jeux occasionnels amusants à jouer.",
+        spanish: "Amplio catálogo de divertidos juegos casuales para jugar.",
+        english: "Wide catalogue of fun casual games to play."
     },
+
     "how to play header": {
         chinese: "怎麼玩",
         french: "Comment jouer",
