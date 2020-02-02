@@ -12,8 +12,9 @@ public class Enum {
         Google
     }
 
-    public enum lauv{
-        Facebook,
-        Google
+    public enum MatchStatus{
+        Started,
+        Ended,
+        Pending,
     }
 }

@@ -1,5 +1,6 @@
 package com.gambeat.mimo.server.model;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -8,9 +9,11 @@ import java.util.ArrayList;
 public class Match extends Default {
     private String name;
     private boolean isCompetition;
-    private User winner;
     private Long entryFee;
-    private ArrayList<User> winners;
+    private Enum.MatchType matchType;
+    private Enum.MatchStatus matchStatus;
+    private ArrayList<MatchSeat> matchSeat = new ArrayList<>();
+    private ArrayList<MatchSeat> winners = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -28,14 +31,6 @@ public class Match extends Default {
         isCompetition = competition;
     }
 
-    public User getWinner() {
-        return winner;
-    }
-
-    public void setWinner(User winner) {
-        this.winner = winner;
-    }
-
     public Long getEntryFee() {
         return entryFee;
     }
@@ -44,11 +39,35 @@ public class Match extends Default {
         this.entryFee = entryFee;
     }
 
-    public ArrayList<User> getWinners() {
+    public ArrayList<MatchSeat> getWinners() {
         return winners;
     }
 
-    public void setWinners(ArrayList<User> winners) {
+    public void setWinners(ArrayList<MatchSeat> winners) {
         this.winners = winners;
+    }
+
+    public Enum.MatchStatus getMatchStatus() {
+        return matchStatus;
+    }
+
+    public void setMatchStatus(Enum.MatchStatus matchStatus) {
+        this.matchStatus = matchStatus;
+    }
+
+    public Enum.MatchType getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(Enum.MatchType matchType) {
+        this.matchType = matchType;
+    }
+
+    public ArrayList<MatchSeat> getMatchSeat() {
+        return matchSeat;
+    }
+
+    public void setMatchSeat(ArrayList<MatchSeat> matchSeat) {
+        this.matchSeat = matchSeat;
     }
 }

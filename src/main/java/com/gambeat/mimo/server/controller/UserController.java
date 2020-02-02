@@ -32,7 +32,6 @@ public class UserController {
     @GetMapping(produces = "application/json")
     public @ResponseBody
     ResponseEntity<ProfileResponse> getUserProfile(HttpServletRequest request) {
-        System.out.println("i am here it");
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new ProfileResponse(false, "User not authorized"), HttpStatus.OK);
         }

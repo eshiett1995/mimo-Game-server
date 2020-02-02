@@ -3,6 +3,8 @@ package com.gambeat.mimo.server.model;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+
 @Document
 public class User extends Default {
     private String username;
@@ -14,6 +16,8 @@ public class User extends Default {
     private Wallet wallet;
     private Statistics statistics;
     private FacebookCredential facebookCredential;
+    @DBRef
+    private ArrayList<Match> pendingMatch = new ArrayList<>();
 
 
     public String getUsername() {
@@ -74,5 +78,13 @@ public class User extends Default {
 
     public void setFacebookCredential(FacebookCredential facebookCredential) {
         this.facebookCredential = facebookCredential;
+    }
+
+    public ArrayList<Match> getPendingMatch() {
+        return pendingMatch;
+    }
+
+    public void setPendingMatch(ArrayList<Match> pendingMatch) {
+        this.pendingMatch = pendingMatch;
     }
 }

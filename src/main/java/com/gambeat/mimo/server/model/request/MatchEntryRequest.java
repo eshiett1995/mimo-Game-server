@@ -2,7 +2,7 @@ package com.gambeat.mimo.server.model.request;
 
 import com.gambeat.mimo.server.model.Enum;
 
-public class MatchEntryData {
+public class MatchEntryRequest {
 
     private long userID;
     private long entryFee;
