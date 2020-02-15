@@ -72,42 +72,42 @@ public class LeaderBoardResponse extends ResponseModel{
 
     class FormattedRank {
 
-        private String firstname;
-        private String lastname;
+        private String firstName;
+        private String lastName;
         private String email;
         private long score;
         private long position;
 
         private FormattedRank(){
-            this.firstname = "";
-            this.lastname = "";
+            this.firstName = "";
+            this.lastName = "";
             this.email = "";
             this.score = 0;
             this.position = 0;
         }
 
         private FormattedRank(Rank rank){
-            this.firstname = rank.getUser().getFirstName();
-            this.lastname = rank.getUser().getLastName();
+            this.firstName = rank.getUser().getFirstName();
+            this.lastName = rank.getUser().getLastName();
             this.email = rank.getUser().getEmail();
             this.score = rank.getScore();
             this.position = rank.getPosition();
         }
 
-        public String getFirstname() {
-            return firstname;
+        public String getFirstName() {
+            return firstName;
         }
 
-        public void setFirstname(String firstname) {
-            this.firstname = firstname;
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
         }
 
-        public String getLastname() {
-            return lastname;
+        public String getLastName() {
+            return lastName;
         }
 
-        public void setLastname(String lastname) {
-            this.lastname = lastname;
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
         }
 
         public String getEmail() {

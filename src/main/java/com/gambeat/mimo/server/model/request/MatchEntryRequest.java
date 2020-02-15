@@ -2,18 +2,40 @@ package com.gambeat.mimo.server.model.request;
 
 import com.gambeat.mimo.server.model.Enum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MatchEntryRequest {
 
-    private long userID;
+    private String matchID;
+    private String userID;
+    private List<Integer> scores = new ArrayList<>();
     private long entryFee;
     private Enum.MatchType matchType;
 
-    public long getUserID() {
+
+    public String getMatchID() {
+        return matchID;
+    }
+
+    public void setMatchID(String matchID) {
+        this.matchID = matchID;
+    }
+
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(long userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public List<Integer> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Integer> scores) {
+        this.scores = scores;
     }
 
     public long getEntryFee() {

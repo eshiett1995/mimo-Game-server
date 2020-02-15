@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Document
 public class Match extends Default {
@@ -14,6 +15,7 @@ public class Match extends Default {
     private Enum.MatchStatus matchStatus;
     private ArrayList<MatchSeat> matchSeat = new ArrayList<>();
     private ArrayList<MatchSeat> winners = new ArrayList<>();
+    private List<StageGeneratorObject> stageGeneratorObjects = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -69,5 +71,13 @@ public class Match extends Default {
 
     public void setMatchSeat(ArrayList<MatchSeat> matchSeat) {
         this.matchSeat = matchSeat;
+    }
+
+    public List<StageGeneratorObject> getStageGeneratorObjects() {
+        return stageGeneratorObjects;
+    }
+
+    public void setStageGeneratorObjects(List<StageGeneratorObject> stageGeneratorObjects) {
+        this.stageGeneratorObjects = stageGeneratorObjects;
     }
 }

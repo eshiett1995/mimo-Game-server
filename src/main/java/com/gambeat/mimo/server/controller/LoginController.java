@@ -41,6 +41,7 @@ public class LoginController {
                 responseModel.setMessage("Log in is successful");
                 responseModel.setJtwToken(jwtService.createToken(optionalUser.get()));
                 responseModel.setSuccessful(true);
+                return new ResponseEntity<>(responseModel, HttpStatus.OK);
             } else {
 
                 FacebookCredential facebookCredential = new FacebookCredential();
@@ -66,8 +67,8 @@ public class LoginController {
                 responseModel.setMessage("Registration is successful");
                 responseModel.setJtwToken(jwtService.createToken(savedUser));
                 responseModel.setSuccessful(true);
+                return new ResponseEntity<>(responseModel, HttpStatus.OK);
             }
-            return new ResponseEntity<>(responseModel, HttpStatus.OK);
         }catch (Exception exception){
             return new ResponseEntity<>(new ResponseModel(false, "An error occurred registering user"), HttpStatus.OK);
         }

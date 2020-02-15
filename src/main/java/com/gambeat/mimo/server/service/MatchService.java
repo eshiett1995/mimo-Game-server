@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Service
 public interface MatchService {
+    Optional<Match> findById(String id);
     Match save(Match match);
     Match update(Match match);
     Boolean isBelowMinimumAmount(long entryFee);

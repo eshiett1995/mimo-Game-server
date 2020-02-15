@@ -7,6 +7,7 @@ import com.gambeat.mimo.server.model.MatchSeat;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.repository.MatchRepository;
 import com.gambeat.mimo.server.service.MatchService;
+import com.gambeat.mimo.server.service.StageGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,14 @@ public class MatchServiceImplementation implements MatchService {
 
     @Autowired
     MatchRepository matchRepository;
+
+    @Autowired
+    StageGeneratorService stageGeneratorService;
+
+    @Override
+    public Optional<Match> findById(String id) {
+        return matchRepository.findById(id);
+    }
 
     @Override
     public Match save(Match match) {
@@ -71,6 +80,7 @@ public class MatchServiceImplementation implements MatchService {
         match.getMatchSeat().add(matchSeat);
         match.setMatchType(Enum.MatchType.RoyalRumble);
         match.setName("random"); //todo add name creator function
+        match.setStageGeneratorObjects(stageGeneratorService.generateStage(1000));
         match.setMatchStatus(Enum.MatchStatus.Started);
         return this.save(match);
     }
