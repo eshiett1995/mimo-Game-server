@@ -2,6 +2,8 @@ package com.gambeat.mimo.server.service;
 
 import com.gambeat.mimo.server.model.Match;
 import com.gambeat.mimo.server.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,4 +17,5 @@ public interface MatchService {
     Boolean hasPendingMatch(User user);
     Optional<Match> getPlayableRoyalRumbleMatch(long entryFee);
     Match createRoyalRumbleMatch(User user, long entryFee);
+    Page<Match> getActiveRoyalRumbleMatches(Pageable pageable);
 }

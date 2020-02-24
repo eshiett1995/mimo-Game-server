@@ -6,12 +6,16 @@ import com.gambeat.mimo.server.model.Match;
 import com.gambeat.mimo.server.model.MatchSeat;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.MatchEntryRequest;
+import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
 import com.gambeat.mimo.server.model.response.MatchEntryResponse;
+import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import com.gambeat.mimo.server.service.JwtService;
 import com.gambeat.mimo.server.service.MatchService;
 import com.gambeat.mimo.server.service.UserService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -162,4 +166,20 @@ public class MatchController {
         }
     }
 
+
+    @PostMapping(value = "/royal-rumble/search", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<RoyalRumbleSearchResponse> getRoyalRumbleMatches(@RequestBody RoyalRumbleSearchRequest royalRumbleSearchRequest, HttpServletRequest request) {
+        if(request.getHeader("Authorization") == null) {
+            return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "User not authorized"), HttpStatus.OK);
+        }
+        try{
+            Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+            Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+            Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(0,20));
+            return new ResponseEntity<>(new RoyalRumbleSearchResponse(matchPage), HttpStatus.OK);
+        }catch (Exception exception){
+            return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "Error occurred while fetching matches"), HttpStatus.OK);
+        }
+    }
 }

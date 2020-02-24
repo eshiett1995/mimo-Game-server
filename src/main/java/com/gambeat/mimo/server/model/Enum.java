@@ -17,4 +17,9 @@ public class Enum {
         Ended,
         Pending,
     }
+
+    public enum MatchState{
+        Open,
+        Close
+    }
 }

@@ -9,4 +9,9 @@ public class WelcomeController {
     public  String getWelcomePage() {
        return "index";
     }
+
+    @GetMapping(value = "/payment")
+    public  String getPaymentPage() {
+        return "payment";
+    }
 }

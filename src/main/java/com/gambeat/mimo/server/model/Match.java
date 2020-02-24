@@ -13,6 +13,7 @@ public class Match extends Default {
     private Long entryFee;
     private Enum.MatchType matchType;
     private Enum.MatchStatus matchStatus;
+    private Enum.MatchState matchState;
     private ArrayList<MatchSeat> matchSeat = new ArrayList<>();
     private ArrayList<MatchSeat> winners = new ArrayList<>();
     private List<StageGeneratorObject> stageGeneratorObjects = new ArrayList<>();
@@ -79,5 +80,13 @@ public class Match extends Default {
 
     public void setStageGeneratorObjects(List<StageGeneratorObject> stageGeneratorObjects) {
         this.stageGeneratorObjects = stageGeneratorObjects;
+    }
+
+    public Enum.MatchState getMatchState() {
+        return matchState;
+    }
+
+    public void setMatchState(Enum.MatchState matchState) {
+        this.matchState = matchState;
     }
 }
