@@ -5,6 +5,7 @@ import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.Match;
 import com.gambeat.mimo.server.model.MatchSeat;
 import com.gambeat.mimo.server.model.User;
+import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
 import com.gambeat.mimo.server.repository.MatchRepository;
 import com.gambeat.mimo.server.service.MatchService;
 import com.gambeat.mimo.server.service.StageGeneratorService;
@@ -89,6 +90,11 @@ public class MatchServiceImplementation implements MatchService {
 
     @Override
     public Page<Match> getActiveRoyalRumbleMatches(Pageable pageable) {
+        return matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open, pageable);
+    }
+
+    @Override
+    public Page<Match> getActiveRoyalRumbleMatches(Pageable pageable, RoyalRumbleSearchRequest royalRumbleSearchRequest) {
         return matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open, pageable);
     }
 }

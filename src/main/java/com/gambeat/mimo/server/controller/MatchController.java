@@ -167,16 +167,18 @@ public class MatchController {
     }
 
 
-    @PostMapping(value = "/royal-rumble/search", produces = "application/json")
+    @PostMapping(value = "/royal-rumble/search/{page}", produces = "application/json")
     public @ResponseBody
-    ResponseEntity<RoyalRumbleSearchResponse> getRoyalRumbleMatches(@RequestBody RoyalRumbleSearchRequest royalRumbleSearchRequest, HttpServletRequest request) {
+    ResponseEntity<RoyalRumbleSearchResponse> getRoyalRumbleMatches(@PathVariable("page") int page,
+                                                                    @RequestBody RoyalRumbleSearchRequest royalRumbleSearchRequest,
+                                                                    HttpServletRequest request) {
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "User not authorized"), HttpStatus.OK);
         }
         try{
             Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
-            Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(0,20));
+            Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(page,20), royalRumbleSearchRequest);
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(matchPage), HttpStatus.OK);
         }catch (Exception exception){
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "Error occurred while fetching matches"), HttpStatus.OK);
