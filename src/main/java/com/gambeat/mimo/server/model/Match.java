@@ -1,6 +1,5 @@
 package com.gambeat.mimo.server.model;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class Match extends Default {
     private Enum.MatchState matchState;
     private ArrayList<MatchSeat> matchSeat = new ArrayList<>();
     private ArrayList<MatchSeat> winners = new ArrayList<>();
-    private List<StageGeneratorObject> stageGeneratorObjects = new ArrayList<>();
+    private List<StageObject> stageObjects = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -74,12 +73,12 @@ public class Match extends Default {
         this.matchSeat = matchSeat;
     }
 
-    public List<StageGeneratorObject> getStageGeneratorObjects() {
-        return stageGeneratorObjects;
+    public List<StageObject> getStageObjects() {
+        return stageObjects;
     }
 
-    public void setStageGeneratorObjects(List<StageGeneratorObject> stageGeneratorObjects) {
-        this.stageGeneratorObjects = stageGeneratorObjects;
+    public void setStageObjects(List<StageObject> stageObjects) {
+        this.stageObjects = stageObjects;
     }
 
     public Enum.MatchState getMatchState() {

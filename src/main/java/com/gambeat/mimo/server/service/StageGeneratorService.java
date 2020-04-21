@@ -1,6 +1,6 @@
 package com.gambeat.mimo.server.service;
 
-import com.gambeat.mimo.server.model.StageGeneratorObject;
+import com.gambeat.mimo.server.model.StageObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,5 +8,5 @@ import java.util.List;
 @Service
 public interface StageGeneratorService{
 
-    List<StageGeneratorObject> generateStage(int iteration);
+    List<StageObject> generateStage(int iteration);
 }

@@ -1,10 +1,9 @@
 package com.gambeat.mimo.server.service.implementation;
 
 
+import com.gambeat.mimo.server.model.*;
 import com.gambeat.mimo.server.model.Enum;
-import com.gambeat.mimo.server.model.Match;
-import com.gambeat.mimo.server.model.MatchSeat;
-import com.gambeat.mimo.server.model.User;
+import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
 import com.gambeat.mimo.server.repository.MatchRepository;
 import com.gambeat.mimo.server.service.MatchService;
@@ -15,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,11 @@ public class MatchServiceImplementation implements MatchService {
     }
 
     @Override
+    public String generateMatchName(User user) {
+        return user.getId();
+    }
+
+    @Override
     public Match save(Match match) {
         return matchRepository.save(match);
     }
@@ -42,6 +48,11 @@ public class MatchServiceImplementation implements MatchService {
     @Override
     public Match update(Match match) {
         return matchRepository.save(match);
+    }
+
+    @Override
+    public void delete(Match match) {
+        matchRepository.delete(match);
     }
 
     @Override
@@ -73,17 +84,17 @@ public class MatchServiceImplementation implements MatchService {
     }
 
     @Override
-    public Match createRoyalRumbleMatch(User user, long entryFee) {
+    public Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest) {
         MatchSeat matchSeat = new MatchSeat();
         matchSeat.setUser(user);
 
         Match match = new Match();
         match.setCompetition(false);
-        match.setEntryFee(entryFee);
+        match.setEntryFee(matchCreationRequest.getEntryFee());
         match.getMatchSeat().add(matchSeat);
         match.setMatchType(Enum.MatchType.RoyalRumble);
-        match.setName("random"); //todo add name creator function
-        match.setStageGeneratorObjects(stageGeneratorService.generateStage(1000));
+        match.setName(Objects.equals(matchCreationRequest.getMatchName(), "") ? this.generateMatchName(user) : matchCreationRequest.getMatchName());
+        match.setStageObjects(stageGeneratorService.generateStage(1000));
         match.setMatchStatus(Enum.MatchStatus.Started);
         return this.save(match);
     }

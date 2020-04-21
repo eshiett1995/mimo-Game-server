@@ -6,6 +6,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 
 public class MatchSeat {
+
+    public MatchSeat(User user){
+        this.user = user;
+    }
+
     @DBRef
     private User user;
     private ArrayList<Integer> points = new ArrayList<>();

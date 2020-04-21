@@ -1,6 +1,6 @@
 package com.gambeat.mimo.server.model;
 
-public class StageGeneratorObject {
+public class StageObject {
     public enum GameObject{
         Ledge,
         BreakableLedge,
