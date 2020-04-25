@@ -7,4 +7,5 @@ import java.util.ArrayList;
 public interface MatchSeatService {
 
     ArrayList<MatchSeat> givePosition(ArrayList<MatchSeat> matchSeats);
+    
 }

@@ -6,7 +6,6 @@ import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
 import com.gambeat.mimo.server.repository.MatchRepository;
-import com.gambeat.mimo.server.repository.MatchSeatRepository;
 import com.gambeat.mimo.server.service.MatchSeatService;
 import com.gambeat.mimo.server.service.MatchService;
 import com.gambeat.mimo.server.service.StageGeneratorService;

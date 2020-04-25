@@ -1,6 +1,7 @@
 package com.gambeat.mimo.server.model;
 
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -12,8 +13,10 @@ public class Transaction extends Default {
 
     public Enum.PaymentOption paymentOption;
 
+    @DBRef
     private Wallet debitWallet;
 
+    @DBRef
     private Wallet creditWallet;
 
 
