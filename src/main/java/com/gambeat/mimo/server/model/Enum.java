@@ -7,6 +7,19 @@ public class Enum {
         RoyalRumble
     }
 
+    public enum TransactionType{
+        Debit,
+        Credit,
+    }
+
+    public enum PaymentOption{
+        EntryFee,
+        GambeatFee,
+        Reversal,
+        Topup,
+        RoyalRumbleAward
+    }
+
     public enum LoginType{
         Facebook,
         Google

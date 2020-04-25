@@ -4,7 +4,6 @@ import com.gambeat.mimo.server.model.Match;
 
 public class MatchEntryResponse extends ResponseModel {
 
-    public MatchEntryResponse(){};
     public MatchEntryResponse(boolean isSuccessful, String message){
         this.isSuccessful = isSuccessful;
         this.message = message;
