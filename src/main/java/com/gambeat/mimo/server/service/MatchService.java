@@ -25,4 +25,5 @@ public interface MatchService {
     Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest);
     Page<Match> getActiveRoyalRumbleMatches(Pageable pageable);
     Page<Match> getActiveRoyalRumbleMatches(Pageable pageable, RoyalRumbleSearchRequest royalRumbleSearchRequest);
+    void endRoyalRumbleMatchesCronJob();
 }

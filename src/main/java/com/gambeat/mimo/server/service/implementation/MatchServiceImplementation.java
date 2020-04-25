@@ -6,6 +6,8 @@ import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
 import com.gambeat.mimo.server.repository.MatchRepository;
+import com.gambeat.mimo.server.repository.MatchSeatRepository;
+import com.gambeat.mimo.server.service.MatchSeatService;
 import com.gambeat.mimo.server.service.MatchService;
 import com.gambeat.mimo.server.service.StageGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MatchServiceImplementation implements MatchService {
@@ -24,8 +24,14 @@ public class MatchServiceImplementation implements MatchService {
     @Value("${minimum.amount}")
     private long minimumAmount;
 
+    @Value("${royal.rumble.time.limit.seconds}")
+    private long royalRumbleTimeLimitSeconds;
+
     @Autowired
     MatchRepository matchRepository;
+
+    @Autowired
+    MatchSeatService matchSeatService;
 
     @Autowired
     StageGeneratorService stageGeneratorService;
@@ -107,5 +113,45 @@ public class MatchServiceImplementation implements MatchService {
     @Override
     public Page<Match> getActiveRoyalRumbleMatches(Pageable pageable, RoyalRumbleSearchRequest royalRumbleSearchRequest) {
         return matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open, pageable);
+    }
+
+    @Override
+    public void endRoyalRumbleMatchesCronJob() {
+
+        //todo sort by date created
+
+        List<Match> matches = matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open);
+
+        for(int index = 0; index < matches.size(); index++){
+
+            Match presentMatch = matches.get(index);
+
+            long startTime = presentMatch.getStartTime();
+
+            long presentTime = new Date().getTime();
+
+            if((presentTime - startTime) / 1000 <= royalRumbleTimeLimitSeconds){
+
+                presentMatch.setMatchState(Enum.MatchState.Close);
+
+                presentMatch.setMatchStatus(Enum.MatchStatus.Ended);
+
+                Optional<Match> matchOptional = matchRepository.findById(presentMatch.getId());
+
+                if(matchOptional.isPresent()){
+
+                    presentMatch = matchOptional.get();
+
+                    presentMatch.setMatchState(Enum.MatchState.Close);
+
+                    presentMatch.setMatchStatus(Enum.MatchStatus.Ended);
+
+                    presentMatch = update(presentMatch);
+
+                    presentMatch.setMatchSeat(matchSeatService.givePosition(presentMatch.getMatchSeat()));
+
+                }
+            }
+        }
     }
 }

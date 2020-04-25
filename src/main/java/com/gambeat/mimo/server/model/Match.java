@@ -9,6 +9,7 @@ import java.util.List;
 public class Match extends Default {
     private String name;
     private boolean isCompetition;
+    private long startTime;
     private Long entryFee;
     private Enum.MatchType matchType;
     private Enum.MatchStatus matchStatus;
@@ -87,5 +88,13 @@ public class Match extends Default {
 
     public void setMatchState(Enum.MatchState matchState) {
         this.matchState = matchState;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 }

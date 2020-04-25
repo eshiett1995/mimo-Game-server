@@ -154,6 +154,7 @@ public class MatchController {
 
         try{
             Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
 
             if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
@@ -164,6 +165,7 @@ public class MatchController {
             }
 
             if(optionalUser.get().getWallet().getBalance() < matchCreationRequest.getEntryFee()){
+
                 return new ResponseEntity<>(new MatchEntryResponse(false, "Insufficient wallet balance"), HttpStatus.OK);
             }
 
@@ -201,7 +203,9 @@ public class MatchController {
     @PostMapping(value = "/royal-rumble/join", produces = "application/json")
     public @ResponseBody
     ResponseEntity<MatchEntryResponse> joinRoyalRumble(@RequestBody MatchEntryRequest matchEntryRequest, HttpServletRequest request) {
-        if(request.getHeader("Authorization") == null) {
+
+      if(request.getHeader("Authorization") == null) {
+
             return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
         }
 

@@ -2,8 +2,8 @@
 
 
 
-1. add the model refernce to transaction model
+1. add the model reference to transaction model
 2. withdrawal
-3. Gambeat Entity
+3. Create gambeat system objects as match starts
 4. add settings model to match
 5. Cron job to calculate match

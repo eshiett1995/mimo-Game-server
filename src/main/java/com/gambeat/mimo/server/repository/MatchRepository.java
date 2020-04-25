@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MatchRepository extends MongoRepository<Match, String> {
@@ -16,5 +17,7 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     Optional<Match> findMatchByMatchTypeAndEntryFeeGreaterThanAndAndMatchStatus(Enum.MatchType matchType, long entryFee, Enum.MatchStatus matchStatus);
 
     Page<Match> getAllByMatchTypeAndMatchState(Enum.MatchType matchType, Enum.MatchState matchState, Pageable pageable);
+
+    List<Match> getAllByMatchTypeAndMatchState(Enum.MatchType matchType, Enum.MatchState matchState);
 
 }
