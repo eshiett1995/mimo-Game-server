@@ -4,10 +4,10 @@ files:
   - source: /
     destination: /home/ubuntu/mimo-Game-server/
 hooks:
-  #BeforeInstall:
-  #- location: scripts/stop_server.sh
-  #  timeout: 200
-   # runas: root
+  BeforeInstall:
+    - location: scripts/remove.sh.sh
+      timeout: 200
+      runas: root
 
   ApplicationStart:
     - location: scripts/start_server.sh
