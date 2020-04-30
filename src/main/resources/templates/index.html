@@ -16,59 +16,66 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen and (max-width: 768px)" href="style/GAMBEAT-mobile.css" />
     <link rel="stylesheet" type="text/css" media="screen and (min-width: 1100px)" href="style/GAMBEAT-widescreen.css" />
-    <link rel="stylesheet" type="text/css" href="style/GAMBEAT.css" />
-    <link rel="stylesheet" type="text/css" href="/style/animate.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="static/style/animate.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/style/animate.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="style/GAMBEAT.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/style/GAMBEAT.css" />
     <script src="script/GAMBEAT.js"></script>
 </head>
 
 <body id="home">
 <div>
-    <!-- navbar -->
-    <nav id="navbar" class="pl-5">
-        <img src="image/icons/logo.png" height="90" width="270" alt="Image not found">
-        <ul>
-            <li><a id="home-link" href="#home" class="trn">home nav menu</a></li>
-            <li><a id="what-we-offer-link" href="#what-we-offer" class="trn">what we offer nav menu</a></li>
-            <li><a id="how-to-play-link" href="#how-to-play" class="trn">how to play nav menu</a></li>
-            <li><a id="contact-us-link" href="#contact-us" class="trn">contact us nav menu</a></li>
-            <a id="country-dropdown" title="Country" href="#" class="nav-link has-submenu"
-               aria-haspopup="true" aria-controls="sm-15530205559473606-6" aria-expanded="false">
-                <!-- Country dropdown -->
-                <span>
-            <span><img id="selectedCountry" width="30" src="image/flags/united-states.svg"
-                       alt="Selected Country"></span>
-          </span>
-                <span class="sub-arrow"></span>
-                <div class="c-dropdown c-dropdown--flip c-dropdown--reversed c-dropdown--sm">
-                    <ul class="c-nav-menu" style="list-style: none; text-align:left">
-                        <li onclick="changeToFrench()" class="c-nav-menu__item">
-                <span class="u-flag-icon u-flag-icon--gh">
-                  <img  width="30" src="image/flags/france.svg" alt="Selected Country">
-                </span>
-                            <span>French</span>
-                        </li>
-                        <li class="c-nav-menu__item" onclick="changeToSpanish()">
-                <span class="u-flag-icon u-flag-icon--gh">
-                  <img  width="30" src="image/flags/spain.svg" alt="Selected Country">
-                </span>
-                            <span>Spanish</span>
-                        </li>
-                        <li class="c-nav-menu__item" onclick="changeToChinese()">
-                <span class="u-flag-icon u-flag-icon--gh">
-                  <img width="30" src="image/flags/china.svg" alt="Selected Country">
-                </span>
-                            <span>Chinese</span>
-                        </li>
-                    </ul>
-                </div>
 
-            </a>
-        </ul>
+
+
+    <!-- navbar -->
+
+    <nav class="navbar navbar-expand-lg sticky-top navbar-css navbar-light">
+        <!-- <a class="pl-xl-5 navbar-brand" href="#"><img src="image/icons/logo.png" height="50" width="180" alt="logo"></a> -->
+        <a class="pl-xl-5 navbar-brand" href="#"><img src="../static/image/icons/logo.png" height="50" width="180" alt="logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end " id="navbarText">
+            <ul class="pr-xl-5 navbar-nav">
+                <li class="pr-xl-4 nav-item">
+                    <a class=" nav-link trn" href="#home">home nav menu</a>
+              </li>
+            <li class="pr-xl-4 nav-item">
+                <a class="nav-link trn" href="#what-we-offer">what we offer nav menu</a>
+            </li>
+            <li class="pr-xl-4 nav-item">
+                <a class="nav-link trn" href="#how-to-play">how to play nav menu</a>
+            </li>
+            <li class="pr-xl-4 nav-item">
+                <a class="nav-link trn" href="#contact-us">contact us nav menu</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <!-- <span> Choose language</span> <img id="selectedCountry" width="30" src="image/flags/united-states.svg" alt="Selected Country"> -->
+                    <span> Choose language</span> <img id="selectedCountry" width="30" src="../static/image/flags/united-states.svg" alt="Selected Country">
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <!-- <a class="dropdown-item" href="#" onclick=changeToFrench()><img width="30" src="image/flags/france.svg" alt="Selected Country"><span>French</span></a> -->
+                    <a class="dropdown-item" href="#" onclick=changeToFrench()><img width="30" src="../static/image/flags/france.svg" alt="Selected Country"><span> French</span></a>
+                    <!-- <a class="dropdown-item" href="#" onclick=changeToSpanish()><img width="30" src="image/flags/spain.svg" alt="Selected Country"><span> Spanish</span></a> -->
+                    <a class="dropdown-item" href="#" onclick=changeToSpanish()><img width="30" src="../static/image/flags/spain.svg" alt="Selected Country"><span> Spanish</span></a>
+                    <!-- <a class="dropdown-item" href="#" onclick="changeToChinese()"><img width="30" src="image/flags/china.svg" alt="Selected Country"><span>   Chinese</span></a> -->
+                    <a class="dropdown-item" href="#" onclick="changeToChinese()"><img width="30" src="../static/image/flags/china.svg" alt="Selected Country"><span>   Chinese</span></a>
+                </div>
+            </li>
+            </ul>
+        </div>
     </nav>
+
+
     <div class="c pt-5 pb-5">
         <!-- header -->
-        <header id="welcome-to-gambeat" class="mb-5">
-            <div class="container">
+        <!-- <header id="welcome-to-gambeat" class="mb-5"> -->
+        <div class="container-welcome-to-gambeat">
+            <div class="c-item">
                 <div class="heading">
                     <h1>Welcome To</h1>
                     <h1>Gam<span class="beat">beat</span></h1>
@@ -79,18 +86,20 @@
                     <div class="col-sm-6">
                         <p class="text-sm-left trn" style="line-height: 250%">welcome note</p>
                     </div>
-                    <div class="col-sm-6" style="position: absolute">
-                        <img id="game-carousel" class="animated infinite bounce delay-2s" src="image/games/mimo.gif"
-                             height="250px" width="250px" alt="game icon">
-
-                    </div>
+                    
 
                 </div>
                 <button type="button" class="btn btn-md btn-primary transition-3d-hover trn">login button message</button>
                 <button type="button" class="btn btn-md btn-outline-primary transition-3d-hover trn">sign up button message</button>
-
             </div>
-        </header>
+            
+            <div class="c-item">
+             <!-- <img id="game-carousel" class="animated infinite bounce delay-2s" src="image/games/mimo.gif" height="250px" width="250px" alt="game icon"> -->
+                <img id="game-carousel" class="c-img animated infinite bounce delay-2s" src="../static/image/games/mimo.gif" height="250px" width="250px" alt="game icon">
+            </div>
+        </div>
+           
+        <!-- </header> -->
     </div>
 
     <!-- what we offer -->
@@ -101,7 +110,8 @@
                 <div class="card bg-white shadow-sm transition-3d-hover">
                     <div class="card-body text-center row ">
               <span class="py-2 px-2">
-                <img width="60" src="image/how-to-play/success.svg" alt="Selected Country">
+                <!-- <img width="60" src="image/how-to-play/success.svg" alt="Selected Country"> -->
+                <img width="60" src="../static/image/how-to-play/success.svg" alt="Selected Country">
               </span>
                <span style="word-wrap: break-word" class="py-2 px-2 trn">compete message</span>
                     </div>
@@ -109,7 +119,8 @@
                 <div class="card bg-white shadow-sm transition-3d-hover">
                     <div class="card-body text-center row ">
               <span class="py-2 px-2">
-                <img width="60" src="image/how-to-play/location.svg" alt="Selected Country">
+                <!-- <img width="60" src="image/how-to-play/location.svg" alt="Selected Country"> -->
+                <img width="60" src="../static/image/how-to-play/location.svg" alt="Selected Country">
               </span>
                         <span style="word-wrap: break-word" class="py-2 px-2 trn">stay connected message</span>
                     </div>
@@ -117,7 +128,8 @@
                 <div class="card bg-white shadow-sm transition-3d-hover">
                     <div class="card-body text-center row ">
               <span class="py-2 px-2">
-                <img width="60" src="image/how-to-play/wallet.png" alt="Selected Country">
+                <!-- <img width="60" src="image/how-to-play/wallet.png" alt="Selected Country"> -->
+                <img width="60" src="../static/image/how-to-play/wallet.png" alt="Selected Country">
               </span>
                         <span style="word-wrap: break-word" class="py-2 px-2 trn">instant withdraw message</span>
                     </div>
@@ -131,7 +143,8 @@
                 <div class="card bg-white shadow-sm transition-3d-hover">
                     <div class="card-body text-center row ">
               <span class="py-2 px-2">
-                <img width="60" src="image/how-to-play/money-bag.svg" alt="Selected Country">
+                <!-- <img width="60" src="image/how-to-play/money-bag.svg" alt="Selected Country"> -->
+                <img width="60" src="../static/image/how-to-play/money-bag.svg" alt="Selected Country">
               </span>
                     <span style="word-wrap: break-word" class="py-2 px-2 trn">earn a living message</span>
                     </div>
@@ -139,7 +152,8 @@
                 <div class="card bg-white shadow-sm transition-3d-hover">
                     <div class="card-body text-center row ">
               <span class="py-2 px-2">
-                <img width="60" src="image/how-to-play/chat.svg" alt="Selected Country">
+                <!-- <img width="60" src="image/how-to-play/chat.svg" alt="Selected Country"> -->
+                <img width="60" src="../static/image/how-to-play/chat.svg" alt="Selected Country">
               </span>
                     <span style="word-wrap: break-word" class="py-2 px-2 trn">chat and socialize message</span>
                     </div>
@@ -147,7 +161,8 @@
                 <div class="card bg-white shadow-sm transition-3d-hover">
                     <div class="card-body text-center row ">
               <span class="py-2 px-2">
-                <img width="60" src="image/how-to-play/game.png" alt="Selected Country">
+                <!-- <img width="60" src="image/how-to-play/game.png" alt="Selected Country"> -->
+                <img width="60" src="../static/image/how-to-play/game.png" alt="Selected Country">
               </span>
                   <span style="word-wrap: break-word" class="py-2 px-2 trn">catalogue of games message</span>
                     </div>
@@ -164,33 +179,33 @@
     <!-- how to play -->
 
     <section id="how-to-play" class=" mt-5 mb-5 pt-1 shadow-sm">
-        <div class="container">
-            <div style="position: absolute;">
-                <img style="position: absolute; top: -77px; left : -150px" src="image/games/robot-peek.png" width="100px"
-                     alt="games">
-
-            </div>
+        
+    
+                <!-- <img class="how-to-play-image" src="image/games/robot-peek.png" width="100px" alt="games"> -->
+                <img class="how-to-play-image" src="../static/image/games/robot-peek.png" width="100px" alt="games">
+         <div class="how-to-play-item">
             <div class="heading mb-5">
                 <h1 class="trn">how to play header</h1>
             </div>
 
-            <div style="width:700px; height: 500px; margin:auto">
+            <div  class="how-to-play-video">
                 <div class="plyr__video-embed shadow-lg" id="player">
                     <iframe
                     src="https://www.youtube.com/embed/ItkKf162LDU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
                     allowtransparency ></iframe>
                 </div>
             </div>
+         </div>
 
-        </div>
+    
     </section>
 
 
 
 
     <!-- contact us -->
-    <section name="contact-us" id="contact-us" class="aliceblue mt-5 mb-5">
-        <div class="container">
+    <section name="contact-us" id="contact-us" class="aliceblue mt-5 mb-5 pt-1">
+        <div class="container-contact-us">
             <div class="heading">
                 <h1 class="trn">contact us header</h1>
             </div>
@@ -265,10 +280,14 @@
     <footer id="end">
         <div id="footer-container">
             <div class="footer-items">
-                <a href="https://www.facebook.com/gambeatng"><img src="image/icons/facebook.png" height="40" width="40" alt="facebook ico"></a>
-                <a href="https://www.twitter.com/gambeatng"><img src="image/icons/twitter.png" height="40" width="40" alt="twitter ico"></a>
-                <!--<a href="https://www.google.com/gambeatng"><img src="image/icons/google.png" height="40" width="40" alt="google+ ico"></a>-->
-                <a href="https://www.instagram.com/gambeatng"><img src="image/icons/ig.png" height="40" width="40" alt="instagram ico"></a>
+                <!-- <a href="https://www.facebook.com/gambeatng"><img class="footer-icons" src="image/icons/facebook.png" alt="facebook ico"></a> -->
+                <a href="https://www.facebook.com/gambeatng"><img class="footer-icons" src="../static/image/icons/facebook.png" alt="facebook ico"></a>
+                <!-- <a href="https://www.twitter.com/gambeatng"><img class="footer-icons" src="image/icons/twitter.png" alt="twitter ico"></a> -->
+                <a href="https://www.twitter.com/gambeatng"><img class="footer-icons" src="../static/image/icons/twitter.png" alt="twitter ico"></a>
+                <!-- <a href="https://www.google.com/gambeatng"><img class="footer-icons" src="image/icons/google.png" alt="google+ ico"></a> -->
+                <a href="https://www.google.com/gambeatng"><img class="footer-icons" src="../static/image/icons/google.png" alt="google+ ico"></a>
+                <!-- <a href="https://www.instagram.com/gambeatng"><img class="footer-icons" src="image/icons/ig.png" alt="instagram ico"></a> -->
+                <a href="https://www.instagram.com/gambeatng"><img class="footer-icons" src="../static/image/icons/ig.png" alt="instagram ico"></a>
             </div>
             <div class="footer-items">
                 <div class="footer-right">
@@ -293,9 +312,12 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<script src="script/dictionary.js"></script>
+<!-- <script src="script/dictionary.js"></script> -->
+<script src="../static/script/dictionary.js"></script>
 
-<script src="/generic-assets/js/vendors/translate/jquery.translate.js"></script>
+<!-- <script src="generic-assets/js/vendors/translate/jquery.translate.js"></script> -->
+<script src="../static/generic-assets/js/vendors/translate/jquery.translate.js"></script>
+
 
 <script>
 
