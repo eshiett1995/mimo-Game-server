@@ -63,7 +63,7 @@
 </div>
 
 <script>
-
+  var authentication = 'eyJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlcl9jcmVkZW50aWFsIjp7ImZpcnN0TmFtZSI6Im90byIsImxhc3ROYW1lIjoiZXNoaWV0dCIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaWQiOiIxMjM0NTYifSwicHJvdmlkZXIiOiJmYWNlYm9vayIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaXNzIjoiR2FtYmVhdCIsInN1YiI6IkF1dGgifQ.CwspXgmggnt4Eujn0bCYOFmLu9V6KDzU41qLcPKIsyg';
 </script>
 
 <script>
@@ -71,32 +71,26 @@
 
         var amount = parseInt($('#amount').val());
         initTransaction({amount : amount}, function (successful, response) {
-
             console.log("response ", response);
+            var paystack;
+            Paystack.init({
+                form: "paystack-card-form",
+                access_code: response.data.access_code
+            }).then(function(returnedObj){
+                paystack = returnedObj;
+                paystack.card.charge({
+                   // Called a function that returns the optional pin value
+                }).then(function(response){
+                    toast({icon:"success", title: "Payment successful", timer:3000})
+                }, function(error){
+                    console.log("error 1", error)
+                    toast({icon:"error", title:error.errors[0].message, timer:3000})
+                });
 
-//            var paystack;
-//            Paystack.init({
-//                form: "paystack-card-form", // Form ID
-//                access_code: response.data.access_code   // You should programmatically pass the access
-//                // code via Ajax or a server variable. Note that
-//                // the access code can only be used once.
-//            }).then(function(returnedObj){
-//                paystack = returnedObj;
-//                // You are to programmatically pass the pin provided by your custoemr
-//                // to this function
-//                // It gets all the card fields from the data-paystack input fields
-//                paystack.card.charge({
-//                    pin: readPin() // Called a function that returns the optional pin value
-//                }).then(function(response){
-//                    console.log(response);
-//                }, function(error){
-//                    console.log(error);
-//                });
-//
-//            }).catch(function(error){
-//                console.log("There was an error loading Paystack", error);
-//            });
-
+            }).catch(function(error){
+                console.log("error 2", error)
+                toast({icon:"error", title:"There was an error loading Paystack", timer:3000})
+            });
         });
 
         return false;
@@ -127,7 +121,7 @@
         $.ajax({
             url: '/transaction/init/paystack',
             headers: {
-                'Authorization':'eyJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlcl9jcmVkZW50aWFsIjp7ImZpcnN0TmFtZSI6Im90byIsImxhc3ROYW1lIjoiZXNoaWV0dCIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaWQiOiIxMjM0NTYifSwicHJvdmlkZXIiOiJmYWNlYm9vayIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaXNzIjoiR2FtYmVhdCIsInN1YiI6IkF1dGgifQ.CwspXgmggnt4Eujn0bCYOFmLu9V6KDzU41qLcPKIsyg',
+                'Authorization':authentication,
                 'Content-Type':'application/json'
             },
             method: 'POST',
