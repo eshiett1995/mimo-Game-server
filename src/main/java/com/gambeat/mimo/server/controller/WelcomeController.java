@@ -14,4 +14,9 @@ public class WelcomeController {
     public  String getPaymentPage() {
         return "payment";
     }
+
+    @GetMapping(value = "/paystack")
+    public  String getPaystackPage() {
+        return "paystack";
+    }
 }

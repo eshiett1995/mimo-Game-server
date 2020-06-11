@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
+
+<body>
+
+<div class="container" style="padding-top: 50px;">
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <h5>Enter your card details to pay</h5>
+    </div>
+    <form action="/action_page.php">
+        <div class="form-group">
+            <input type="email" class="form-control" id="email" placeholder="Card number" name="email">
+        </div>
+        <div class="form-group" style="display: flex;">
+            <div style="margin-right: 5px;">
+                <input type="password" class="form-control" placeholder="Month" name="pwd">
+            </div>
+            <div style="margin-left: 5px;">
+                <input type="password" class="form-control"  placeholder="Year" name="pwd">
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="CVV" name="pwd">
+        </div>
+        <button style="width: 100%; box-shadow: 1px 1px 0px 1px #e8e8e8;" type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
+
+</body>
+
+</html>
