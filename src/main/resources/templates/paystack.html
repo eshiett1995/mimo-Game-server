@@ -83,7 +83,7 @@
                 }).then(function(response){
                     toast({icon:"success", title: "Payment successful", timer:3000})
                 }, function(error){
-                    toast({icon:"error", title:error.errors[0].message, timer:3000})
+                    toast({icon:"error", title: error.message ?  error.message : error.errors[0].message, timer:3000})
                 });
 
             }).catch(function(error){
