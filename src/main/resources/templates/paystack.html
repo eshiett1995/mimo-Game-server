@@ -10,11 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://js.paystack.co/v1/paystack.js"></script>
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
 </head>
 
 <style>
     body{
         font-family: 'Poppins', sans-serif;
+    }
+    .form-control{
+        border: 1px solid #e4e4e4;
+        box-shadow: none;
+        padding: 25px 12px;
     }
 </style>
 
@@ -27,25 +35,25 @@
     <div style="display: flex; justify-content: center; margin-bottom: 20px;">
         <h5>Enter your card details to pay</h5>
     </div>
-    <form action="/action_page.php">
+    <form id="paystack-card-form">
         <div class="form-group">
-            <input type="email" class="form-control" id="email" placeholder="Card number" name="email">
+            <input type="text" class="form-control" id="email" placeholder="Card number" data-paystack="number">
         </div>
         <div class="form-group">
-            <input type="email" class="form-control" id="amount" placeholder="Card number" name="email">
+            <input type="number" class="form-control" id="amount" placeholder="Amount">
         </div>
         <div class="form-group" style="display: flex;">
             <div style="margin-right: 5px;">
-                <input type="password" class="form-control" placeholder="Month" name="pwd">
+                <input type="password" class="form-control" placeholder="Month" data-paystack="expiryMonth">
             </div>
             <div style="margin-left: 5px;">
-                <input type="password" class="form-control"  placeholder="Year" name="pwd">
+                <input type="password" class="form-control"  placeholder="Year" data-paystack="expiryYear">
             </div>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" placeholder="CVV" name="pwd">
+            <input type="password" class="form-control" placeholder="CVV" data-paystack="cvv">
         </div>
-        <button style="width: 100%; box-shadow: 1px 1px 0px 1px #e8e8e8;" type="submit" class="btn btn-success">Submit</button>
+        <button style="width: 100%; box-shadow: 1px 1px 0px 1px #e8e8e8;" type="submit" data-paystack="submit" class="btn btn-success">Pay NGN 100</button>
     </form>
     <footer style="display: flex; justify-content: center; margin-top: 15px">
         <a href="https://paystack.com/what-is-paystack">
@@ -53,6 +61,62 @@
         </a>
     </footer>
 </div>
+
+<script>
+    var paystack;
+    Paystack.init({
+        form: "paystack-card-form", // Form ID
+        access_code: 'kh1to8a43ikgl86'   // You should programmatically pass the access
+        // code via Ajax or a server variable. Note that
+        // the access code can only be used once.
+    }).then(function(returnedObj){
+        paystack = returnedObj;
+    }).catch(function(error){
+        console.log("There was an error loading Paystack", error);
+    });
+</script>
+
+<script>
+    $("#paystack-card-form").submit(function(e){
+
+//        e.preventDefault();
+//        // You are to programmatically pass the pin provided by your custoemr
+//        // to this function
+//        // It gets all the card fields from the data-paystack input fields
+//        paystack.card.charge({
+//            pin: readPin() // Called a function that returns the optional pin value
+//        }).then(function(response){
+//            console.log(response);
+//        }, function(error){
+//            console.log(error);
+//        });
+
+
+
+        return false;
+    });
+</script>
+
+<script>
+    function toast(payload){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: payload.timer,
+            timerProgressBar: true,
+            onOpen: function(toast) {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        Toast.fire({
+            icon: payload.icon,
+            title: payload.title
+        })
+    }
+</script>
 
 </body>
 
