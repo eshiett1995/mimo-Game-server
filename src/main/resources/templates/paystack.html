@@ -40,14 +40,14 @@
             <input type="text" class="form-control" id="email" placeholder="Card number" data-paystack="number">
         </div>
         <div class="form-group">
-            <input type="number" class="form-control" id="amount" placeholder="Amount">
+            <input type="number" class="form-control" id="amount" placeholder="Amount" min="50" value="50" required>
         </div>
         <div class="form-group" style="display: flex;">
             <div style="margin-right: 5px;">
-                <input type="password" class="form-control" placeholder="Month" data-paystack="expiryMonth">
+                <input type="number" class="form-control" placeholder="Month" data-paystack="expiryMonth">
             </div>
             <div style="margin-left: 5px;">
-                <input type="password" class="form-control"  placeholder="Year" data-paystack="expiryYear">
+                <input type="number" class="form-control"  placeholder="Year" data-paystack="expiryYear">
             </div>
         </div>
         <div class="form-group">
@@ -63,35 +63,41 @@
 </div>
 
 <script>
-    var paystack;
-    Paystack.init({
-        form: "paystack-card-form", // Form ID
-        access_code: 'kh1to8a43ikgl86'   // You should programmatically pass the access
-        // code via Ajax or a server variable. Note that
-        // the access code can only be used once.
-    }).then(function(returnedObj){
-        paystack = returnedObj;
-    }).catch(function(error){
-        console.log("There was an error loading Paystack", error);
-    });
+
 </script>
 
 <script>
     $("#paystack-card-form").submit(function(e){
 
-//        e.preventDefault();
-//        // You are to programmatically pass the pin provided by your custoemr
-//        // to this function
-//        // It gets all the card fields from the data-paystack input fields
-//        paystack.card.charge({
-//            pin: readPin() // Called a function that returns the optional pin value
-//        }).then(function(response){
-//            console.log(response);
-//        }, function(error){
-//            console.log(error);
-//        });
+        var amount = parseInt($('#amount').val());
+        initTransaction({amount : amount}, function (successful, response) {
 
+            console.log("response ", response);
 
+//            var paystack;
+//            Paystack.init({
+//                form: "paystack-card-form", // Form ID
+//                access_code: response.data.access_code   // You should programmatically pass the access
+//                // code via Ajax or a server variable. Note that
+//                // the access code can only be used once.
+//            }).then(function(returnedObj){
+//                paystack = returnedObj;
+//                // You are to programmatically pass the pin provided by your custoemr
+//                // to this function
+//                // It gets all the card fields from the data-paystack input fields
+//                paystack.card.charge({
+//                    pin: readPin() // Called a function that returns the optional pin value
+//                }).then(function(response){
+//                    console.log(response);
+//                }, function(error){
+//                    console.log(error);
+//                });
+//
+//            }).catch(function(error){
+//                console.log("There was an error loading Paystack", error);
+//            });
+
+        });
 
         return false;
     });
@@ -115,6 +121,25 @@
             icon: payload.icon,
             title: payload.title
         })
+    }
+
+    function initTransaction(payload,callback){
+        $.ajax({
+            url: '/transaction/init/paystack',
+            headers: {
+                'Authorization':'eyJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlcl9jcmVkZW50aWFsIjp7ImZpcnN0TmFtZSI6Im90byIsImxhc3ROYW1lIjoiZXNoaWV0dCIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaWQiOiIxMjM0NTYifSwicHJvdmlkZXIiOiJmYWNlYm9vayIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaXNzIjoiR2FtYmVhdCIsInN1YiI6IkF1dGgifQ.CwspXgmggnt4Eujn0bCYOFmLu9V6KDzU41qLcPKIsyg',
+                'Content-Type':'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(payload),
+            success: function(data){
+                callback(true,data);
+            },
+            error: function(data){
+                callback(false,data);
+            }
+        });
     }
 </script>
 
