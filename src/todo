@@ -5,6 +5,5 @@
 2. withdrawal
 3. Create gambeat system objects as match starts
 4. add settings model to match
-5. Cron job to calculate
 6. Work on match search filter
 7. work on the transaction service methods saveEntryFeeTransaction && saveGambeatFeeTransaction

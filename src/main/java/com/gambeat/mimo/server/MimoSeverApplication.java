@@ -1,5 +1,11 @@
 package com.gambeat.mimo.server;
 
+import com.gambeat.mimo.server.model.GambeatSystem;
+import com.gambeat.mimo.server.model.User;
+import com.gambeat.mimo.server.model.Wallet;
+import com.gambeat.mimo.server.repository.GambeatSystemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,9 +14,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.List;
 
 @SpringBootApplication
-public class MimoSeverApplication {
+public class MimoSeverApplication implements CommandLineRunner {
+
+    @Autowired
+    GambeatSystemRepository gambeatSystemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MimoSeverApplication.class, args);
@@ -18,6 +28,23 @@ public class MimoSeverApplication {
 		new EchoServer();
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+
+        List<GambeatSystem> gambeatSystems = gambeatSystemRepository.findAll();
+
+        if(gambeatSystems.isEmpty()){
+
+            User user = new User();
+            user.setEmail("");
+            user.setFirstName("");
+            user.setLastName("");
+            user.setUsername("");
+            user.setWallet(new Wallet());
+
+        }
+
+	}
 }
 
 

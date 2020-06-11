@@ -9,7 +9,16 @@ public class Rank extends Default {
     @DBRef
     private User user;
     private long score;
+    private long weeklyScore;
     private  long position;
+
+    public long getWeeklyScore() {
+        return weeklyScore;
+    }
+
+    public void setWeeklyScore(long weeklyScore) {
+        this.weeklyScore = weeklyScore;
+    }
 
     public User getUser() {
         return user;
