@@ -83,7 +83,6 @@
                 }).then(function(response){
                     toast({icon:"success", title: "Payment successful", timer:3000})
                 }, function(error){
-                    console.log("error 1", error)
                     toast({icon:"error", title:error.errors[0].message, timer:3000})
                 });
 
