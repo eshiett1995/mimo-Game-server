@@ -169,7 +169,8 @@
 
     $("#amount").keyup(function() {
         var submit_btn = $("#submit-payment");
-        submit_btn.text("Pay NGN " + parseInt($(this).val()));
+        var amount = Number.isInteger(parseInt($(this).val())) ? parseInt($(this).val()) : 0;
+        submit_btn.text("Pay NGN " + amount);
     });
 </script>
 
