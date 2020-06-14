@@ -15,6 +15,6 @@ public class CronJob {
 
     @Scheduled(fixedRateString = "${royal.rumble.cron.time}")
     public void calculateWinnerOfRoyalRumble() {
-        matchService.endRoyalRumbleMatchesCronJob();
+        //matchService.endRoyalRumbleMatchesCronJob();
     }
 }
