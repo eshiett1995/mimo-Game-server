@@ -8,6 +8,7 @@ import com.gambeat.mimo.server.service.UserService;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,9 @@ public class TransactionController {
     @Autowired
     JwtService jwtService;
 
+    @Value("${paystack.test.secretkey}")
+    private String paystackTestSecretKey;
+
     @PostMapping(path="/init/paystack", produces = "application/json")
     public @ResponseBody
     ResponseEntity<PaystackInitResponse> initPaysackDebit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
@@ -40,7 +44,7 @@ public class TransactionController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Authorization", "Bearer sk_test_087c1932101cb6688dc4e14692ecc778c71491b3");
+            headers.set("Authorization", "Bearer " + paystackTestSecretKey);
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<PaystackInitRequest> body = new HttpEntity<>(paystackInitRequest, headers);
             ResponseEntity<String> response = restTemplate.exchange("https://api.paystack.co/transaction/initialize",  HttpMethod.POST, body, String.class);

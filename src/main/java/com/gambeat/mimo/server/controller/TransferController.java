@@ -1,59 +1,75 @@
 package com.gambeat.mimo.server.controller;
-
-import com.gambeat.mimo.server.model.request.PaystackInitRequest;
-import com.gambeat.mimo.server.model.response.PaystackInitResponse;
+import com.gambeat.mimo.server.model.request.WalletNgTransferRequest;
+import com.gambeat.mimo.server.model.response.WalletNgTransferResponse;
 import com.gambeat.mimo.server.service.JwtService;
 import com.gambeat.mimo.server.service.UserService;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/transfer")
 public class TransferController {
+
+    @Value("${walletng.test.secretkey}")
+    private String walletNgTestSecretKey;
+    @Value("${walletng.test.publickey}")
+    private String walletNgTestPublicKey;
+
     @Autowired
     UserService userService;
 
     @Autowired
     JwtService jwtService;
 
-    @PostMapping(path="/init/wallet.ng", produces = "application/json")
+    @PostMapping(path="/wallets.ng", produces = "application/json")
     public @ResponseBody
-    ResponseEntity<PaystackInitResponse> initPaysackDebit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
+    ResponseEntity<WalletNgTransferResponse> WalletNgTransfer(HttpServletRequest request, @RequestBody WalletNgTransferRequest walletNgTransferRequest) {
         if(request.getHeader("Authorization") == null) {
-            return new ResponseEntity<>(new PaystackInitResponse(false, "User not authorized"), HttpStatus.OK);
+            return new ResponseEntity<>(new WalletNgTransferResponse(false, "User not authorized"), HttpStatus.OK);
         }
-        //try {
+
         Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
 
-        paystackInitRequest.setReference(UUID.randomUUID().toString());
-        paystackInitRequest.setEmail((String) claims.get("email"));
+        walletNgTransferRequest.setSecretKey(walletNgTestSecretKey);
+        walletNgTransferRequest.setTransactionReference("Wallet.NG " + UUID.randomUUID().toString());
+        walletNgTransferRequest.setNarration("Payout from Gambeat");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer sk_test_087c1932101cb6688dc4e14692ecc778c71491b3");
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<PaystackInitRequest> body = new HttpEntity<>(paystackInitRequest, headers);
-        ResponseEntity<String> response = restTemplate.exchange("https://api.paystack.co/transaction/initialize",  HttpMethod.POST, body, String.class);
-        PaystackInitResponse paystackInitResponse = new Gson().fromJson(response.getBody(), PaystackInitResponse.class);
-        if(response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.ACCEPTED){
-            paystackInitResponse.setSuccessful(true);
-        }else{
-            paystackInitResponse.setSuccessful(false);
+        try {
+
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            okhttp3.MediaType mediaType = okhttp3.MediaType.parse("application/json");
+            okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, new Gson().toJson(walletNgTransferRequest));
+            Request httpRequest = new Request.Builder()
+                    .url("https://sandbox.wallets.africa/transfer/bank/account")
+                    .method("POST", body)
+                    .addHeader("Authorization", "Bearer " + walletNgTestPublicKey)
+                    .build();
+            Response httpResponse = client.newCall(httpRequest).execute();
+
+            WalletNgTransferResponse walletNgTransferResponse;
+            walletNgTransferResponse = new Gson().fromJson(httpResponse.body().string(), WalletNgTransferResponse.class);
+
+            if(httpResponse.isSuccessful()){
+                walletNgTransferResponse.setSuccessful(true);
+            }else{
+                walletNgTransferResponse.setSuccessful(false);
+            }
+            return new ResponseEntity<>(walletNgTransferResponse, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(new WalletNgTransferResponse(false, "A server error has occured"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(paystackInitResponse, HttpStatus.OK);
-        //}catch (Exception exception){
-        //  return new ResponseEntity<>(new PaystackInitResponse(false, exception.getCause().getMessage()), HttpStatus.OK);
-        //}
     }
 }
