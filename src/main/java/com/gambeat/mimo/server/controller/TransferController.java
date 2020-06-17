@@ -52,7 +52,6 @@ public class TransferController {
         walletNgTransferRequest.setTransactionReference("Wallet.NG " + UUID.randomUUID().toString());
         walletNgTransferRequest.setNarration("Payout from Gambeat");
 
-        System.out.println(new Gson().toJson(walletNgTransferRequest));
 
         try {
 

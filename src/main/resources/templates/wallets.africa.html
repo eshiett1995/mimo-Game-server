@@ -83,7 +83,7 @@
             if(response.successful){
                 onLoadingFinishedButton(true);
                 toast({icon:"success", title: response.message , timer:3000});
-                goBack();
+                goBack(3000);
             }else{
                 onLoadingFinishedButton(false);
                 toast({icon:"error", title: response.message ? response.message : "There was an error cashing out", timer:3000})
@@ -362,8 +362,10 @@
         source = src;
     }
 
-    function goBack() {
-        window.location.search += '&shouldClose=true'
+    function goBack(time) {
+        setTimeout(function () {
+            window.location.search += '&shouldClose=true'
+        }, time)
     }
 
     $("#amount").keyup(function() {
