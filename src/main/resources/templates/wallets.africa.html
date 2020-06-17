@@ -360,6 +360,8 @@
         submit_btn.text("Cash out N" + amount);
     });
 
+    getBanksFromWalletsAfrica();
+
     getBanksFromWalletsAfrica2(function (banks) {
         $.each(banks, function (i, bank) {
             $('#bank_selection').append($('<option>', {
