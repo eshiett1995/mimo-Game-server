@@ -45,10 +45,10 @@
             <input type="number" class="form-control" id="amount" placeholder="Amount" min="1" value="1" required>
         </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Account Name">
+                <input type="text" class="form-control" id="account_name" placeholder="Account Name">
             </div>
             <div class="form-group">
-                <input type="number" class="form-control"  placeholder="Account Number">
+                <input type="number" class="form-control" id="account_number"  placeholder="Account Number">
             </div>
         <div style="display: flex; justify-content: center;">
           <button style="width: 100%; height: 52px; align-items: center; box-shadow: 1px 1px 0px 1px #e8e8e8; transition: 0.5s; display: flex; justify-content: center; background-color: #5C2799; border-color: #5C2799; color: white" type="submit" id="submit-payment" data-paystack="submit" class="btn">Cash out NGN 1</button>
@@ -70,7 +70,13 @@
 
         onLoadingButton();
         var amount = parseInt($('#amount').val());
-       initTransfer({amount : amount}, function (successful, response) {
+        var accountNumber = $('#account_number').val();
+        var accountName =  $('#account_name').val();
+        var bankCode =  $("#bank_selection").find(":selected").val();
+
+        var payload = {amount : amount, accountNumber: accountNumber,  accountName: accountName, bankCode : bankCode};
+
+       initTransfer(payload, function (successful, response) {
             onLoadingFinishedButton(false);
             console.log("error 2", error);
             toast({icon:"error", title:"There was an error loading Paystack", timer:3000})
@@ -133,11 +139,11 @@
         submit_btn.css( {"width": "100%",  "height" : "52px", "border-radius":"4px","align-items": "center"});
         submit_btn.prop("disabled",false);
         if(isSuccessful){
-            submit_btn.text("Payment Successful");
+            submit_btn.text("Cash out Successful");
         }else{
             var amount_input  = $('#amount');
             var amount =  Number.isInteger(parseInt(amount_input.val())) ? parseInt(amount_input.val()) : 0;
-            submit_btn.text("Pay NGN " + amount);
+            submit_btn.text("Cash out " + amount);
         }
     }
 
