@@ -36,7 +36,7 @@ public class TransactionController {
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new PaystackInitResponse(false, "User not authorized"), HttpStatus.OK);
         }
-         //try {
+
             Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
 
             paystackInitRequest.setReference(UUID.randomUUID().toString());
@@ -55,8 +55,5 @@ public class TransactionController {
                 paystackInitResponse.setSuccessful(false);
             }
             return new ResponseEntity<>(paystackInitResponse, HttpStatus.OK);
-        //}catch (Exception exception){
-          //  return new ResponseEntity<>(new PaystackInitResponse(false, exception.getCause().getMessage()), HttpStatus.OK);
-        //}
     }
 }

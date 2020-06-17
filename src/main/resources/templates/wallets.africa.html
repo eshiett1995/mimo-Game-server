@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wallets.Africa</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
+    .form-control{
+        border: 1px solid #e4e4e4;
+        box-shadow: none;
+        height: 52px;
+    }
+</style>
+
+<body>
+
+<div class="container" style="padding-top: 50px;">
+    <div style="display: flex; justify-content: center;">
+        <img data-v-3e7b300e="" src="image/icons/wallets.africa.logo.svg" alt="Secured by Wallets Africa">
+    </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <h5>Enter your Bank account details</h5>
+    </div>
+    <form id="wallets-africa-form">
+        <div class="form-group">
+            <select class="form-control" id="bank_selection">
+                <option value="" disabled selected="selected">Select a bank</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" id="amount" placeholder="Amount" min="1" value="1" required>
+        </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Account Name">
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control"  placeholder="Account Number">
+            </div>
+        <div style="display: flex; justify-content: center;">
+          <button style="width: 100%; height: 52px; align-items: center; box-shadow: 1px 1px 0px 1px #e8e8e8; transition: 0.5s; display: flex; justify-content: center; background-color: #5C2799; border-color: #5C2799; color: white" type="submit" id="submit-payment" data-paystack="submit" class="btn">Cash out NGN 1</button>
+        </div>
+    </form>
+    <footer style="display: flex; justify-content: center; margin-top: 35px">
+        <a href="https://wallets.africa/about">
+            <img data-v-3e7b300e="" src="image/icons/wallets.africa.svg" alt="Secured by Wallets Africa">
+        </a>
+    </footer>
+</div>
+
+<script>
+  var authentication = 'eyJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlcl9jcmVkZW50aWFsIjp7ImZpcnN0TmFtZSI6Im90byIsImxhc3ROYW1lIjoiZXNoaWV0dCIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaWQiOiIxMjM0NTYifSwicHJvdmlkZXIiOiJmYWNlYm9vayIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaXNzIjoiR2FtYmVhdCIsInN1YiI6IkF1dGgifQ.CwspXgmggnt4Eujn0bCYOFmLu9V6KDzU41qLcPKIsyg';
+</script>
+
+<script>
+    $("#wallets-africa-form").submit(function(e){
+
+        onLoadingButton();
+        var amount = parseInt($('#amount').val());
+       initTransfer({amount : amount}, function (successful, response) {
+            onLoadingFinishedButton(false);
+            console.log("error 2", error);
+            toast({icon:"error", title:"There was an error loading Paystack", timer:3000})
+       });
+
+        return false;
+    });
+</script>
+
+<script>
+    function toast(payload){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: payload.timer,
+            timerProgressBar: true,
+            onOpen: function(toast) {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        Toast.fire({
+            icon: payload.icon,
+            title: payload.title
+        })
+    }
+
+    function initTransfer(payload,callback){
+        $.ajax({
+            url: '/transfer/wallets.africa',
+            headers: {
+                'Authorization':authentication,
+                'Content-Type':'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(payload),
+            success: function(data){
+                callback(true,data);
+            },
+            error: function(data){
+                callback(false,data);
+            }
+        });
+    }
+
+    function onLoadingButton() {
+        var submit_btn = $("#submit-payment");
+        submit_btn.empty();
+        submit_btn.css( {"width": "52px",  "height" : "52px", "border-radius":"50%","align-items": "center"});
+        submit_btn.prop("disabled",true);
+        submit_btn.html("<i class='fa fa-circle-o-notch fa-spin' style='font-size : 35px'></i>");
+    }
+
+    function onLoadingFinishedButton(isSuccessful) {
+        var submit_btn = $("#submit-payment");
+        submit_btn.empty();
+        submit_btn.css( {"width": "100%",  "height" : "52px", "border-radius":"4px","align-items": "center"});
+        submit_btn.prop("disabled",false);
+        if(isSuccessful){
+            submit_btn.text("Payment Successful");
+        }else{
+            var amount_input  = $('#amount');
+            var amount =  Number.isInteger(parseInt(amount_input.val())) ? parseInt(amount_input.val()) : 0;
+            submit_btn.text("Pay NGN " + amount);
+        }
+    }
+
+    function getBanksFromWalletsAfrica(callback) {
+        var settings = {
+            url: "https://sandbox.wallets.africa/transfer/banks/all",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer uvjqzm5xl6bw",
+                'Access-Control-Allow-Origin': '*'
+            },
+            method: "POST",
+            crossDomain: true,
+            dataType: "json",
+            data: '',
+            timeout: 0
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log("this are the banks ", response);
+            callback(response)
+        });
+    }
+
+    function getBanksFromWalletsAfrica2 (callback) {
+        var banks = [
+            {
+                "BankCode": "044",
+                "BankName": "Access Bank Nigeria",
+                "BankSortCode": "000014",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "035A",
+                "BankName": "Alat By Wema",
+                "BankSortCode": "000017",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "101",
+                "BankName": "Busha",
+                "BankSortCode": "000023",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "101",
+                "BankName": "Cowrywise",
+                "BankSortCode": "000023",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "044",
+                "BankName": "Diamond Bank Plc",
+                "BankSortCode": "000014",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "050",
+                "BankName": "Ecobank Nigeria Plc",
+                "BankSortCode": "000010",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "070",
+                "BankName": "Fidelity Bank Plc",
+                "BankSortCode": "000007",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "011",
+                "BankName": "First Bank Plc",
+                "BankSortCode": "000016",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "214",
+                "BankName": "First City Monument Bank",
+                "BankSortCode": "000003",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "058",
+                "BankName": "Gtbank Plc",
+                "BankSortCode": "000013",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "030",
+                "BankName": "Heritage Bank",
+                "BankSortCode": "000020",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "090175",
+                "BankName": "Highstreet Microfinance Bank",
+                "BankSortCode": "090175",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "301",
+                "BankName": "Jaiz Bank",
+                "BankSortCode": "000006",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "082",
+                "BankName": "Keystone Bank Plc",
+                "BankSortCode": "000002",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "100011",
+                "BankName": "Kuda",
+                "BankSortCode": "090267",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "100026",
+                "BankName": "One Finance",
+                "BankSortCode": "100026",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "101",
+                "BankName": "Piggyvest",
+                "BankSortCode": "000023",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "076",
+                "BankName": "Polaris Bank",
+                "BankSortCode": "000008",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "101",
+                "BankName": "Providus Bank",
+                "BankSortCode": "000023",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "039",
+                "BankName": "Stanbic Ibtc Bank Plc",
+                "BankSortCode": "000012",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "068",
+                "BankName": "Standard Chartered Bank Nigeria Limited",
+                "BankSortCode": "000021",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "232",
+                "BankName": "Sterling Bank Plc",
+                "BankSortCode": "000001",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "100",
+                "BankName": "Suntrust Bank",
+                "BankSortCode": "000022",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "101",
+                "BankName": "Thrive Agric",
+                "BankSortCode": "000023",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "032",
+                "BankName": "Union Bank Of Nigeria Plc",
+                "BankSortCode": "000018",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "033",
+                "BankName": "United Bank For Africa Plc",
+                "BankSortCode": "000004",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "215",
+                "BankName": "Unity Bank Plc",
+                "BankSortCode": "000011",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "035",
+                "BankName": "Wema Bank Plc",
+                "BankSortCode": "000017",
+                "PaymentGateway": null
+            },
+            {
+                "BankCode": "057",
+                "BankName": "Zenith Bank Plc",
+                "BankSortCode": "000015",
+                "PaymentGateway": null
+            }
+        ]
+
+        callback(banks)
+    }
+
+    $("#amount").keyup(function() {
+        var submit_btn = $("#submit-payment");
+        var amount = Number.isInteger(parseInt($(this).val())) ? parseInt($(this).val()) : 0;
+        submit_btn.text("Cash out N" + amount);
+    });
+
+    getBanksFromWalletsAfrica2(function (banks) {
+        $.each(banks, function (i, bank) {
+            $('#bank_selection').append($('<option>', {
+                value: bank.BankCode,
+                text : bank.BankName
+            }));
+        });
+    });
+</script>
+
+
+</body>
+
+</html>

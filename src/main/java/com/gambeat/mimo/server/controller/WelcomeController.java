@@ -19,4 +19,9 @@ public class WelcomeController {
     public  String getPaystackPage() {
         return "paystack";
     }
+
+    @GetMapping(value = "/wallets.africa")
+    public  String getWalletsAfica() {
+        return "wallets.africa";
+    }
 }
