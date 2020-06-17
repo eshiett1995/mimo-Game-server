@@ -1,44 +1,179 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
+    <title>Paystack</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://js.paystack.co/v1/paystack.js"></script>
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
+    .form-control{
+        border: 1px solid #e4e4e4;
+        box-shadow: none;
+        padding: 25px 12px;
+    }
+</style>
 
 <body>
 
-<script src="https://js.paystack.co/v2/inline.js"></script>
+<div class="container" style="padding-top: 50px;">
+    <div style="display: flex; justify-content: center;">
+        <img width="40px" src="https://s3-eu-west-1.amazonaws.com/pstk-integration-logos/paystack.jpg" alt="Gambeat Logo">
+    </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <h5>Enter your card details to pay</h5>
+    </div>
+    <form id="paystack-card-form">
+        <div class="form-group">
+            <input type="text" class="form-control" id="email" placeholder="Card number" data-paystack="number">
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" id="amount" placeholder="Amount" min="50" value="50" required>
+        </div>
+        <div class="form-group" style="display: flex;">
+            <div style="margin-right: 5px;">
+                <input type="number" class="form-control" placeholder="Month" data-paystack="expiryMonth">
+            </div>
+            <div style="margin-left: 5px;">
+                <input type="number" class="form-control"  placeholder="Year" data-paystack="expiryYear">
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="CVV" data-paystack="cvv">
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <button style="width: 100%; box-shadow: 1px 1px 0px 1px #e8e8e8; transition: 0.5s; display: flex; justify-content: center;" type="submit" id="submit-payment" data-paystack="submit" class="btn btn-success">Pay NGN 50</button>
+        </div>
+    </form>
+    <footer style="display: flex; justify-content: center; margin-top: 15px">
+        <a href="https://paystack.com/what-is-paystack">
+            <img data-v-3e7b300e="" src="https://checkout.paystack.com/static/img/secure.003c4c5.svg" alt="Secured by Paystack">
+        </a>
+    </footer>
+</div>
 
 <script>
-    function payWithPaystack(){
-        var handler = PaystackPop.setup({
-            key: 'pk_test_3a7af4a93d785ab7fb183ee27eeae4be3755340e',
-            email: 'customer@email.com',
-            amount: 10000,
-            currency: "NGN",
-            ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-            metadata: {
-                custom_fields: [
-                    {
-                        display_name: "Mobile Number",
-                        variable_name: "mobile_number",
-                        value: "+2348012345678"
-                    }
-                ]
-            },
-            callback: function(response){
-                alert('success. transaction ref is ' + response.reference);
-            },
-            onClose: function(){
-                alert('window closed');
+    var authentication = 'eyJhbGciOiJIUzI1NiJ9.eyJwcm92aWRlcl9jcmVkZW50aWFsIjp7ImZpcnN0TmFtZSI6Im90byIsImxhc3ROYW1lIjoiZXNoaWV0dCIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaWQiOiIxMjM0NTYifSwicHJvdmlkZXIiOiJmYWNlYm9vayIsImVtYWlsIjoiZXNoaWV0dDE5OTVAZ21haWwuY29tIiwiaXNzIjoiR2FtYmVhdCIsInN1YiI6IkF1dGgifQ.CwspXgmggnt4Eujn0bCYOFmLu9V6KDzU41qLcPKIsyg';
+</script>
+
+<script>
+    $("#paystack-card-form").submit(function(e){
+
+        onLoadingButton();
+        var amount = parseInt($('#amount').val());
+        initTransaction({amount : amount}, function (successful, response) {
+            console.log("response ", response);
+            var paystack;
+            Paystack.init({
+                form: "paystack-card-form",
+                access_code: response.data.access_code
+            }).then(function(returnedObj){
+                paystack = returnedObj;
+                console.log(paystack)
+                paystack.card.charge({
+                    pin: "1234"
+                    // Called a function that returns the optional pin value
+                }).then(function(response){
+                    onLoadingFinishedButton(true);
+                    toast({icon:"success", title: "Payment successful", timer:3000})
+                }, function(error){
+                    onLoadingFinishedButton(false);
+                    console.log("error ", error);
+                    toast({icon:"error", title: error.message && !error.errors ?  error.message : error.errors[0].message, timer:3000})
+                });
+
+            }).catch(function(error){
+                onLoadingFinishedButton(false);
+                console.log("error 2", error);
+                toast({icon:"error", title:"There was an error loading Paystack", timer:3000})
+            });
+        });
+
+        return false;
+    });
+</script>
+
+<script>
+    function toast(payload){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: payload.timer,
+            timerProgressBar: true,
+            onOpen: function(toast) {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         });
-        handler.openIframe();
+
+        Toast.fire({
+            icon: payload.icon,
+            title: payload.title
+        })
     }
 
-    payWithPaystack();
+    function initTransaction(payload,callback){
+        $.ajax({
+            url: '/transaction/init/paystack',
+            headers: {
+                'Authorization':authentication,
+                'Content-Type':'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(payload),
+            success: function(data){
+                callback(true,data);
+            },
+            error: function(data){
+                callback(false,data);
+            }
+        });
+    }
+
+    function onLoadingButton() {
+        var submit_btn = $("#submit-payment");
+        submit_btn.empty();
+        submit_btn.css( {"width": "40px",  "height" : "40px", "border-radius":"50%","align-items": "center"});
+        submit_btn.prop("disabled",true);
+        submit_btn.html("<i class='fa fa-circle-o-notch fa-spin' style='font-size : 30px'></i>");
+    }
+
+    function onLoadingFinishedButton(isSuccessful) {
+        var submit_btn = $("#submit-payment");
+        submit_btn.empty();
+        submit_btn.css( {"width": "100%",  "height" : "36px", "border-radius":"4px","align-items": "center"});
+        submit_btn.prop("disabled",false);
+        if(isSuccessful){
+            submit_btn.text("Payment Successful");
+        }else{
+            var amount_input  = $('#amount');
+            var amount =  Number.isInteger(parseInt(amount_input.val())) ? parseInt(amount_input.val()) : 0;
+            submit_btn.text("Pay NGN " + amount);
+        }
+    }
+
+    $("#amount").keyup(function() {
+        var submit_btn = $("#submit-payment");
+        var amount = Number.isInteger(parseInt($(this).val())) ? parseInt($(this).val()) : 0;
+        submit_btn.text("Pay NGN " + amount);
+    });
 </script>
 
 </body>
+
 </html>
