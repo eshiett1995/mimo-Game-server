@@ -77,9 +77,14 @@
         var payload = {amount : amount, accountNumber: accountNumber,  accountName: accountName, bankCode : bankCode};
 
        initTransfer(payload, function (successful, response) {
-            onLoadingFinishedButton(false);
-            console.log("error 2", error);
-            toast({icon:"error", title:"There was an error loading Paystack", timer:3000})
+            console.log("response", response);
+            if(response.successful){
+                onLoadingFinishedButton(true);
+                toast({icon:"success", title: response.message , timer:3000})
+            }else{
+                onLoadingFinishedButton(false);
+                toast({icon:"error", title: response.message ? response.message : "There was an error cashing out", timer:3000})
+            }
        });
 
         return false;

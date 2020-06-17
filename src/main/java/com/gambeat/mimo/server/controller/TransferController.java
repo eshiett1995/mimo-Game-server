@@ -44,11 +44,15 @@ public class TransferController {
             return new ResponseEntity<>(new WalletNgTransferResponse(false, "User not authorized"), HttpStatus.OK);
         }
 
+
+
         Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
 
         walletNgTransferRequest.setSecretKey(walletNgTestSecretKey);
         walletNgTransferRequest.setTransactionReference("Wallet.NG " + UUID.randomUUID().toString());
         walletNgTransferRequest.setNarration("Payout from Gambeat");
+
+        System.out.println(new Gson().toJson(walletNgTransferRequest));
 
         try {
 
