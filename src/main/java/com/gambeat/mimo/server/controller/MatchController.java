@@ -11,6 +11,7 @@ import com.gambeat.mimo.server.model.response.MatchEntryResponse;
 import com.gambeat.mimo.server.model.response.ResponseModel;
 import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import com.gambeat.mimo.server.service.*;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -148,6 +149,7 @@ public class MatchController {
     @PostMapping(value = "/royal-rumble/create", produces = "application/json")
     public @ResponseBody
     ResponseEntity<MatchEntryResponse> saveEvent(@RequestBody MatchCreationRequest matchCreationRequest, HttpServletRequest request) {
+       System.out.println(new Gson().toJson(matchCreationRequest));
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
         }
