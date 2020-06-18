@@ -70,6 +70,7 @@ public class LoginController {
                 return new ResponseEntity<>(responseModel, HttpStatus.OK);
             }
         }catch (Exception exception){
+            System.out.println(exception.getCause().getMessage());
             return new ResponseEntity<>(new ResponseModel(false, "An error occurred registering user"), HttpStatus.OK);
         }
     }
