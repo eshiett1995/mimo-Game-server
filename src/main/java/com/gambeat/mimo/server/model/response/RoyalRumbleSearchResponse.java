@@ -22,10 +22,15 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
     private long getTotalElements;
 
     public RoyalRumbleSearchResponse(Page<Match> matches){
+        super(true, "Successful");
         this.number = matches.getNumber();
         this.size =  matches.getSize();
         this.numberOfElements = matches.getNumberOfElements();
-        matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
+        //matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
+
+        for(int index = 0; index < matches.getContent().size(); index++){
+            this.content.add(new FormattedMatch(matches.getContent().get(index)));
+        }
         this.hasContent = matches.hasContent();
         this.isFirst = matches.isFirst();
         this.isLast = matches.isLast();
@@ -33,13 +38,10 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         this.hasPrevious = matches.hasPrevious();
         this.totalPages = matches.getTotalPages();
         this.getTotalElements = matches.getTotalElements();
-        this.setMessage("Successful");
-        this.setSuccessful(true);
     }
 
     public RoyalRumbleSearchResponse(boolean successful, String message) {
-        this.setMessage(message);
-        this.setSuccessful(successful);
+        super(successful, message);
     }
 
     public int getNumber() {

@@ -149,7 +149,7 @@ public class MatchController {
     @PostMapping(value = "/royal-rumble/create", produces = "application/json")
     public @ResponseBody
     ResponseEntity<MatchEntryResponse> saveEvent(@RequestBody MatchCreationRequest matchCreationRequest, HttpServletRequest request) {
-       System.out.println(new Gson().toJson(matchCreationRequest));
+       //System.out.println(new Gson().toJson(matchCreationRequest));
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
         }
@@ -267,6 +267,8 @@ public class MatchController {
     ResponseEntity<RoyalRumbleSearchResponse> getRoyalRumbleMatches(@PathVariable("page") int page,
                                                                     @RequestBody RoyalRumbleSearchRequest royalRumbleSearchRequest,
                                                                     HttpServletRequest request) {
+
+        System.out.println("it came to here");
         if(request.getHeader("Authorization") == null) {
 
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "User not authorized"), HttpStatus.OK);
@@ -279,7 +281,13 @@ public class MatchController {
 
             Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(page,20), royalRumbleSearchRequest);
 
-            return new ResponseEntity<>(new RoyalRumbleSearchResponse(matchPage), HttpStatus.OK);
+            RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(matchPage);
+            royalRumbleSearchResponse.setSuccessful(true);
+            royalRumbleSearchResponse.setMessage("Royal rumble match successfully retrieved");
+
+            System.out.println(royalRumbleSearchResponse.getGetTotalElements());
+            System.out.println(royalRumbleSearchResponse.getNumberOfElements());
+            return new ResponseEntity<>(royalRumbleSearchResponse, HttpStatus.OK);
 
         }catch (Exception exception){
 
