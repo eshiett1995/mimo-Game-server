@@ -173,7 +173,7 @@ public class MatchController {
 
             Match savedMatch = matchService.createRoyalRumbleMatch(optionalUser.get(), matchCreationRequest);
 
-            //optionalUser.get().getPendingMatch().add(savedMatch);
+            optionalUser.get().getPendingMatch().add(savedMatch);
 
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee() + gambeatFee);
 
@@ -284,7 +284,6 @@ public class MatchController {
             RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(matchPage);
             royalRumbleSearchResponse.setSuccessful(true);
             royalRumbleSearchResponse.setMessage("Royal rumble match successfully retrieved");
-
             return new ResponseEntity<>(royalRumbleSearchResponse, HttpStatus.OK);
 
         }catch (Exception exception){

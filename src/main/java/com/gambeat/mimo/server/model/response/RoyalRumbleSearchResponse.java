@@ -22,18 +22,21 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
     private int totalPages;
     private long getTotalElements;
 
+    public RoyalRumbleSearchResponse(){}
+
     public RoyalRumbleSearchResponse(Page<Match> matches){
         super(true, "Successful");
         this.number = matches.getNumber();
         this.size =  matches.getSize();
-        this.numberOfElements = matches.getNumberOfElements();
-        matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
 
-//        for(int index = 0; index < matches.getContent().size(); index++){
-//            //this.content.add(new FormattedMatch(matches.getContent().get(index)));
-//            //new Gson().toJson(matches.getContent().get(index));
-//            new FormattedMatch(matches.getContent().get(index));
-//        }
+        this.numberOfElements = matches.getNumberOfElements();
+        //matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
+
+        for(int index = 0; index < matches.getContent().size(); index++){
+            //this.content.add(new FormattedMatch(matches.getContent().get(index)));
+           System.out.println( new Gson().toJson(new FormattedMatch(matches.getContent().get(index))));
+           this.content.add(new FormattedMatch(matches.getContent().get(index)));
+        }
         this.hasContent = matches.hasContent();
         this.isFirst = matches.isFirst();
         this.isLast = matches.isLast();
@@ -135,7 +138,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         this.getTotalElements = getTotalElements;
     }
 
-    class FormattedMatch {
+    public class FormattedMatch {
 
         private String id;
         private String name;
@@ -144,6 +147,16 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         private Enum.MatchState matchState;
         private int numberOfCompetitors;
         private String winners;
+
+        private FormattedMatch(){
+            this.id = "";
+            this.name = "";
+            this.entryFee = 0l;
+            this.matchStatus = Enum.MatchStatus.Started;
+            this.matchState = Enum.MatchState.Open;
+            this.numberOfCompetitors = 0;
+            this.winners = "";
+        }
 
         private FormattedMatch(Match match) {
 
@@ -163,6 +176,62 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
                 winners.concat(matchSeat.getUser().getEmail() + "");
             });
             return winners;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Long getEntryFee() {
+            return entryFee;
+        }
+
+        public void setEntryFee(Long entryFee) {
+            this.entryFee = entryFee;
+        }
+
+        public Enum.MatchStatus getMatchStatus() {
+            return matchStatus;
+        }
+
+        public void setMatchStatus(Enum.MatchStatus matchStatus) {
+            this.matchStatus = matchStatus;
+        }
+
+        public Enum.MatchState getMatchState() {
+            return matchState;
+        }
+
+        public void setMatchState(Enum.MatchState matchState) {
+            this.matchState = matchState;
+        }
+
+        public int getNumberOfCompetitors() {
+            return numberOfCompetitors;
+        }
+
+        public void setNumberOfCompetitors(int numberOfCompetitors) {
+            this.numberOfCompetitors = numberOfCompetitors;
+        }
+
+        public String getWinners() {
+            return winners;
+        }
+
+        public void setWinners(String winners) {
+            this.winners = winners;
         }
     }
 }
