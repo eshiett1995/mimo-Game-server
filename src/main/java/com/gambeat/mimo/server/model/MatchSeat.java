@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@Document
 public class MatchSeat implements Comparable {
 
     public MatchSeat(){}

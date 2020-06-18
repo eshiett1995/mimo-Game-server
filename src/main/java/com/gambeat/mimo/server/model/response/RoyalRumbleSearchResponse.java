@@ -3,6 +3,7 @@ package com.gambeat.mimo.server.model.response;
 import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.Match;
 import com.gambeat.mimo.server.model.MatchSeat;
+import com.google.gson.Gson;
 import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
     private int number;
     private int size;
     private int numberOfElements;
-    private List<FormattedMatch> content = new ArrayList<>();
+    private ArrayList<FormattedMatch> content = new ArrayList<>();
     private boolean hasContent;
     private boolean isFirst;
     private boolean isLast;
@@ -26,11 +27,13 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         this.number = matches.getNumber();
         this.size =  matches.getSize();
         this.numberOfElements = matches.getNumberOfElements();
-        //matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
+        matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
 
-        for(int index = 0; index < matches.getContent().size(); index++){
-            this.content.add(new FormattedMatch(matches.getContent().get(index)));
-        }
+//        for(int index = 0; index < matches.getContent().size(); index++){
+//            //this.content.add(new FormattedMatch(matches.getContent().get(index)));
+//            //new Gson().toJson(matches.getContent().get(index));
+//            new FormattedMatch(matches.getContent().get(index));
+//        }
         this.hasContent = matches.hasContent();
         this.isFirst = matches.isFirst();
         this.isLast = matches.isLast();
@@ -68,11 +71,11 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         this.numberOfElements = numberOfElements;
     }
 
-    public List<FormattedMatch> getContent() {
+    public ArrayList<FormattedMatch> getContent() {
         return content;
     }
 
-    public void setContent(List<FormattedMatch> content) {
+    public void setContent(ArrayList<FormattedMatch> content) {
         this.content = content;
     }
 

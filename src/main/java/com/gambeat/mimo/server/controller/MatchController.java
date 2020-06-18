@@ -50,38 +50,38 @@ public class MatchController {
     @Value("${gambeat.fee}")
     private long gambeatFee;
 
-  @GetMapping(value = "/", produces = "application/json")
-    public @ResponseBody ResponseEntity<MatchEntryResponse> getFirstMatch(HttpServletRequest request) {
-
-      if(request.getHeader("Authorization") == null) {
-
-          return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
-
-      }
-
-      try {
-
-          Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
-
-          Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
-
-          if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
-
-          if(optionalUser.get().getPendingMatch().size() > 0) {
-
-              return new ResponseEntity<>(new MatchEntryResponse(optionalUser.get().getPendingMatch().get(0)), HttpStatus.OK);
-
-          }else{
-
-              return new ResponseEntity<>(new MatchEntryResponse(false, "You have no existing match"), HttpStatus.OK);
-
-          }
-
-      }catch (Exception exception) {
-
-          return new ResponseEntity<>(new MatchEntryResponse(true, "Error fetching existing match"), HttpStatus.OK);
-      }
-  }
+//  @GetMapping(value = "/", produces = "application/json")
+//    public @ResponseBody ResponseEntity<MatchEntryResponse> getFirstMatch(HttpServletRequest request) {
+//
+//      if(request.getHeader("Authorization") == null) {
+//
+//          return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
+//
+//      }
+//
+//      try {
+//
+//          Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+//
+//          Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+//
+//          if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
+//
+//          if(optionalUser.get().getPendingMatch().size() > 0) {
+//
+//              return new ResponseEntity<>(new MatchEntryResponse(optionalUser.get().getPendingMatch().get(0)), HttpStatus.OK);
+//
+//          }else{
+//
+//              return new ResponseEntity<>(new MatchEntryResponse(false, "You have no existing match"), HttpStatus.OK);
+//
+//          }
+//
+//      }catch (Exception exception) {
+//
+//          return new ResponseEntity<>(new MatchEntryResponse(true, "Error fetching existing match"), HttpStatus.OK);
+//      }
+//  }
 
 
   //TODO submit score route
@@ -173,7 +173,7 @@ public class MatchController {
 
             Match savedMatch = matchService.createRoyalRumbleMatch(optionalUser.get(), matchCreationRequest);
 
-            optionalUser.get().getPendingMatch().add(savedMatch);
+            //optionalUser.get().getPendingMatch().add(savedMatch);
 
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee() + gambeatFee);
 
@@ -285,8 +285,6 @@ public class MatchController {
             royalRumbleSearchResponse.setSuccessful(true);
             royalRumbleSearchResponse.setMessage("Royal rumble match successfully retrieved");
 
-            System.out.println(royalRumbleSearchResponse.getGetTotalElements());
-            System.out.println(royalRumbleSearchResponse.getNumberOfElements());
             return new ResponseEntity<>(royalRumbleSearchResponse, HttpStatus.OK);
 
         }catch (Exception exception){
