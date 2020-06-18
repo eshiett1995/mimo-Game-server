@@ -6,6 +6,7 @@ public class MatchCreationRequest {
     private String matchName;
     private long entryFee;
     private Enum.MatchType matchType;
+    private int maxPlayers;
 
     public String getMatchName() {
         return matchName;
@@ -29,5 +30,13 @@ public class MatchCreationRequest {
 
     public void setMatchType(Enum.MatchType matchType) {
         this.matchType = matchType;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 }
