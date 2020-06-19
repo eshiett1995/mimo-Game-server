@@ -146,6 +146,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         private Enum.MatchStatus matchStatus;
         private Enum.MatchState matchState;
         private int numberOfCompetitors;
+        private int competitorLimit;
         private String winners;
 
         private FormattedMatch(){
@@ -155,6 +156,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
             this.matchStatus = Enum.MatchStatus.Started;
             this.matchState = Enum.MatchState.Open;
             this.numberOfCompetitors = 0;
+            this.competitorLimit = 0;
             this.winners = "";
         }
 
@@ -167,6 +169,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
             this.matchState = match.getMatchState();
             this.numberOfCompetitors = match.getMatchSeat().size();
             this.winners =  parseWinners(match.getWinners());
+            this.competitorLimit = match.getCompetitorLimit();
 
         }
 
@@ -232,6 +235,14 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
 
         public void setWinners(String winners) {
             this.winners = winners;
+        }
+
+        public int getCompetitorLimit() {
+            return competitorLimit;
+        }
+
+        public void setCompetitorLimit(int competitorLimit) {
+            this.competitorLimit = competitorLimit;
         }
     }
 }

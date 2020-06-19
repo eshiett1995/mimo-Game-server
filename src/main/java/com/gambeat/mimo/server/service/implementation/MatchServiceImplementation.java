@@ -97,6 +97,7 @@ public class MatchServiceImplementation implements MatchService {
         match.setCompetition(false);
         match.setEntryFee(matchCreationRequest.getEntryFee());
         match.getMatchSeat().add(matchSeat);
+        match.setCompetitorLimit(matchCreationRequest.getMaxPlayers());
         match.setMatchState(Enum.MatchState.Open);
         match.setMatchType(Enum.MatchType.RoyalRumble);
         match.setName(Objects.equals(matchCreationRequest.getMatchName(), "") ? this.generateMatchName(user) : matchCreationRequest.getMatchName());
