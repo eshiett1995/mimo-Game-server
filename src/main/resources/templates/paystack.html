@@ -1,32 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Paystack</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
 </head>
 
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
+    .form-control{
+        border: 1px solid #e4e4e4;
+        box-shadow: none;
+        height: 52px;
+    }
+</style>
+
 <body>
+
+<div class="container" style="padding-top: 50px;">
+    <div style="display: flex; justify-content: center;">
+        <img width="40px" src="https://s3-eu-west-1.amazonaws.com/pstk-integration-logos/paystack.jpg" alt="Gambeat Logo">
+    </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <h5>Enter your card details to pay</h5>
+    </div>
+    <form id="paystack-form">
+        <div class="form-group">
+            <input type="text" class="form-control" id="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" id="amount" placeholder="Amount" min="50" value="50" required>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <button style="width: 100%; box-shadow: 1px 1px 0px 1px #e8e8e8; transition: 0.5s; display: flex; justify-content: center;" type="submit" id="submit-payment" class="btn btn-success">Pay NGN 50</button>
+        </div>
+    </form>
+    <footer style="display: flex; justify-content: center; margin-top: 15px">
+        <a href="https://paystack.com/what-is-paystack">
+            <img data-v-3e7b300e="" src="https://checkout.paystack.com/static/img/secure.003c4c5.svg" alt="Secured by Paystack">
+        </a>
+    </footer>
+</div>
 
 <script src="https://js.paystack.co/v2/inline.js"></script>
 
 <script>
-    function payWithPaystack(){
+    $("#paystack-form").submit(function(e){
+        var amount = parseInt($('#amount').val());
+        var email = $('#email').val();
+       payWithPaystack({amount: amount, email: email});
+       return false;
+    });
+    function payWithPaystack(payload){
         var handler = PaystackPop.setup({
             key: 'pk_test_3a7af4a93d785ab7fb183ee27eeae4be3755340e',
-            email: 'customer@email.com',
-            amount: 10000,
+            email: payload.email,
+            amount: payload.amount * 100,
             currency: "NGN",
-            ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-            metadata: {
-                custom_fields: [
-                    {
-                        display_name: "Mobile Number",
-                        variable_name: "mobile_number",
-                        value: "+2348012345678"
-                    }
-                ]
-            },
+            //ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+//            metadata: {
+//                custom_fields: [
+//                    {
+//                        display_name: "Mobile Number",
+//                        variable_name: "mobile_number",
+//                        value: "+2348012345678"
+//                    }
+//                ]
+//            },
             callback: function(response){
                 alert('success. transaction ref is ' + response.reference);
             },
@@ -36,8 +87,29 @@
         });
         handler.openIframe();
     }
-
-    payWithPaystack();
+    function initTransaction(payload,callback){
+        $.ajax({
+            url: '/transaction/init/paystack',
+            headers: {
+                'Authorization':authentication,
+                'Content-Type':'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(payload),
+            success: function(data){
+                callback(true,data);
+            },
+            error: function(data){
+                callback(false,data);
+            }
+        });
+    }
+    $("#amount").keyup(function() {
+        var submit_btn = $("#submit-payment");
+        var amount = Number.isInteger(parseInt($(this).val())) ? parseInt($(this).val()) : 0;
+        submit_btn.text("Pay NGN " + amount);
+    });
 </script>
 
 </body>

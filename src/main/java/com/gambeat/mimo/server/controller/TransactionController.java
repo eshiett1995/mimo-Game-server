@@ -32,7 +32,7 @@ public class TransactionController {
 
     @PostMapping(path="/init/paystack", produces = "application/json")
     public @ResponseBody
-    ResponseEntity<PaystackInitResponse> initPaysackDebit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
+    ResponseEntity<PaystackInitResponse> initPaystackDebit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new PaystackInitResponse(false, "User not authorized"), HttpStatus.OK);
         }
