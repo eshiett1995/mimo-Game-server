@@ -79,11 +79,20 @@
 //                ]
 //            },
             callback: function(response){
-                alert('success. transaction ref is ' + response.reference);
+                var reference = response.reference;
+                var amount = payload.amount;
+                var email = payload.email;
+                var requestBody = {"reference":reference,"amount":amount,"email":email};
+
+                initTransaction(requestBody, function (isSuccessful, data) {
+                    if(isSuccessful){
+                        toast({icon:"success", title: response.message , timer:3000});
+                    }else{
+                        toast({icon:"error", title: response.message , timer:3000});
+                    }
+                });
             },
-            onClose: function(){
-                alert('window closed');
-            }
+            onClose: function(){}
         });
         handler.openIframe();
     }
@@ -104,6 +113,24 @@
                 callback(false,data);
             }
         });
+    }
+    function toast(payload){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: payload.timer,
+            timerProgressBar: true,
+            onOpen: function(toast) {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: payload.icon,
+            title: payload.title
+        })
     }
     $("#amount").keyup(function() {
         var submit_btn = $("#submit-payment");

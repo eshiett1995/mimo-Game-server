@@ -36,10 +36,10 @@ public class MimoSeverApplication implements CommandLineRunner {
         if(gambeatSystems.isEmpty()){
 
             User user = new User();
-            user.setEmail("");
-            user.setFirstName("");
-            user.setLastName("");
-            user.setUsername("");
+            user.setEmail("games@gmabeat.com");
+            user.setFirstName("Gambeat");
+            user.setLastName("Gambeat");
+            user.setUsername("Gambeat");
             user.setWallet(new Wallet());
 
         }
