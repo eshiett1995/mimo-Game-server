@@ -54,7 +54,10 @@
 </div>
 
 <script src="https://js.paystack.co/v2/inline.js"></script>
-
+<script>
+    var key = "";
+    var email = "";
+</script>
 <script>
     $("#paystack-form").submit(function(e){
         var amount = parseInt($('#amount').val());
@@ -80,7 +83,7 @@
 //            },
             callback: function(response){
                 var reference = response.reference;
-                var amount = payload.amount;
+                var amount = payload.amount * 100;
                 var email = payload.email;
                 var requestBody = {"reference":reference,"amount":amount,"email":email};
 
@@ -98,9 +101,9 @@
     }
     function initTransaction(payload,callback){
         $.ajax({
-            url: '/transaction/init/paystack',
+            url: '/top-up/paystack',
             headers: {
-                'Authorization':authentication,
+                'Authorization': key,
                 'Content-Type':'application/json'
             },
             method: 'POST',
@@ -113,6 +116,14 @@
                 callback(false,data);
             }
         });
+    }
+    function initEmail(email) {
+        this.email = email;
+        $('#email').val(this.email);
+        $("#email").prop("readonly", true);
+    }
+    function initApiKey(key) {
+        this.key = key;
     }
     function toast(payload){
         const Toast = Swal.mixin({

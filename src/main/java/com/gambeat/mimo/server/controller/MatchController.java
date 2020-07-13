@@ -7,6 +7,7 @@ import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.MatchEntryRequest;
 import com.gambeat.mimo.server.model.request.MatchPlayedRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
+import com.gambeat.mimo.server.model.response.GameStageResponse;
 import com.gambeat.mimo.server.model.response.MatchEntryResponse;
 import com.gambeat.mimo.server.model.response.ResponseModel;
 import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -43,7 +43,7 @@ public class MatchController {
     WalletService walletService;
 
     @Autowired
-    StageGeneratorService stageGeneratorService;
+    GameStageService gameStageService;
 
     @Autowired TransactionService transactionService;
 
@@ -83,8 +83,6 @@ public class MatchController {
 //      }
 //  }
 
-
-  //TODO submit score route
 
     @PostMapping(value = "/royal-rumble/submit", produces = "application/json")
     public @ResponseBody
@@ -161,6 +159,9 @@ public class MatchController {
 
             if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
 
+
+            System.out.println("entry fee "  + matchCreationRequest.getEntryFee());
+
             if(matchService.isBelowMinimumAmount(matchCreationRequest.getEntryFee())){
 
                 return new ResponseEntity<>(new MatchEntryResponse(false, "Your are below the minimum amount"), HttpStatus.OK);
@@ -173,7 +174,7 @@ public class MatchController {
 
             Match savedMatch = matchService.createRoyalRumbleMatch(optionalUser.get(), matchCreationRequest);
 
-            optionalUser.get().getPendingMatch().add(savedMatch);
+            optionalUser.get().getPendingMatch().add(savedMatch.getId());
 
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee() + gambeatFee);
 
@@ -268,10 +269,66 @@ public class MatchController {
                                                                     @RequestBody RoyalRumbleSearchRequest royalRumbleSearchRequest,
                                                                     HttpServletRequest request) {
 
-        System.out.println("it came to here");
+        System.out.println(new Gson().toJson(royalRumbleSearchRequest));
         if(request.getHeader("Authorization") == null) {
 
+            System.out.println("Auth issue");
+
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "User not authorized"), HttpStatus.OK);
+        }
+
+        try{
+
+            Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+
+            Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+            if(!optionalUser.isPresent())
+                return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "No player found"), HttpStatus.OK);
+
+
+            Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(page,20), royalRumbleSearchRequest);
+            System.out.println(page);
+            System.out.println(matchPage.getContent().size());
+            RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(matchPage);
+            //this adds registered(true) to matches the user has been registered to.
+            royalRumbleSearchResponse.setContent(matchService.tagRegisteredMatch(optionalUser.get().getPendingMatch(), royalRumbleSearchResponse.getContent()));
+            royalRumbleSearchResponse.setSuccessful(true);
+            royalRumbleSearchResponse.setMessage("Royal rumble match successfully retrieved");
+            System.out.println(new Gson().toJson(royalRumbleSearchResponse.getContent()));
+            return new ResponseEntity<>(royalRumbleSearchResponse, HttpStatus.OK);
+
+        }catch (Exception exception){
+
+            System.out.println("it reached ana error");
+            return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "Error occurred while fetching matches"), HttpStatus.OK);
+
+        }
+    }
+
+    @GetMapping(value = "/get/stage/{match_id}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<GameStageResponse> getRoyalRumbleMatches(@PathVariable("match_id") String match_id) {
+        try{
+            Optional<GameStage> gameStageOptional = gameStageService.getGameStageByMatchId(match_id);
+            if(gameStageOptional.isPresent()){
+                GameStage gameStage = gameStageOptional.get();
+                GameStageResponse responseModel = new GameStageResponse(true, "Successfully retrieved");
+                responseModel.setData(new Gson().toJson(gameStage.getStageObjects()));
+                return new ResponseEntity<>(responseModel, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(new GameStageResponse(false, "No stage has been found"), HttpStatus.OK);
+            }
+
+        }catch (Exception exception){
+            return new ResponseEntity<>(new GameStageResponse(false, "Error occurred while fetching stage"), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(value = "/royal-rumble/init/{match_id}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<GameStageResponse> initRoyalRumbleMatch(@PathVariable("match_id") String match_id, HttpServletRequest request) {
+        if(request.getHeader("Authorization") == null) {
+            return new ResponseEntity<>(new GameStageResponse(false, "User not authorized"), HttpStatus.OK);
         }
 
         try{
@@ -279,17 +336,36 @@ public class MatchController {
 
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
 
-            Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(page,20), royalRumbleSearchRequest);
+            if(!optionalUser.isPresent())
+                return new ResponseEntity<>(new GameStageResponse(false, "No player found"), HttpStatus.OK);
 
-            RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(matchPage);
-            royalRumbleSearchResponse.setSuccessful(true);
-            royalRumbleSearchResponse.setMessage("Royal rumble match successfully retrieved");
-            return new ResponseEntity<>(royalRumbleSearchResponse, HttpStatus.OK);
+            Optional<Match> matchOptional = matchService.findById(match_id);
+            if(!matchOptional.isPresent())
+                return new ResponseEntity<>(new GameStageResponse(false, "No match found"), HttpStatus.OK);
+
+
+            User foundUser = optionalUser.get();
+            Match foundMatch = matchOptional.get();
+
+            System.out.print(foundUser.getId());
+
+            Optional<MatchSeat> matchSeatOptional = foundMatch.getMatchSeat().stream().filter(matchSeat -> matchSeat.getUser().getId().equals(foundUser.getId())).findFirst();
+
+            if(!matchSeatOptional.isPresent())
+                return new ResponseEntity<>(new GameStageResponse(false, "You don't have a place in this match"), HttpStatus.OK);
+
+            Optional<GameStage> gameStageOptional = gameStageService.getGameStageByMatchId(match_id);
+            if(gameStageOptional.isPresent()){
+                GameStage gameStage = gameStageOptional.get();
+                GameStageResponse responseModel = new GameStageResponse(true, "Successfully retrieved");
+                responseModel.setData(new Gson().toJson(gameStage.getStageObjects()));
+                return new ResponseEntity<>(responseModel, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(new GameStageResponse(false, "No stage has been found"), HttpStatus.OK);
+            }
 
         }catch (Exception exception){
-
-            return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "Error occurred while fetching matches"), HttpStatus.OK);
-
+            return new ResponseEntity<>(new GameStageResponse(false, "Error occurred while fetching stage"), HttpStatus.OK);
         }
     }
 }

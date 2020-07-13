@@ -10,7 +10,7 @@ public class WalletNgTransferRequest {
   private String AccountNumber;
   private String AccountName;
   private String TransactionReference;
-  private String Amount;
+  private long Amount;
   private String Narration;
 
     public String getSecretKey() {
@@ -53,11 +53,11 @@ public class WalletNgTransferRequest {
         TransactionReference = transactionReference;
     }
 
-    public String getAmount() {
+    public long getAmount() {
         return Amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(long amount) {
         Amount = amount;
     }
 

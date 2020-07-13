@@ -4,6 +4,7 @@ import com.gambeat.mimo.server.model.GambeatSystem;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.Wallet;
 import com.gambeat.mimo.server.repository.GambeatSystemRepository;
+import com.gambeat.mimo.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -21,6 +23,9 @@ public class MimoSeverApplication implements CommandLineRunner {
 
     @Autowired
     GambeatSystemRepository gambeatSystemRepository;
+
+	@Autowired
+	UserRepository userRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MimoSeverApplication.class, args);
@@ -43,6 +48,20 @@ public class MimoSeverApplication implements CommandLineRunner {
             user.setWallet(new Wallet());
 
         }
+
+//        List<User> users = userRepository.findAll();
+//		ArrayList<String> ids = new ArrayList<>();
+//		ids.add("5eebee2f2d31bc4d62422d3c");
+//		ids.add("5eee98b7a9b25a6ffd6cd212");
+//		ids.add("5eee997da9b25a6ffd6cd213");
+//		ids.add("5eee99d8a9b25a6ffd6cd214");
+//		ids.add("5eee99f9a9b25a6ffd6cd215");
+//
+//		for (User user: users) {
+//			user.setPendingMatch(ids);
+//			userRepository.save(user);
+//			System.out.print("done saving");
+//		}
 
 	}
 }

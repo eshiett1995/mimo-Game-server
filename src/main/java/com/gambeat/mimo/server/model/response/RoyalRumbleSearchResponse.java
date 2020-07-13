@@ -33,8 +33,6 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         //matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
 
         for(int index = 0; index < matches.getContent().size(); index++){
-            //this.content.add(new FormattedMatch(matches.getContent().get(index)));
-           System.out.println( new Gson().toJson(new FormattedMatch(matches.getContent().get(index))));
            this.content.add(new FormattedMatch(matches.getContent().get(index)));
         }
         this.hasContent = matches.hasContent();
@@ -145,6 +143,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         private Long entryFee;
         private Enum.MatchStatus matchStatus;
         private Enum.MatchState matchState;
+        private boolean registered;
         private int numberOfCompetitors;
         private int competitorLimit;
         private String winners;
@@ -243,6 +242,14 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
 
         public void setCompetitorLimit(int competitorLimit) {
             this.competitorLimit = competitorLimit;
+        }
+
+        public boolean isRegistered() {
+            return registered;
+        }
+
+        public void setRegistered(boolean registered) {
+            this.registered = registered;
         }
     }
 }

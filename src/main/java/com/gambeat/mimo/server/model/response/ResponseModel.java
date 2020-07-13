@@ -35,4 +35,5 @@ public class ResponseModel {
     public void setJtwToken(String jtwToken) {
         this.jtwToken = jtwToken;
     }
+
 }

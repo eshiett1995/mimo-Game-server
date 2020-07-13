@@ -2,8 +2,13 @@ package com.gambeat.mimo.server.model.request;
 
 public class RoyalRumbleSearchRequest {
     private String competitionName;
-    private int number;
-    private double amount;
+    private long minimumAmount;
+    private long maximumAmount;
+    private int minimumPlayers;
+    private int maximumPlayers;
+    private String sortField;
+    private boolean ascending;
+    private boolean filter = false;
 
     public String getCompetitionName() {
         return competitionName;
@@ -13,19 +18,59 @@ public class RoyalRumbleSearchRequest {
         this.competitionName = competitionName;
     }
 
-    public int getNumber() {
-        return number;
+    public double getMinimumAmount() {
+        return minimumAmount;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setMinimumAmount(long minimumAmount) {
+        this.minimumAmount = minimumAmount;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getMaximumAmount() {
+        return maximumAmount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setMaximumAmount(long maximumAmount) {
+        this.maximumAmount = maximumAmount;
+    }
+
+    public double getMinimumPlayers() {
+        return minimumPlayers;
+    }
+
+    public void setMinimumPlayers(int minimumPlayers) {
+        this.minimumPlayers = minimumPlayers;
+    }
+
+    public double getMaximumPlayers() {
+        return maximumPlayers;
+    }
+
+    public void setMaximumPlayers(int maximumPlayers) {
+        this.maximumPlayers = maximumPlayers;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
+    public boolean isAscending() {
+        return ascending;
+    }
+
+    public void setAscending(boolean ascending) {
+        this.ascending = ascending;
+    }
+
+    public boolean isFilter() {
+        return filter;
+    }
+
+    public void setFilter(boolean filter) {
+        this.filter = filter;
     }
 }

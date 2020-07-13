@@ -2,8 +2,7 @@
 
 
 1. create pending match document
-2. withdrawal
-3. Create gambeat system objects as match starts
 4. add settings model to match
-6. Work on match search filter
 7. work on the transaction service methods saveEntryFeeTransaction && saveGambeatFeeTransaction
+8. work on changing currency to kobo
+9. remove finished matches from pendingMatches list on user model

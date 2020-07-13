@@ -1,8 +1,13 @@
 package com.gambeat.mimo.server.controller;
+import com.gambeat.mimo.server.model.Enum;
+import com.gambeat.mimo.server.model.Transaction;
+import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.WalletNgTransferRequest;
+import com.gambeat.mimo.server.model.response.ResponseModel;
 import com.gambeat.mimo.server.model.response.WalletsAfricaBank;
 import com.gambeat.mimo.server.model.response.WalletNgTransferResponse;
 import com.gambeat.mimo.server.service.JwtService;
+import com.gambeat.mimo.server.service.TransactionService;
 import com.gambeat.mimo.server.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -37,16 +43,28 @@ public class TransferController {
     @Autowired
     JwtService jwtService;
 
+    @Autowired
+    TransactionService transactionService;
+
     @PostMapping(path="/wallets.africa", produces = "application/json")
     public @ResponseBody
     ResponseEntity<WalletNgTransferResponse> WalletNgTransfer(HttpServletRequest request, @RequestBody WalletNgTransferRequest walletNgTransferRequest) {
+
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new WalletNgTransferResponse(false, "User not authorized"), HttpStatus.OK);
         }
 
-
-
         Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+        Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+
+        if(!optionalUser.isPresent()){
+            return new ResponseEntity<>(new WalletNgTransferResponse(false, "No user present."), HttpStatus.OK);
+        }
+
+        User user = optionalUser.get();
+        if(user.getWallet().getBalance() > walletNgTransferRequest.getAmount()){
+            return new ResponseEntity<>(new WalletNgTransferResponse(false, "You do not have up to this in you wallet."), HttpStatus.OK);
+        }
 
         walletNgTransferRequest.setSecretKey(walletNgTestSecretKey);
         walletNgTransferRequest.setTransactionReference("Wallet.NG " + UUID.randomUUID().toString());
@@ -71,10 +89,21 @@ public class TransferController {
 
             if(httpResponse.isSuccessful()){
                 walletNgTransferResponse.setSuccessful(true);
+                    user.getWallet().setBalance(user.getWallet().getBalance() - walletNgTransferRequest.getAmount());
+                    userService.update(user);
+                    Transaction transaction = new Transaction();
+                    transaction.setAmount(walletNgTransferRequest.getAmount());
+                    transaction.setCreditWallet(user.getWallet());
+                    transaction.setPaymentOption(Enum.PaymentOption.Cashout);
+                    transaction.setTransactionType(Enum.TransactionType.Credit);
+                    transaction.setReference(walletNgTransferRequest.getTransactionReference());
+                    transaction.setVendor(Enum.Vendor.WalletsAfrica);
+                    transactionService.save(transaction);
+                    return new ResponseEntity<>(new WalletNgTransferResponse(true, "Wallet Successfully updated."), HttpStatus.OK);
             }else{
                 walletNgTransferResponse.setSuccessful(false);
+                return new ResponseEntity<>(walletNgTransferResponse, HttpStatus.OK);
             }
-            return new ResponseEntity<>(walletNgTransferResponse, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(new WalletNgTransferResponse(false, "A server error has occured"), HttpStatus.OK);
         }

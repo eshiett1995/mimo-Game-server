@@ -1,14 +1,22 @@
 package com.gambeat.mimo.server.service.implementation;
 
+import com.gambeat.mimo.server.model.GameStage;
 import com.gambeat.mimo.server.model.StageObject;
-import com.gambeat.mimo.server.service.StageGeneratorService;
+import com.gambeat.mimo.server.repository.GameStageRepository;
+import com.gambeat.mimo.server.service.GameStageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class StageGenerationImplementation implements StageGeneratorService {
+public class GameGameStageServiceImplementation implements GameStageService {
+
+    @Autowired
+    GameStageRepository gameStageRepository;
+
     @Override
     public List<StageObject> generateStage(int iteration) {
         List<StageObject> stageObjects = new ArrayList<>();
@@ -23,5 +31,15 @@ public class StageGenerationImplementation implements StageGeneratorService {
             stageObjects.add(stageObject);
         }
         return stageObjects;
+    }
+
+    @Override
+    public GameStage save(GameStage gameStage) {
+        return gameStageRepository.save(gameStage);
+    }
+
+    @Override
+    public Optional<GameStage> getGameStageByMatchId(String matchId) {
+        return gameStageRepository.findByMatch_Id(matchId);
     }
 }

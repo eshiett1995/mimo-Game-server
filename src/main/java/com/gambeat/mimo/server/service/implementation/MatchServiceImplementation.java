@@ -5,14 +5,20 @@ import com.gambeat.mimo.server.model.*;
 import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
+import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import com.gambeat.mimo.server.repository.MatchRepository;
 import com.gambeat.mimo.server.service.MatchSeatService;
 import com.gambeat.mimo.server.service.MatchService;
-import com.gambeat.mimo.server.service.StageGeneratorService;
+import com.gambeat.mimo.server.service.GameStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,13 +33,16 @@ public class MatchServiceImplementation implements MatchService {
     private long royalRumbleTimeLimitSeconds;
 
     @Autowired
+    MongoTemplate mongoTemplate;
+
+    @Autowired
     MatchRepository matchRepository;
 
     @Autowired
     MatchSeatService matchSeatService;
 
     @Autowired
-    StageGeneratorService stageGeneratorService;
+    GameStageService gameStageService;
 
     @Override
     public Optional<Match> findById(String id) {
@@ -101,9 +110,16 @@ public class MatchServiceImplementation implements MatchService {
         match.setMatchState(Enum.MatchState.Open);
         match.setMatchType(Enum.MatchType.RoyalRumble);
         match.setName(Objects.equals(matchCreationRequest.getMatchName(), "") ? this.generateMatchName(user) : matchCreationRequest.getMatchName());
-        match.setStageObjects(stageGeneratorService.generateStage(1000));
+
+
+        GameStage gameStage = new GameStage();
+        gameStage.setStageObjects(gameStageService.generateStage(1000));
+
         match.setMatchStatus(Enum.MatchStatus.Started);
-        return this.save(match);
+        Match savedMatch = this.save(match);
+        gameStage.setMatch(savedMatch);
+        gameStageService.save(gameStage);
+        return savedMatch;
     }
 
     @Override
@@ -113,7 +129,45 @@ public class MatchServiceImplementation implements MatchService {
 
     @Override
     public Page<Match> getActiveRoyalRumbleMatches(Pageable pageable, RoyalRumbleSearchRequest royalRumbleSearchRequest) {
-        return matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open, pageable);
+
+        if(!royalRumbleSearchRequest.isFilter()) {
+            return matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open, pageable);
+        }else{
+
+            String sortField = royalRumbleSearchRequest.getSortField().isEmpty() ? "createdAt" : royalRumbleSearchRequest.getSortField();
+
+            //todo make it look for only open ones
+            Query query = new Query();
+            query.addCriteria(
+                    Criteria.where("name").regex(royalRumbleSearchRequest.getCompetitionName())
+                    .and("entryFee")
+                    .gte(royalRumbleSearchRequest.getMinimumAmount()).lte(royalRumbleSearchRequest.getMaximumAmount())
+                    .and("competitorLimit")
+                    .gte(royalRumbleSearchRequest.getMinimumAmount()).lte(royalRumbleSearchRequest.getMaximumPlayers())
+            );
+            query.with(Sort.by(royalRumbleSearchRequest.isAscending() ? Sort.Direction.ASC : Sort.Direction.DESC,sortField));
+            query.with(pageable);
+            List<Match> matches = mongoTemplate.find(query,Match.class);
+            return PageableExecutionUtils.getPage(
+                    matches,
+                    pageable,
+                    () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), Match.class));
+        }
+    }
+
+    @Override
+    public ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatch(ArrayList<String> pendingMatch, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches) {
+        for(int index = 0 ; index < matches.size(); index++){
+            final int tempIndex = index;
+            Optional<String> OptionalId = pendingMatch.stream().filter(pm -> pm.equals(matches.get(tempIndex).getId())).findFirst();
+            matches.get(tempIndex).setRegistered(OptionalId.isPresent());
+        }
+        return matches;
+    }
+
+    @Override
+    public ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatchFromStringArray(ArrayList<String> pendingMatchIds, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches) {
+        return null;
     }
 
     @Override

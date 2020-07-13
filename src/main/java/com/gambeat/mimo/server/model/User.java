@@ -16,8 +16,7 @@ public class User extends Default {
     private Wallet wallet;
     private Statistics statistics;
     private FacebookCredential facebookCredential;
-    @DBRef
-    private ArrayList<Match> pendingMatch = new ArrayList<>();
+    private ArrayList<String> pendingMatch = new ArrayList<>();
 
 
     public String getUsername() {
@@ -80,11 +79,11 @@ public class User extends Default {
         this.facebookCredential = facebookCredential;
     }
 
-    public ArrayList<Match> getPendingMatch() {
+    public ArrayList<String> getPendingMatch() {
         return pendingMatch;
     }
 
-    public void setPendingMatch(ArrayList<Match> pendingMatch) {
+    public void setPendingMatch(ArrayList<String> pendingMatch) {
         this.pendingMatch = pendingMatch;
     }
 }

@@ -10,7 +10,7 @@ public class PaystackInitResponse extends ResponseModel{
 
     private boolean status;
 
-    private Data data;
+    //private Data data;
 
     public boolean isStatus() {
         return status;
@@ -20,13 +20,13 @@ public class PaystackInitResponse extends ResponseModel{
         this.status = status;
     }
 
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
-    }
+//    public Data getData() {
+//        return data;
+//    }
+//
+//    public void setData(Data data) {
+//        this.data = data;
+//    }
 
     class Data {
 

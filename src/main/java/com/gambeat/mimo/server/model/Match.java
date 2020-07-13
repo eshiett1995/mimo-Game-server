@@ -17,7 +17,6 @@ public class Match extends Default {
     private Enum.MatchState matchState;
     private ArrayList<MatchSeat> matchSeat = new ArrayList<>();
     private ArrayList<MatchSeat> winners = new ArrayList<>();
-    private List<StageObject> stageObjects = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -73,14 +72,6 @@ public class Match extends Default {
 
     public void setMatchSeat(ArrayList<MatchSeat> matchSeat) {
         this.matchSeat = matchSeat;
-    }
-
-    public List<StageObject> getStageObjects() {
-        return stageObjects;
-    }
-
-    public void setStageObjects(List<StageObject> stageObjects) {
-        this.stageObjects = stageObjects;
     }
 
     public Enum.MatchState getMatchState() {

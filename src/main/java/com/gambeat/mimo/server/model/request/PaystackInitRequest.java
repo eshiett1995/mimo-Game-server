@@ -5,7 +5,7 @@ public class PaystackInitRequest {
     public PaystackInitRequest() {}
 
     private String reference;
-    private String amount;
+    private long amount;
     private String email;
 
     public String getReference() {
@@ -16,11 +16,11 @@ public class PaystackInitRequest {
         this.reference = reference;
     }
 
-    public String getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

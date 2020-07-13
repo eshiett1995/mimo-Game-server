@@ -11,7 +11,11 @@ public class Transaction extends Default {
 
     private Enum.TransactionType transactionType;
 
-    public Enum.PaymentOption paymentOption;
+    private Enum.PaymentOption paymentOption;
+
+    private String reference;
+
+    private Enum.Vendor vendor;
 
     @DBRef
     private Wallet debitWallet;
@@ -58,5 +62,21 @@ public class Transaction extends Default {
 
     public void setCreditWallet(Wallet creditWallet) {
         this.creditWallet = creditWallet;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public Enum.Vendor getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Enum.Vendor vendor) {
+        this.vendor = vendor;
     }
 }
