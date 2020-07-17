@@ -7,23 +7,23 @@ public class StageObject {
         SpikedLedge,
         SpikedRoller,
     }
-    private GameObject object;
-    private double coordinate;
+    private String object;
+    private float coordinate;
     private  boolean hasLife;
 
-    public GameObject getObject() {
+    public String getObject() {
         return object;
     }
 
-    public void setObject(GameObject object) {
+    public void setObject(String object) {
         this.object = object;
     }
 
-    public double getCoordinate() {
+    public float getCoordinate() {
         return coordinate;
     }
 
-    public void setCoordinate(double coordinate) {
+    public void setCoordinate(float coordinate) {
         this.coordinate = coordinate;
     }
 

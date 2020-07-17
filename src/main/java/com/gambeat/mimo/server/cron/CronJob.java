@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 //@EnableScheduling
 public class CronJob {
 
-    @Autowired
+    //@Autowired
     MatchService matchService;
 
     //@Scheduled(fixedRateString = "${royal.rumble.cron.time}")

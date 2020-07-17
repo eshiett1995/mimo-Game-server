@@ -105,6 +105,7 @@ public class MatchServiceImplementation implements MatchService {
         Match match = new Match();
         match.setCompetition(false);
         match.setEntryFee(matchCreationRequest.getEntryFee());
+        match.setStartTime(new Date().getTime());
         match.getMatchSeat().add(matchSeat);
         match.setCompetitorLimit(matchCreationRequest.getMaxPlayers());
         match.setMatchState(Enum.MatchState.Open);
