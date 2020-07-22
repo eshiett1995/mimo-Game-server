@@ -233,6 +233,10 @@ public class MatchController {
 
             Match match = optionalMatch.get();
 
+            optionalUser.get().getPendingMatch().add(match.getId());
+
+            userService.update(optionalUser.get());
+
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), match.getEntryFee() + gambeatFee);
 
             transactionService.saveEntryFeeTransaction(optionalUser.get().getWallet(), match.getEntryFee());
@@ -357,6 +361,10 @@ public class MatchController {
             Optional<GameStage> gameStageOptional = gameStageService.getGameStageByMatchId(match_id);
             if(gameStageOptional.isPresent()){
                 GameStage gameStage = gameStageOptional.get();
+                //this is temporary ("should be removed after")
+                gameStage.getStageObjects().forEach(stageObject -> {
+                    stageObject.setItem(stageObject.getObject());
+                });
                 GameStageResponse responseModel = new GameStageResponse(true, "Successfully retrieved");
                 responseModel.setData(new Gson().toJson(gameStage.getStageObjects()));
                 return new ResponseEntity<>(responseModel, HttpStatus.OK);
