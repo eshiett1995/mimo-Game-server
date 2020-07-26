@@ -26,20 +26,27 @@ import java.util.Optional;
 @RequestMapping("/top-up")
 public class TopUpController {
 
-    @Autowired
+    final
     UserService userService;
 
-    @Autowired
+    final
     GambeatSystemService gambeatSystemService;
 
-    @Autowired
+    final
     TransactionService transactionService;
 
-    @Autowired
+    final
     JwtService jwtService;
 
     @Value("${paystack.test.secretkey}")
     private String paystackTestSecretKey;
+
+    public TopUpController(UserService userService, GambeatSystemService gambeatSystemService, TransactionService transactionService, JwtService jwtService) {
+        this.userService = userService;
+        this.gambeatSystemService = gambeatSystemService;
+        this.transactionService = transactionService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping(path="/paystack", produces = "application/json")
     public @ResponseBody

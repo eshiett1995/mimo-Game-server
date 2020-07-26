@@ -1,12 +1,10 @@
 package com.gambeat.mimo.server.controller;
 
 import com.gambeat.mimo.server.model.User;
-import com.gambeat.mimo.server.model.response.LeaderBoardResponse;
 import com.gambeat.mimo.server.model.response.ProfileResponse;
 import com.gambeat.mimo.server.service.JwtService;
 import com.gambeat.mimo.server.service.UserService;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,11 +21,16 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    final
     UserService userService;
 
-    @Autowired
+    final
     JwtService jwtService;
+
+    public UserController(UserService userService, JwtService jwtService) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+    }
 
     @GetMapping(produces = "application/json")
     public @ResponseBody

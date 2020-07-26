@@ -37,14 +37,20 @@ public class TransferController {
     @Value("${walletng.test.publickey}")
     private String walletNgTestPublicKey;
 
-    @Autowired
+    final
     UserService userService;
 
-    @Autowired
+    final
     JwtService jwtService;
 
-    @Autowired
+    final
     TransactionService transactionService;
+
+    public TransferController(UserService userService, JwtService jwtService, TransactionService transactionService) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.transactionService = transactionService;
+    }
 
     @PostMapping(path="/wallets.africa", produces = "application/json")
     public @ResponseBody

@@ -30,25 +30,34 @@ import java.util.Optional;
 @RequestMapping("/match")
 public class MatchController {
 
-    @Autowired
+    final
     JwtService jwtService;
 
-    @Autowired
+    final
     UserService userService;
 
-    @Autowired
+    final
     MatchService matchService;
 
-    @Autowired
+    final
     WalletService walletService;
 
-    @Autowired
+    final
     GameStageService gameStageService;
 
-    @Autowired TransactionService transactionService;
+    final TransactionService transactionService;
 
     @Value("${gambeat.fee}")
     private long gambeatFee;
+
+    public MatchController(JwtService jwtService, UserService userService, MatchService matchService, WalletService walletService, GameStageService gameStageService, TransactionService transactionService) {
+        this.jwtService = jwtService;
+        this.userService = userService;
+        this.matchService = matchService;
+        this.walletService = walletService;
+        this.gameStageService = gameStageService;
+        this.transactionService = transactionService;
+    }
 
 //  @GetMapping(value = "/", produces = "application/json")
 //    public @ResponseBody ResponseEntity<MatchEntryResponse> getFirstMatch(HttpServletRequest request) {

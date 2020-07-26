@@ -24,14 +24,20 @@ import java.util.Optional;
 @RequestMapping("/leader-board")
 public class RankController {
 
-    @Autowired
+    final
     RankService rankService;
 
-    @Autowired
+    final
     UserService userService;
 
-    @Autowired
+    final
     JwtService jwtService;
+
+    public RankController(RankService rankService, UserService userService, JwtService jwtService) {
+        this.rankService = rankService;
+        this.userService = userService;
+        this.jwtService = jwtService;
+    }
 
     @GetMapping(produces = "application/json")
     public @ResponseBody

@@ -129,28 +129,28 @@ var dictionary = {
         chinese: "家",
         french: "MAISON",
         spanish: "CASA",
-        english: "HOME"
+        english: "Home"
     },
 
     "what we offer nav menu": {
         chinese: "我們提供什麼",
         french: "CE QUE NOUS OFFRONS",
         spanish: "LO QUE OFRECEMOS",
-        english: "WHAT WE OFFER"
+        english: "What We Offer"
     },
 
     "how to play nav menu": {
         chinese: "怎麼玩",
         french: "COMMENT JOUER",
         spanish: "CÓMO JUGAR",
-        english: "HOW TO PLAY"
+        english: "How To Play"
     },
 
     "contact us nav menu": {
         chinese: "聯繫我們",
         french: "CONTACTEZ NOUS",
         spanish: "CONTÁCTENOS",
-        english: "CONTACT US"
+        english: "Contact Us"
     },
 };
 

@@ -23,12 +23,18 @@ import java.util.Optional;
 @RequestMapping("/auth")
 public class LoginController {
 
-    @Autowired
+    final
     UserService userService;
-    @Autowired
+    final
     JwtService jwtService;
-    @Autowired
+    final
     WalletService walletService;
+
+    public LoginController(UserService userService, JwtService jwtService, WalletService walletService) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.walletService = walletService;
+    }
 
     @PostMapping(value = "/facebook", produces = "application/json") public @ResponseBody
     ResponseEntity<ResponseModel> getEvent(@RequestBody FacebookLoginRequest faceBookLoginRequest) {
