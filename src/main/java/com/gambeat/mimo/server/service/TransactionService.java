@@ -9,5 +9,7 @@ public interface TransactionService {
 
     Transaction saveEntryFeeTransaction(Wallet wallet, long amount);
 
-    Transaction saveGambeatFeeTransaction(Wallet wallet, long ammout);
+    Transaction saveGambeatFeeTransaction(Wallet wallet, long amount);
+
+    Transaction saveCreditWinnerWithCashPriceTransaction(Wallet gambeatWallet, Wallet userWallet, long amount);
 }

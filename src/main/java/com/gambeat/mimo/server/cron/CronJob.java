@@ -6,15 +6,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-//@Configuration
-//@EnableScheduling
+import java.util.Date;
+
+@Configuration
+@EnableScheduling
 public class CronJob {
 
-    //@Autowired
+    @Autowired
     MatchService matchService;
 
-    //@Scheduled(fixedRateString = "${royal.rumble.cron.time}")
+    @Scheduled(fixedRateString = "${royal.rumble.cron.time}")
     public void calculateWinnerOfRoyalRumble() {
+        System.out.println("cron is running " +  new Date().toString());
         matchService.endRoyalRumbleMatchesCronJob();
     }
 }

@@ -9,7 +9,7 @@
 html,
 body {
   height: 100%;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
 }
 
@@ -25,7 +25,7 @@ p {
 
 .btn {
   border-radius: 0.125rem;
-  box-shadow: 0.5px 0.5px 1px #888888;
+  box-shadow: 1px 1px 1px #888888;
 }
 
 /* Navbar */
@@ -41,7 +41,7 @@ p {
   background-image: url("../image/background.png");
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: 100% 600px;
+  background-size: 100% 200px;
 }
 
 .container-welcome-to-gambeat {
@@ -81,7 +81,6 @@ p {
 /* how to play */
 
 #how-to-play {
-  background-color: #cdedf7;
   background-image: url("../image/background.png");
   background-repeat: no-repeat;
   background-position: center top;
@@ -203,7 +202,7 @@ textarea {
   font-size: 20px;
 }
 .facebook {
-  padding: none;
+  padding: 0;
   color: blue;
   background-color: aliceblue;
   margin-left: 70px;
@@ -342,7 +341,7 @@ textarea {
   }
 
   .footer-right {
-    padding-top: 1.5px;
+    padding-top: 2px;
     color: whitesmoke;
   }
   .five-item-right {

@@ -7,9 +7,7 @@ import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
 import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import com.gambeat.mimo.server.repository.MatchRepository;
-import com.gambeat.mimo.server.service.MatchSeatService;
-import com.gambeat.mimo.server.service.MatchService;
-import com.gambeat.mimo.server.service.GameStageService;
+import com.gambeat.mimo.server.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -29,6 +27,9 @@ public class MatchServiceImplementation implements MatchService {
     @Value("${minimum.amount}")
     private long minimumAmount;
 
+    @Value("${allow.other.positions}")
+    private boolean allowOtherPositions;
+
     @Value("${royal.rumble.time.limit.seconds}")
     private long royalRumbleTimeLimitSeconds;
 
@@ -43,6 +44,15 @@ public class MatchServiceImplementation implements MatchService {
 
     @Autowired
     GameStageService gameStageService;
+
+    @Autowired
+    WalletService walletService;
+
+    @Autowired
+    TransactionService transactionService;
+
+    @Autowired
+    GambeatSystemService gambeatSystemService;
 
     @Override
     public Optional<Match> findById(String id) {
@@ -178,23 +188,20 @@ public class MatchServiceImplementation implements MatchService {
 
         List<Match> matches = matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open);
 
-        for(int index = 0; index < matches.size(); index++){
-
-            Match presentMatch = matches.get(index);
+        for (Match presentMatch : matches) {
 
             long startTime = presentMatch.getStartTime();
 
             long presentTime = new Date().getTime();
 
-            if((presentTime - startTime) / 1000 <= royalRumbleTimeLimitSeconds){
-
-                presentMatch.setMatchState(Enum.MatchState.Close);
-
-                presentMatch.setMatchStatus(Enum.MatchStatus.Ended);
-
+            if (startTime == 0 || (presentTime - startTime) / 1000 >= royalRumbleTimeLimitSeconds) {
+                /*
+                   doing this to get the updated model, just in case it had been changed during the fetch
+                   (e.i) someone posting his score just before the match ends.
+                */
                 Optional<Match> matchOptional = matchRepository.findById(presentMatch.getId());
 
-                if(matchOptional.isPresent()){
+                if (matchOptional.isPresent()) {
 
                     presentMatch = matchOptional.get();
 
@@ -202,12 +209,32 @@ public class MatchServiceImplementation implements MatchService {
 
                     presentMatch.setMatchStatus(Enum.MatchStatus.Ended);
 
-                    presentMatch = update(presentMatch);
-
                     presentMatch.setMatchSeat(matchSeatService.givePosition(presentMatch.getMatchSeat()));
 
+                    if(allowOtherPositions) {
+                        presentMatch.setWinners(matchSeatService.getFirstPosition(presentMatch.getMatchSeat()));
+                    }else{
+                        presentMatch.setWinners(matchSeatService.getFirstPosition(presentMatch.getMatchSeat()));
+                    }
+                    presentMatch = update(presentMatch);
+
+                    this.giveMoneyToFirstPositionWinners(presentMatch);
                 }
             }
+        }
+    }
+
+    @Override
+    public void giveMoneyToFirstPositionWinners(Match match) {
+        int playersSize = match.getMatchSeat().size();
+        long tournamentCashPrice = match.getEntryFee() * playersSize;
+        long cashPricePerWinner = tournamentCashPrice/match.getWinners().size();
+        Wallet gambeatWallet = gambeatSystemService.getGambeatWallet();
+
+        for (MatchSeat matchSeat: match.getWinners()) {
+            walletService.credit(matchSeat.getUser().getWallet(), cashPricePerWinner);
+            walletService.debit(gambeatWallet, cashPricePerWinner);
+            transactionService.saveCreditWinnerWithCashPriceTransaction(gambeatWallet,matchSeat.getUser().getWallet(),cashPricePerWinner );
         }
     }
 }

@@ -27,4 +27,15 @@ public class WalletServiceImplementation implements WalletService {
             return false;
         }
     }
+
+    @Override
+    public boolean credit(Wallet wallet, long amount) {
+        try {
+            wallet.setBalance(wallet.getBalance() + amount);
+            this.save(wallet);
+            return true;
+        }catch (Exception error){
+            return false;
+        }
+    }
 }

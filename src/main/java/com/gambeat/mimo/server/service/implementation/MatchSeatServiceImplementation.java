@@ -18,19 +18,19 @@ public class MatchSeatServiceImplementation implements MatchSeatService {
         int lastScore = highestScore;
         int lastPosition = 0;
 
-        for(int index = 0; index < matchSeats.size(); index++){
+        for (MatchSeat matchSeat : matchSeats) {
 
-            int highScore = Collections.max(matchSeats.get(index).getPoints());
+            int highScore = Collections.max(matchSeat.getPoints());
 
-            if(lastPosition == 0){
-                matchSeats.get(index).setPosition(lastPosition + 1);
+            if (lastPosition == 0) {
+                matchSeat.setPosition(lastPosition + 1);
                 lastPosition = 1;
 
-            }else if(highScore == lastScore){
-                matchSeats.get(index).setPosition(lastPosition);
+            } else if (highScore == lastScore) {
+                matchSeat.setPosition(lastPosition);
 
-            }else {
-                matchSeats.get(index).setPosition(lastPosition + 1);
+            } else {
+                matchSeat.setPosition(lastPosition + 1);
                 lastPosition = lastPosition + 1;
             }
 
@@ -38,5 +38,45 @@ public class MatchSeatServiceImplementation implements MatchSeatService {
         }
 
         return matchSeats;
+    }
+
+    @Override
+    public ArrayList<MatchSeat> getFirstPosition(ArrayList<MatchSeat> matchSeats) {
+        ArrayList<MatchSeat> winners = new ArrayList<>();
+        for (MatchSeat matchSeat : matchSeats) {
+            if (winners.isEmpty()){
+                winners.add(matchSeat);
+            }else{
+                if(Collections.max(matchSeat.getPoints()) > Collections.max(winners.get(0).getPoints())){
+                    winners.clear();
+                    winners.add(matchSeat);
+                }else if(Collections.max(matchSeat.getPoints()).equals(Collections.max(winners.get(0).getPoints()))){
+                    winners.add(matchSeat);
+                }
+            }
+        }
+        return winners;
+    }
+
+    @Override
+    public ArrayList<MatchSeat> getNthPosition(ArrayList<MatchSeat> matchSeats, int position) {
+        ArrayList<MatchSeat> winners = new ArrayList<>();
+
+        for (MatchSeat matchSeat : matchSeats) {
+
+            if (winners.isEmpty()){
+                winners.add(matchSeat);
+
+            }else{
+                if(Collections.max(matchSeat.getPoints()) > Collections.max(winners.get(0).getPoints())){
+                    winners.clear();
+                    winners.add(matchSeat);
+                }else if(Collections.max(matchSeat.getPoints()).equals(Collections.max(winners.get(0).getPoints()))){
+                    winners.add(matchSeat);
+                }
+            }
+        }
+
+        return winners;
     }
 }

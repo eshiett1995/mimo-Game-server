@@ -9,7 +9,8 @@ public class Enum {
 
     public enum Vendor{
         Paystack,
-        WalletsAfrica
+        WalletsAfrica,
+        Gambeat
     }
 
     public enum TransactionType{
@@ -23,7 +24,7 @@ public class Enum {
         Reversal,
         Topup,
         Cashout,
-        RoyalRumbleAward
+        RoyalRumbleWinnerCashPrice
     }
 
     public enum LoginType{

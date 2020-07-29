@@ -28,4 +28,5 @@ public interface MatchService {
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatch(ArrayList<String> pendingMatch, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatchFromStringArray(ArrayList<String> pendingMatchIds, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);
     void endRoyalRumbleMatchesCronJob();
+    void giveMoneyToFirstPositionWinners(Match match);
 }
