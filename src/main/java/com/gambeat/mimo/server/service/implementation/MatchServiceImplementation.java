@@ -85,6 +85,18 @@ public class MatchServiceImplementation implements MatchService {
     }
 
     @Override
+    public Boolean hasUserAlreadyJoined(User user, Match match) {
+        if(user.getPendingMatch().contains(match.getId())){
+            return true;
+        }
+        Optional<MatchSeat> foundSeat = match.getMatchSeat()
+                .stream()
+                .filter(ms -> ms.getUser().getId().equals(user.getId()))
+                .findFirst();
+        return foundSeat.isPresent();
+    }
+
+    @Override
     public Boolean hasPendingMatch(User user) {
         Boolean hasPendingMatch = false;
         if(matchRepository.findByMatchSeatUserAndMatchStatus(user, Enum.MatchStatus.Pending).isPresent()){
@@ -184,9 +196,9 @@ public class MatchServiceImplementation implements MatchService {
     @Override
     public void endRoyalRumbleMatchesCronJob() {
 
-        //todo sort by date created
+        Sort sortByStartTime = Sort.by(Sort.Direction.ASC,"startTime");
 
-        List<Match> matches = matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open);
+        List<Match> matches = matchRepository.getAllByMatchTypeAndMatchState(Enum.MatchType.RoyalRumble, Enum.MatchState.Open, sortByStartTime);
 
         for (Match presentMatch : matches) {
 

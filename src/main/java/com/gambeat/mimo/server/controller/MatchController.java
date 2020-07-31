@@ -156,48 +156,35 @@ public class MatchController {
     @PostMapping(value = "/royal-rumble/create", produces = "application/json")
     public @ResponseBody
     ResponseEntity<MatchEntryResponse> saveEvent(@RequestBody MatchCreationRequest matchCreationRequest, HttpServletRequest request) {
-       //System.out.println(new Gson().toJson(matchCreationRequest));
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
         }
 
         try{
             Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
-
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
 
             if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
 
-
-            System.out.println("entry fee "  + matchCreationRequest.getEntryFee());
-
             if(matchService.isBelowMinimumAmount(matchCreationRequest.getEntryFee())){
-
                 return new ResponseEntity<>(new MatchEntryResponse(false, "Your are below the minimum amount"), HttpStatus.OK);
             }
 
             if(optionalUser.get().getWallet().getBalance() < matchCreationRequest.getEntryFee()){
-
                 return new ResponseEntity<>(new MatchEntryResponse(false, "Insufficient wallet balance"), HttpStatus.OK);
             }
 
             Match savedMatch = matchService.createRoyalRumbleMatch(optionalUser.get(), matchCreationRequest);
-
             optionalUser.get().getPendingMatch().add(savedMatch.getId());
-
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee() + gambeatFee);
-
             transactionService.saveEntryFeeTransaction(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee());
-
             transactionService.saveGambeatFeeTransaction(optionalUser.get().getWallet(), gambeatFee);
 
             //todo check if wallets gets updated
             userService.save(optionalUser.get());
 
             if(debitSuccessful) {
-
                 return new ResponseEntity<>(new MatchEntryResponse(true, "You have entered a match"), HttpStatus.OK);
-
             }else{
 
                 matchService.delete(savedMatch);
@@ -226,46 +213,38 @@ public class MatchController {
 
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
 
-            //todo debit gambeat fee
-
-            //todo check if user is already in the competition
-
             if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
 
             Optional<Match> optionalMatch = matchService.findById(matchEntryRequest.getMatchID());
 
             if(!optionalMatch.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "Match not found"), HttpStatus.OK);
 
+            if(matchService.hasUserAlreadyJoined(optionalUser.get(), optionalMatch.get())){
+                return new ResponseEntity<>(new MatchEntryResponse(false, "You have already joined this match"), HttpStatus.OK);
+            }
+
             if(optionalUser.get().getWallet().getBalance() < optionalMatch.get().getEntryFee()){
                 return new ResponseEntity<>(new MatchEntryResponse(false, "You have an insufficient amount in your wallet"), HttpStatus.OK);
             }
-
             Match match = optionalMatch.get();
-
             optionalUser.get().getPendingMatch().add(match.getId());
-
             userService.update(optionalUser.get());
-
+            /*
+              Over here gambeat fee & tournament entry fee
+              are added and removed from the users wallet.
+            */
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), match.getEntryFee() + gambeatFee);
-
             transactionService.saveEntryFeeTransaction(optionalUser.get().getWallet(), match.getEntryFee());
-
             transactionService.saveGambeatFeeTransaction(optionalUser.get().getWallet(), gambeatFee);
 
             if(debitSuccessful) {
-
                 MatchSeat matchSeat = new MatchSeat(optionalUser.get());
-
                 if (match.getMatchSeat().size() < 2) match.setMatchStatus(Enum.MatchStatus.Started);
-
                 match.getMatchSeat().add(matchSeat);
-
                 matchService.update(match);
-
                 return new ResponseEntity<>(new MatchEntryResponse(true, "You have entered a match"), HttpStatus.OK);
 
             }else {
-
                 return new ResponseEntity<>(new MatchEntryResponse(false, "Error occurred Debiting your wallet"), HttpStatus.OK);
             }
         }catch (Exception exception){
@@ -284,26 +263,23 @@ public class MatchController {
 
         System.out.println(new Gson().toJson(royalRumbleSearchRequest));
         if(request.getHeader("Authorization") == null) {
-
-            System.out.println("Auth issue");
-
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "User not authorized"), HttpStatus.OK);
         }
 
         try{
-
             Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
 
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
             if(!optionalUser.isPresent())
                 return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "No player found"), HttpStatus.OK);
 
-
             Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(page,20), royalRumbleSearchRequest);
             System.out.println(page);
             System.out.println(matchPage.getContent().size());
             RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(matchPage);
-            //this adds registered(true) to matches the user has been registered to.
+            /*
+              this adds registered(true) to matches the user has been registered to.
+             */
             royalRumbleSearchResponse.setContent(matchService.tagRegisteredMatch(optionalUser.get().getPendingMatch(), royalRumbleSearchResponse.getContent()));
             royalRumbleSearchResponse.setSuccessful(true);
             royalRumbleSearchResponse.setMessage("Royal rumble match successfully retrieved");
@@ -311,7 +287,6 @@ public class MatchController {
             return new ResponseEntity<>(royalRumbleSearchResponse, HttpStatus.OK);
 
         }catch (Exception exception){
-
             System.out.println("it reached ana error");
             return new ResponseEntity<>(new RoyalRumbleSearchResponse(false, "Error occurred while fetching matches"), HttpStatus.OK);
 

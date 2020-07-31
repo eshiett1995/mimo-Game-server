@@ -48,8 +48,21 @@ public class TransactionServiceImplementation implements TransactionService {
     }
 
     @Override
-    public Transaction saveGambeatFeeTransaction(Wallet wallet, long amount) {
-        return null;
+    public Transaction saveGambeatFeeTransaction(Wallet userWallet, long amount) {
+        try {
+            Wallet gambeatWallet = gambeatSystemService.getGambeatWallet();
+            Transaction transaction = new Transaction();
+            transaction.setAmount(amount);
+            transaction.setDebitWallet(userWallet);
+            transaction.setCreditWallet(gambeatWallet);
+            transaction.setPaymentOption(Enum.PaymentOption.GambeatFee);
+            transaction.setReference(UUID.randomUUID().toString());
+            transaction.setTransactionType(Enum.TransactionType.Credit);
+            transaction.setVendor(Enum.Vendor.Gambeat);
+            return transactionService.save(transaction);
+        }catch (Exception exception){
+            return null;
+        }
     }
 
     @Override
