@@ -158,11 +158,11 @@ public class MatchServiceImplementation implements MatchService {
         }else{
 
             String sortField = royalRumbleSearchRequest.getSortField().isEmpty() ? "createdAt" : royalRumbleSearchRequest.getSortField();
-
-            //todo make it look for only open ones
             Query query = new Query();
             query.addCriteria(
                     Criteria.where("name").regex(royalRumbleSearchRequest.getCompetitionName())
+                    .and("matchState")
+                    .is(Enum.MatchState.Open)
                     .and("entryFee")
                     .gte(royalRumbleSearchRequest.getMinimumAmount()).lte(royalRumbleSearchRequest.getMaximumAmount())
                     .and("competitorLimit")

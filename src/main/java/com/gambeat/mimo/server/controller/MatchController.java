@@ -14,7 +14,6 @@ import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import com.gambeat.mimo.server.service.*;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,57 +95,41 @@ public class MatchController {
     @PostMapping(value = "/royal-rumble/submit", produces = "application/json")
     public @ResponseBody
     ResponseEntity<ResponseModel> uploadRoyalRumbleScore(@RequestBody MatchPlayedRequest matchPlayedRequest, HttpServletRequest request) {
-
       if(request.getHeader("Authorization") == null) {
-
             return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
       }
 
       try{
-
             Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
-
             Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
-
             if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchEntryResponse(false, "User not found"), HttpStatus.OK);
-
             Optional<Match> matchOptional = matchService.findById(matchPlayedRequest.getMatchID());
 
             if(!matchOptional.isPresent()){
-
                 return new ResponseEntity<>(new ResponseModel(false, "Royal rumble match not found"), HttpStatus.OK);
             }
 
             Match foundMatch = matchOptional.get();
-
             MatchSeat foundMatchSeat;
 
             Optional<MatchSeat> matchSeatOptional = foundMatch.getMatchSeat().stream().
                     filter(ms -> ms.getUser().equals(optionalUser.get())).findFirst();
 
           if(!matchSeatOptional.isPresent()){
-
               return new ResponseEntity<>(new ResponseModel(false, "User's seat not found in the Match"), HttpStatus.OK);
 
           }else{
-
               foundMatchSeat = matchSeatOptional.get();
-
               int index = foundMatch.getMatchSeat().indexOf(foundMatchSeat);
-
               foundMatchSeat.setPoints(matchPlayedRequest.getScores());
-
               foundMatch.getMatchSeat().remove(index);
-
               foundMatch.getMatchSeat().add(index, foundMatchSeat);
 
               matchService.update(foundMatch);
           }
-
           return new ResponseEntity<>(new MatchEntryResponse(true, "You have entered a match"), HttpStatus.OK);
 
         }catch (Exception exception){
-
             return new ResponseEntity<>(new MatchEntryResponse(false, "Error occurred entering a match"), HttpStatus.OK);
       }
 
@@ -180,22 +163,17 @@ public class MatchController {
             transactionService.saveEntryFeeTransaction(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee());
             transactionService.saveGambeatFeeTransaction(optionalUser.get().getWallet(), gambeatFee);
 
-            //todo check if wallets gets updated
             userService.save(optionalUser.get());
 
             if(debitSuccessful) {
                 return new ResponseEntity<>(new MatchEntryResponse(true, "You have entered a match"), HttpStatus.OK);
             }else{
-
                 matchService.delete(savedMatch);
-
                 return new ResponseEntity<>(new MatchEntryResponse(true, "An error occurred while debiting you"), HttpStatus.OK);
             }
 
         }catch (Exception exception){
-
             return new ResponseEntity<>(new MatchEntryResponse(false, "Error occurred entering a match"), HttpStatus.OK);
-
         }
     }
 
