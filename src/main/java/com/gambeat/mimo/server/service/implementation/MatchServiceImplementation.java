@@ -97,6 +97,13 @@ public class MatchServiceImplementation implements MatchService {
     }
 
     @Override
+    public Boolean hasExceedDuration(Match match) {
+        long elapsedTimeMilliseconds = new Date().getTime() - match.getStartTime();
+        long elapsedTimeSeconds = elapsedTimeMilliseconds/1000;
+        return elapsedTimeSeconds >= royalRumbleTimeLimitSeconds;
+    }
+
+    @Override
     public Boolean hasPendingMatch(User user) {
         Boolean hasPendingMatch = false;
         if(matchRepository.findByMatchSeatUserAndMatchStatus(user, Enum.MatchStatus.Pending).isPresent()){

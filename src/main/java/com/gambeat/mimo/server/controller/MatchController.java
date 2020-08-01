@@ -110,6 +110,11 @@ public class MatchController {
             }
 
             Match foundMatch = matchOptional.get();
+
+            if(matchService.hasExceedDuration(foundMatch)){
+                return new ResponseEntity<>(new ResponseModel(false, "You are unable to post, this match has closed"), HttpStatus.OK);
+            }
+
             MatchSeat foundMatchSeat;
 
             Optional<MatchSeat> matchSeatOptional = foundMatch.getMatchSeat().stream().
@@ -124,7 +129,6 @@ public class MatchController {
               foundMatchSeat.setPoints(matchPlayedRequest.getScores());
               foundMatch.getMatchSeat().remove(index);
               foundMatch.getMatchSeat().add(index, foundMatchSeat);
-
               matchService.update(foundMatch);
           }
           return new ResponseEntity<>(new MatchEntryResponse(true, "You have entered a match"), HttpStatus.OK);

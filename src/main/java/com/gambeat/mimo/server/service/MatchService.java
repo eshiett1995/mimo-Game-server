@@ -21,6 +21,7 @@ public interface MatchService {
     void delete(Match match);
     Boolean isBelowMinimumAmount(long entryFee);
     Boolean hasUserAlreadyJoined(User user, Match match);
+    Boolean hasExceedDuration(Match match);
     Boolean hasPendingMatch(User user);
     Optional<Match> getPlayableRoyalRumbleMatch(long entryFee);
     Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest);

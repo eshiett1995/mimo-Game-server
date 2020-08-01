@@ -6,8 +6,5 @@
 7. work on the transaction service methods saveEntryFeeTransaction && saveGambeatFeeTransaction
 8. work on changing currency to kobo
 9. remove finished matches from pendingMatches list on user model
-10. work on the cron
 11. work on adding if/else for prod or sandbox env
 12. UI rework
-13. Dont let same person join match multiple times
-14. Dont allow post if match has ended
