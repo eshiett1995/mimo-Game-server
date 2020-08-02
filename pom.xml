@@ -11,6 +11,8 @@
 	<groupId>com.gambeat</groupId>
 	<artifactId>mimo-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
 	<name>Mimo-Sever</name>
 	<description>Mimo Game Server</description>
 

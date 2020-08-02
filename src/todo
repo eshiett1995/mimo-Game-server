@@ -8,3 +8,5 @@
 9. remove finished matches from pendingMatches list on user model
 11. work on adding if/else for prod or sandbox env
 12. UI rework
+13. increase players stats (wins, loss, draws) after match.
+14. custom toast ui for android
