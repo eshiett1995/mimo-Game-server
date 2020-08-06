@@ -1,13 +1,10 @@
 package com.gambeat.mimo.server.model.request;
 
 public class FacebookLoginRequest {
-
     private String firstName;
-
+    private String photoUrl;
     private String lastName;
-
     private String email;
-
     private String id;
 
     public String getFirstName() {
@@ -40,6 +37,14 @@ public class FacebookLoginRequest {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
 

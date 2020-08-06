@@ -75,6 +75,7 @@ public class LeaderBoardResponse extends ResponseModel{
         private String firstName;
         private String lastName;
         private String email;
+        private String photoUrl;
         private long score;
         private long position;
 
@@ -84,6 +85,7 @@ public class LeaderBoardResponse extends ResponseModel{
             this.email = "";
             this.score = 0;
             this.position = 0;
+            this.photoUrl = "";
         }
 
         private FormattedRank(Rank rank){
@@ -92,6 +94,7 @@ public class LeaderBoardResponse extends ResponseModel{
             this.email = rank.getUser().getEmail();
             this.score = rank.getScore();
             this.position = rank.getPosition();
+            this.photoUrl = rank.getUser().getPhotoUrl();
         }
 
         public String getFirstName() {
@@ -132,6 +135,14 @@ public class LeaderBoardResponse extends ResponseModel{
 
         public void setPosition(long position) {
             this.position = position;
+        }
+
+        public String getPhotoUrl() {
+            return photoUrl;
+        }
+
+        public void setPhotoUrl(String photoUrl) {
+            this.photoUrl = photoUrl;
         }
     }
 }

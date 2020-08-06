@@ -10,6 +10,7 @@ public class User extends Default {
     private String username;
     private String firstName;
     private String lastName;
+    private String photoUrl;
     private Enum.LoginType loginType;
     private String email;
     @DBRef
@@ -85,5 +86,13 @@ public class User extends Default {
 
     public void setPendingMatch(ArrayList<String> pendingMatch) {
         this.pendingMatch = pendingMatch;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

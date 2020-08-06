@@ -44,6 +44,11 @@ public class LoginController {
             Optional<User> optionalUser = userService.findExistingFacebookUser(faceBookLoginRequest.getId(), faceBookLoginRequest.getEmail());
 
             if (optionalUser.isPresent()) {
+                user = optionalUser.get();
+                user.getFacebookCredential().setPhotoUrl(faceBookLoginRequest.getPhotoUrl());
+                user.setPhotoUrl(faceBookLoginRequest.getPhotoUrl());
+                userService.update(user);
+
                 responseModel.setMessage("Log in is successful");
                 responseModel.setJtwToken(jwtService.createToken(optionalUser.get()));
                 responseModel.setSuccessful(true);
@@ -55,12 +60,14 @@ public class LoginController {
                 facebookCredential.setId(faceBookLoginRequest.getId());
                 facebookCredential.setFirstName(faceBookLoginRequest.getFirstName());
                 facebookCredential.setLastName(faceBookLoginRequest.getLastName());
+                facebookCredential.setPhotoUrl(faceBookLoginRequest.getPhotoUrl());
 
                 user.setFirstName(faceBookLoginRequest.getFirstName());
                 user.setLastName(faceBookLoginRequest.getLastName());
                 user.setEmail(faceBookLoginRequest.getEmail());
                 user.setLoginType(Enum.LoginType.Facebook);
                 user.setFacebookCredential(facebookCredential);
+                user.setPhotoUrl(faceBookLoginRequest.getPhotoUrl());
 
                 user.setStatistics(new Statistics());
 
