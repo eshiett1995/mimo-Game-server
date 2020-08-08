@@ -1,10 +1,19 @@
 package com.gambeat.mimo.server.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WelcomeController {
+
+    @Value("${paystack.test.secretkey}")
+    private String paystackTestSecretKey;
+
+    @Value("${paystack.test.publicKey}")
+    private String paystackTestPublicKey;
+
     @GetMapping(value = "/")
     public  String getWelcomePage() {
        return "index";
@@ -16,7 +25,8 @@ public class WelcomeController {
     }
 
     @GetMapping(value = "/paystack")
-    public  String getPaystackPage() {
+    public  String getPaystackPage(Model model) {
+        model.addAttribute("secretKey",paystackTestPublicKey);
         return "paystack";
     }
 

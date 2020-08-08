@@ -10,3 +10,4 @@
 12. UI rework
 13. increase players stats (wins, loss, draws) after match.
 14. custom toast ui for android
+15. on failed api request from unity add toasts.

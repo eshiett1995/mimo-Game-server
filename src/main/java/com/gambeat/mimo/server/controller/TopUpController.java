@@ -51,7 +51,12 @@ public class TopUpController {
     @PostMapping(path="/paystack", produces = "application/json")
     public @ResponseBody
     ResponseEntity<ResponseModel> initPaystackCredit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
+
+        System.out.println("it has entered here");
+
         if(request.getHeader("Authorization") == null) {
+
+            System.out.println("no auth key found");
             return new ResponseEntity<>(new ResponseModel(false, "User not authorized"), HttpStatus.OK);
         }
         Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));

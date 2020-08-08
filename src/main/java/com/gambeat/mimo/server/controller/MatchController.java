@@ -186,7 +186,6 @@ public class MatchController {
     ResponseEntity<MatchEntryResponse> joinRoyalRumble(@RequestBody MatchEntryRequest matchEntryRequest, HttpServletRequest request) {
 
       if(request.getHeader("Authorization") == null) {
-
             return new ResponseEntity<>(new MatchEntryResponse(false, "User not authorized"), HttpStatus.OK);
         }
 
