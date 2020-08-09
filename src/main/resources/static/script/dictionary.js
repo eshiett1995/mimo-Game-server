@@ -1,14 +1,14 @@
 var dictionary = {
     "welcome header": {
-        french: "Je suis un service de compétition en ligne social / numérique qui vous permet de rester connecté aux meilleurs jeux mobiles, de socialiser et de rivaliser entre plusieurs compétitions. Le jeu n'a jamais été aussi amusant et addictif. Votre histoire commence maintenant!",
-        english: "I am an online social/digital competition service that enables you stay connected to the best mobile games, socialize and compete accross various competitions. Gaming has never been this fun and addictive. Your story starts now!",
-        spanish: "Soy un servicio de competencia social / digital en línea que te permite estar conectado a los mejores juegos móviles, socializar y competir en varias competiciones. El juego nunca ha sido tan divertido y adictivo. ¡Tu historia comienza ahora!",
+        french: "Le service de compétition en ligne social (numérique) qui vous permet de rester connecté aux meilleurs jeux mobiles, de socialiser et de rivaliser entre plusieurs compétitions. Le jeu n'a jamais été aussi amusant et addictif. Votre histoire commence maintenant!",
+        english: "I am an online social (digital) competition service that enables you stay connected to the best mobile games, socialize and compete accross various competitions. Gaming has never been this fun and addictive. Your story starts now!",
+        spanish: "Soy un servicio de competencia social (digital) en línea que te permite estar conectado a los mejores juegos móviles, socializar y competir en varias competiciones. El juego nunca ha sido tan divertido y adictivo. ¡Tu historia comienza ahora!",
         chinese: "我是一個在線社交/數字競賽服務，可讓您與各種比賽中的最佳手機遊戲，社交和競爭保持聯繫。遊戲從未如此有趣和令人上癮。你的故事現在開始"
     },
     "welcome note": {
-        french: "Je suis un service de compétition en ligne social / numérique qui vous permet de rester connecté aux meilleurs jeux mobiles, de socialiser et de rivaliser entre plusieurs compétitions. Le jeu n'a jamais été aussi amusant et addictif. Votre histoire commence maintenant!",
-        english: "The social/digital competition service thats enables you stay connected to the best mobile games, socialize and compete accross various competitions. Gaming has never been this fun and addictive. Your story starts now!",
-        spanish: "Soy un servicio de competencia social / digital en línea que te permite estar conectado a los mejores juegos móviles, socializar y competir en varias competiciones. El juego nunca ha sido tan divertido y adictivo. ¡Tu historia comienza ahora!",
+        french: "Le service de compétition en ligne social (numérique) qui vous permet de rester connecté aux meilleurs jeux mobiles, de socialiser et de rivaliser entre plusieurs compétitions. Le jeu n'a jamais été aussi amusant et addictif. Votre histoire commence maintenant!",
+        english: "The social (digital) competition service that enables you stay connected to the best mobile games, socialize and compete accross various competitions. Gaming has never been this fun and addictive. Your story starts now!",
+        spanish: "Soy un servicio de competencia social (digital) en línea que te permite estar conectado a los mejores juegos móviles, socializar y competir en varias competiciones. El juego nunca ha sido tan divertido y adictivo. ¡Tu historia comienza ahora!",
         chinese: "我是一個在線社交/數字競賽服務，可讓您與各種比賽中的最佳手機遊戲，社交和競爭保持聯繫。遊戲從未如此有趣和令人上癮。你的故事現在開始"
     },
     "what we offer header": {
