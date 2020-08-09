@@ -24,8 +24,7 @@ p {
 }
 
 .btn {
-  border-radius: 0.125rem;
-  box-shadow: 1px 1px 1px #888888;
+  border-radius: 55px;
 }
 
 /* Navbar */
@@ -39,7 +38,7 @@ p {
 /* welcome to gambeat */
 
 .c {
-  background-image: url("../image/background.png");
+  /*background-image: url("../image/background.png");*/
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: 100% 200px;
