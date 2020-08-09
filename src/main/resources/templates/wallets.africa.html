@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Wallets.Africa</title>
@@ -71,7 +71,7 @@
     $("#wallets-africa-form").submit(function(e){
 
         onLoadingButton();
-        var amount = parseInt($('#amount').val());
+        var amount = parseInt($('#amount').val()) * 100;
         var accountNumber = $('#account_number').val();
         var accountName =  $('#account_name').val();
         var bankCode =  $("#bank_selection").find(":selected").val();
@@ -82,11 +82,11 @@
             console.log("response", response);
             if(response.successful){
                 onLoadingFinishedButton(true);
-                toast({icon:"success", title: response.message , timer:3000});
+                toast({icon:"success", title: response.message || response.Message, timer:3000});
                 goBack(3000);
             }else{
                 onLoadingFinishedButton(false);
-                toast({icon:"error", title: response.message ? response.message : "There was an error cashing out", timer:3000})
+                toast({icon:"error", title: response.message || response.Message || "There was an error cashing out", timer:3000})
             }
        });
 
@@ -125,9 +125,11 @@
             dataType: 'json',
             data: JSON.stringify(payload),
             success: function(data){
+                console.log("elevera", data)
                 callback(true,data);
             },
             error: function(data){
+                console.log("real", data)
                 callback(false,data);
             }
         });
@@ -155,28 +157,8 @@
         }
     }
 
-    function getBanksFromWalletsAfrica(callback) {
-        var settings = {
-            url: "https://sandbox.wallets.africa/transfer/banks/all",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer uvjqzm5xl6bw",
-                'Access-Control-Allow-Origin': '*'
-            },
-            method: "POST",
-            crossDomain: true,
-            dataType: "json",
-            data: '',
-            timeout: 0
-        };
-
-        $.ajax(settings).done(function (response) {
-            callback(response)
-        });
-    }
-
-    function getBanksFromWalletsAfrica2 (callback) {
-        var banks = [
+    function getSavedWalletsAfricaBanks () {
+        return [
             {
                 "BankCode": "044",
                 "BankName": "Access Bank Nigeria",
@@ -352,13 +334,15 @@
                 "PaymentGateway": null
             }
         ]
-
-        callback(banks)
     }
 
     function init(apiKey, src) {
         authentication = apiKey;
         source = src;
+    }
+
+    function initApiKey(apiKey) {
+        authentication = apiKey;
     }
 
     function goBack(time) {
@@ -373,18 +357,26 @@
         submit_btn.text("Cash out N" + amount);
     });
 
-    getBanksFromWalletsAfrica();
-
-    getBanksFromWalletsAfrica2(function (banks) {
+    function displayBanksInSelectionDropdown(banks) {
         $.each(banks, function (i, bank) {
             $('#bank_selection').append($('<option>', {
                 value: bank.BankCode,
                 text : bank.BankName
             }));
         });
-    });
+    }
 </script>
-
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var banks = /*[[${banks}]]*/ undefined;
+    /*]]>*/
+    if(banks && banks.length) {
+        banks = JSON.parse(banks);
+    }else{
+        banks = getSavedWalletsAfricaBanks();
+    }
+    displayBanksInSelectionDropdown(banks);
+</script>
 
 </body>
 

@@ -38,4 +38,9 @@ public class WalletServiceImplementation implements WalletService {
             return false;
         }
     }
+
+    @Override
+    public Wallet update(Wallet wallet) {
+        return walletRepository.save(wallet);
+    }
 }

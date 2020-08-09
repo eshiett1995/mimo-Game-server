@@ -72,7 +72,6 @@
        return false;
     });
     function payWithPaystack(payload){
-        console.log(paystackSecretKey)
         var handler = PaystackPop.setup({
             key: paystackSecretKey,
             email: payload.email,

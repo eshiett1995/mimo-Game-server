@@ -8,10 +8,7 @@ import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.PaystackInitRequest;
 import com.gambeat.mimo.server.model.response.ResponseModel;
 import com.gambeat.mimo.server.repository.GambeatSystemRepository;
-import com.gambeat.mimo.server.service.GambeatSystemService;
-import com.gambeat.mimo.server.service.JwtService;
-import com.gambeat.mimo.server.service.TransactionService;
-import com.gambeat.mimo.server.service.UserService;
+import com.gambeat.mimo.server.service.*;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +27,9 @@ public class TopUpController {
     UserService userService;
 
     final
+    WalletService walletService;
+
+    final
     GambeatSystemService gambeatSystemService;
 
     final
@@ -38,25 +38,22 @@ public class TopUpController {
     final
     JwtService jwtService;
 
-    @Value("${paystack.test.secretkey}")
+    @Value("${paystack.test.secretKey}")
     private String paystackTestSecretKey;
 
-    public TopUpController(UserService userService, GambeatSystemService gambeatSystemService, TransactionService transactionService, JwtService jwtService) {
+    public TopUpController(UserService userService, GambeatSystemService gambeatSystemService, TransactionService transactionService, JwtService jwtService, WalletService walletService) {
         this.userService = userService;
         this.gambeatSystemService = gambeatSystemService;
         this.transactionService = transactionService;
         this.jwtService = jwtService;
+        this.walletService = walletService;
     }
 
     @PostMapping(path="/paystack", produces = "application/json")
     public @ResponseBody
     ResponseEntity<ResponseModel> initPaystackCredit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
 
-        System.out.println("it has entered here");
-
         if(request.getHeader("Authorization") == null) {
-
-            System.out.println("no auth key found");
             return new ResponseEntity<>(new ResponseModel(false, "User not authorized"), HttpStatus.OK);
         }
         Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
@@ -64,7 +61,7 @@ public class TopUpController {
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             user.getWallet().setBalance(user.getWallet().getBalance() + paystackInitRequest.getAmount());
-            userService.update(user);
+            walletService.save(user.getWallet());
             Transaction transaction = new Transaction();
             transaction.setAmount(paystackInitRequest.getAmount());
             transaction.setCreditWallet(user.getWallet());
@@ -79,3 +76,5 @@ public class TopUpController {
         }
     }
 }
+
+//8999914300
