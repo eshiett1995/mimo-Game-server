@@ -22,6 +22,9 @@ public class WelcomeController {
     @Value("${paystack.test.publicKey}")
     private String paystackTestPublicKey;
 
+    @Value("${payant.production.publicKey}")
+    private String payantProductionPublicKey;
+
     private final WalletsAfricaService walletsAfricaService;
 
     public WelcomeController(WalletsAfricaService walletsAfricaService) {
@@ -42,6 +45,12 @@ public class WelcomeController {
     public  String getPaystackPage(Model model) {
         model.addAttribute("secretKey",paystackTestPublicKey);
         return "paystack";
+    }
+
+    @GetMapping(value = "/payant")
+    public  String getPayantPage(Model model) {
+        model.addAttribute("secretKey",payantProductionPublicKey);
+        return "payant";
     }
 
     @GetMapping(value = "/wallets.africa")

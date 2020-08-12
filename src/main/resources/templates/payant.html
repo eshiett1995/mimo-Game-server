@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Paystack</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+    }
+    .form-control{
+        border: 1px solid #e4e4e4;
+        box-shadow: none;
+        height: 52px;
+    }
+</style>
+
+<body>
+
+<div class="container" style="padding-top: 50px;">
+    <div style="display: flex; justify-content: center;">
+        <img width="40px" src="https://uploads.payant.ng/assets/uploads/companies/default.png" alt="Gambeat Logo">
+    </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <h5>Enter your card details to pay</h5>
+    </div>
+    <form id="paystack-form">
+        <div class="form-group">
+            <input type="text" class="form-control" id="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" id="amount" placeholder="Amount" min="50" value="50" required>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <button style="width: 100%; box-shadow: 1px 1px 0 1px #e8e8e8; transition: 0.5s; display: flex; justify-content: center;" type="submit" id="submit-payment" class="btn btn-success">Pay NGN 50</button>
+        </div>
+    </form>
+    <footer style="display: flex; justify-content: center; margin-top: 15px">
+        <a href="https://paystack.com/what-is-paystack">
+            <img data-v-3e7b300e="" src="https://checkout.paystack.com/static/img/secure.003c4c5.svg" alt="Secured by Paystack">
+        </a>
+    </footer>
+</div>
+
+<script src="https://api.payant.ng/assets/js/inline.min.js"></script>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var payantProductionPublicKey = /*[[${secretKey}]]*/ 'default';
+    /*]]>*/
+</script>
+<script>
+    var key = "";
+    var email = "";
+</script>
+<script>
+    $("#paystack-form").submit(function(e){
+        var amount = parseInt($('#amount').val());
+        var email = $('#email').val();
+        payWithPaystack({amount: amount, email: email});
+        return false;
+    });
+    function payWithPaystack(payload){
+        var handler = Payant.invoice({
+            "key": payantProductionPublicKey,
+            "client": {
+                "first_name": "Albert",
+                "last_name": "Jane",
+                "email": payload.email,
+                "phone": "+2348012345678"
+            },
+            "due_date": "12/30/2016",
+            "fee_bearer": "client",
+            "items": [
+                {
+                    "item": "",
+                    "description": "",
+                    "unit_cost": payload.email,
+                    "quantity": "1"
+                }
+            ],
+            callback: function(response) {
+                var reference = response.reference;
+                var amount = payload.amount * 100;
+                var email = payload.email;
+                var requestBody = {"reference":reference,"amount":amount,"email":email};
+
+                initTransaction(requestBody, function (isSuccessful, data) {
+                    if(isSuccessful){
+                        toast({icon:"success", title: response.message , timer:3000});
+                    }else{
+                        toast({icon:"error", title: response.message , timer:3000});
+                    }
+                });
+            },
+            onClose: function() {
+                console.log('Window Closed.');
+            }
+        });
+
+        handler.openIframe();
+    }
+    function initTransaction(payload,callback){
+        $.ajax({
+            url: '/top-up/paystack',
+            headers: {
+                'Authorization': key,
+                'Content-Type':'application/json'
+            },
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(payload),
+            success: function(data){
+                callback(true,data);
+            },
+            error: function(data){
+                callback(false,data);
+            }
+        });
+    }
+    function initEmail(email) {
+        this.email = email;
+        $('#email').val(this.email);
+        $("#email").prop("readonly", true);
+    }
+    function initApiKey(key) {
+        this.key = key;
+    }
+    function toast(payload){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: payload.timer,
+            timerProgressBar: true,
+            onOpen: function(toast) {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: payload.icon,
+            title: payload.title
+        })
+    }
+    $("#amount").keyup(function() {
+        var submit_btn = $("#submit-payment");
+        var amount = Number.isInteger(parseInt($(this).val())) ? parseInt($(this).val()) : 0;
+        submit_btn.text("Pay NGN " + amount);
+    });
+</script>
+
+</body>
+</html>
