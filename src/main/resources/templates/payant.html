@@ -24,6 +24,9 @@
         box-shadow: none;
         height: 52px;
     }
+    iframe{
+        padding: 10px !important;
+    }
 </style>
 
 <body>
@@ -37,7 +40,16 @@
     </div>
     <form id="paystack-form">
         <div class="form-group">
+            <input type="text" class="form-control" id="first_name" placeholder="First name" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="last_name" placeholder="Last name" required>
+        </div>
+        <div class="form-group">
             <input type="text" class="form-control" id="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" id="phone_number" placeholder="Phone number" required>
         </div>
         <div class="form-group">
             <input type="number" class="form-control" id="amount" placeholder="Amount" min="50" value="50" required>
@@ -69,24 +81,27 @@
     $("#paystack-form").submit(function(e){
         var amount = parseInt($('#amount').val());
         var email = $('#email').val();
-        payWithPaystack({amount: amount, email: email});
+        var first_name = $('#first_name').val();
+        var last_name = $('#last_name').val();
+        var phone_number = $('#phone_number').val();
+        payWithPaystack({amount: amount, email: email, first_name : first_name, last_name : last_name, phone_number : phone_number});
         return false;
     });
     function payWithPaystack(payload){
         var handler = Payant.invoice({
             "key": payantProductionPublicKey,
             "client": {
-                "first_name": "Albert",
-                "last_name": "Jane",
+                "first_name": payload.first_name,
+                "last_name": payload.last_name,
                 "email": payload.email,
-                "phone": "+2348012345678"
+                "phone": payload.phone_number
             },
             "due_date": "12/30/2016",
             "fee_bearer": "client",
             "items": [
                 {
                     "item": "custom shirt",
-                    "description": "seamsANDstitches",
+                    "description": "Gambeat",
                     "unit_cost": payload.amount,
                     "quantity": "1"
                 }
