@@ -19,11 +19,17 @@ public class WelcomeController {
     @Value("${paystack.test.secretkey}")
     private String paystackTestSecretKey;
 
+    @Value("${environment}")
+    private String environment;
+
     @Value("${paystack.test.publicKey}")
     private String paystackTestPublicKey;
 
     @Value("${payant.production.publicKey}")
     private String payantProductionPublicKey;
+
+    @Value("${payant.test.publicKey}")
+    private String payantTestPublicKey;
 
     private final WalletsAfricaService walletsAfricaService;
 
@@ -49,7 +55,7 @@ public class WelcomeController {
 
     @GetMapping(value = "/payant")
     public  String getPayantPage(Model model) {
-        model.addAttribute("secretKey",payantProductionPublicKey);
+        model.addAttribute("secretKey",environment.equals("sandbox") ? payantTestPublicKey : payantProductionPublicKey);
         return "payant";
     }
 

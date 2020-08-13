@@ -1,8 +1,8 @@
 package com.gambeat.mimo.server.model.request;
 
-public class PaystackInitRequest {
+public class TopupInitRequest {
 
-    public PaystackInitRequest() {}
+    public TopupInitRequest() {}
 
     private String reference;
     private long amount;

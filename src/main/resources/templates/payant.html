@@ -59,13 +59,13 @@
         </div>
     </form>
     <footer style="display: flex; justify-content: center; margin-top: 15px">
-        <a href="https://paystack.com/what-is-paystack">
-            <img data-v-3e7b300e="" src="https://checkout.paystack.com/static/img/secure.003c4c5.svg" alt="Secured by Paystack">
+        <a href="https://payant.ng/product/payments">
+            <span style="color: #001A34">Secured by <bold>Payant</bold></span>
         </a>
     </footer>
 </div>
 
-<script src="https://api.payant.ng/assets/js/inline.min.js"></script>
+<script src="https://api.demo.payant.ng/assets/js/inline.min.js"></script>
 
 
 <script th:inline="javascript">
@@ -107,16 +107,17 @@
                 }
             ],
             callback: function(response) {
-                var reference = response.reference;
+                console.log("response ", response)
+                var reference = response.reference_code;
                 var amount = payload.amount * 100;
                 var email = payload.email;
                 var requestBody = {"reference":reference,"amount":amount,"email":email};
 
                 initTransaction(requestBody, function (isSuccessful, data) {
                     if(isSuccessful){
-                        toast({icon:"success", title: response.message , timer:3000});
+                        toast({icon:"success", title: data.message , timer:3000});
                     }else{
-                        toast({icon:"error", title: response.message , timer:3000});
+                        toast({icon:"error", title: data.message , timer:3000});
                     }
                 });
             },
@@ -129,7 +130,7 @@
     }
     function initTransaction(payload,callback){
         $.ajax({
-            url: '/top-up/paystack',
+            url: '/top-up/payant',
             headers: {
                 'Authorization': key,
                 'Content-Type':'application/json'

@@ -10,6 +10,7 @@ public class Enum {
     public enum Vendor{
         Paystack,
         WalletsAfrica,
+        Payant,
         Gambeat
     }
 

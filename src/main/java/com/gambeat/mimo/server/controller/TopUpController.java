@@ -2,15 +2,12 @@ package com.gambeat.mimo.server.controller;
 
 
 import com.gambeat.mimo.server.model.Enum;
-import com.gambeat.mimo.server.model.GambeatSystem;
 import com.gambeat.mimo.server.model.Transaction;
 import com.gambeat.mimo.server.model.User;
-import com.gambeat.mimo.server.model.request.PaystackInitRequest;
+import com.gambeat.mimo.server.model.request.TopupInitRequest;
 import com.gambeat.mimo.server.model.response.ResponseModel;
-import com.gambeat.mimo.server.repository.GambeatSystemRepository;
 import com.gambeat.mimo.server.service.*;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -51,7 +48,7 @@ public class TopUpController {
 
     @PostMapping(path="/paystack", produces = "application/json")
     public @ResponseBody
-    ResponseEntity<ResponseModel> initPaystackCredit(HttpServletRequest request, @RequestBody PaystackInitRequest paystackInitRequest) {
+    ResponseEntity<ResponseModel> initPaystackCredit(HttpServletRequest request, @RequestBody TopupInitRequest topupInitRequest) {
 
         if(request.getHeader("Authorization") == null) {
             return new ResponseEntity<>(new ResponseModel(false, "User not authorized"), HttpStatus.OK);
@@ -60,15 +57,42 @@ public class TopUpController {
         Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
-            user.getWallet().setBalance(user.getWallet().getBalance() + paystackInitRequest.getAmount());
+            user.getWallet().setBalance(user.getWallet().getBalance() + topupInitRequest.getAmount());
             walletService.save(user.getWallet());
             Transaction transaction = new Transaction();
-            transaction.setAmount(paystackInitRequest.getAmount());
+            transaction.setAmount(topupInitRequest.getAmount());
             transaction.setCreditWallet(user.getWallet());
             transaction.setPaymentOption(Enum.PaymentOption.Topup);
             transaction.setTransactionType(Enum.TransactionType.Credit);
-            transaction.setReference(paystackInitRequest.getReference());
+            transaction.setReference(topupInitRequest.getReference());
             transaction.setVendor(Enum.Vendor.Paystack);
+            transactionService.save(transaction);
+            return new ResponseEntity<>(new ResponseModel(true, "Wallet Successfully updated."), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(new ResponseModel(false, "No user found"), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping(path="/payant", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<ResponseModel> initPayantCredit(HttpServletRequest request, @RequestBody TopupInitRequest topupInitRequest) {
+
+        if(request.getHeader("Authorization") == null) {
+            return new ResponseEntity<>(new ResponseModel(false, "User not authorized"), HttpStatus.OK);
+        }
+        Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+        Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.getWallet().setBalance(user.getWallet().getBalance() + topupInitRequest.getAmount());
+            walletService.save(user.getWallet());
+            Transaction transaction = new Transaction();
+            transaction.setAmount(topupInitRequest.getAmount());
+            transaction.setCreditWallet(user.getWallet());
+            transaction.setPaymentOption(Enum.PaymentOption.Topup);
+            transaction.setTransactionType(Enum.TransactionType.Credit);
+            transaction.setReference(topupInitRequest.getReference());
+            transaction.setVendor(Enum.Vendor.Payant);
             transactionService.save(transaction);
             return new ResponseEntity<>(new ResponseModel(true, "Wallet Successfully updated."), HttpStatus.OK);
         }else{

@@ -85,9 +85,9 @@
 
                 initTransaction(requestBody, function (isSuccessful, data) {
                     if(isSuccessful){
-                        toast({icon:"success", title: response.message , timer:3000});
+                        toast({icon:"success", title: data.message , timer:3000});
                     }else{
-                        toast({icon:"error", title: response.message , timer:3000});
+                        toast({icon:"error", title: data.message , timer:3000});
                     }
                 });
             },
