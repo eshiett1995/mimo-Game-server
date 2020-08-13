@@ -118,7 +118,7 @@ public class MatchController {
             MatchSeat foundMatchSeat;
 
             Optional<MatchSeat> matchSeatOptional = foundMatch.getMatchSeat().stream().
-                    filter(ms -> ms.getUser().equals(optionalUser.get())).findFirst();
+                    filter(ms -> ms.getUser().getId().equals(optionalUser.get().getId())).findFirst();
 
           if(!matchSeatOptional.isPresent()){
               return new ResponseEntity<>(new ResponseModel(false, "User's seat not found in the Match"), HttpStatus.OK);

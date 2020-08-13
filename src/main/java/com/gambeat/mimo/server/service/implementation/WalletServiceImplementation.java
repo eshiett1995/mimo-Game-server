@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class WalletServiceImplementation implements WalletService {
 
-    @Autowired
+    final
     WalletRepository walletRepository;
+
+    public WalletServiceImplementation(WalletRepository walletRepository) {
+        this.walletRepository = walletRepository;
+    }
 
     @Override
     public Wallet save(Wallet wallet) {
