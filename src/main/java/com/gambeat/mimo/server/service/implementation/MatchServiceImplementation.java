@@ -40,6 +40,9 @@ public class MatchServiceImplementation implements MatchService {
     MatchRepository matchRepository;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     MatchSeatService matchSeatService;
 
     @Autowired
@@ -238,8 +241,11 @@ public class MatchServiceImplementation implements MatchService {
                     presentMatch = update(presentMatch);
 
                     this.giveMoneyToFirstPositionWinners(presentMatch);
+                    this.updatePlayersStats(presentMatch);
                 }
             }
+            String s1 =String.format("the time in seconds %s and the limit %s", (presentTime - startTime) / 1000, royalRumbleTimeLimitSeconds);
+            System.out.println(s1);
         }
     }
 
@@ -254,6 +260,24 @@ public class MatchServiceImplementation implements MatchService {
             walletService.credit(matchSeat.getUser().getWallet(), cashPricePerWinner);
             walletService.debit(gambeatWallet, cashPricePerWinner);
             transactionService.saveCreditWinnerWithCashPriceTransaction(gambeatWallet,matchSeat.getUser().getWallet(),cashPricePerWinner );
+        }
+    }
+
+    @Override
+    public void updatePlayersStats(Match match) {
+        for (MatchSeat matchseat: match.getMatchSeat()) {
+            Optional<MatchSeat> matchSeatOptional =  match.getWinners().stream()
+                    .filter(ms -> ms.getUser().getId().equals(matchseat.getUser().getId()))
+                    .findFirst();
+
+            User presentUser = matchseat.getUser();
+            Statistics statistics = presentUser.getStatistics();
+            if(matchSeatOptional.isPresent()){
+                presentUser.getStatistics().setWins(statistics.getWins() + 1);
+            }else{
+                presentUser.getStatistics().setLosses(statistics.getLosses() + 1);
+            }
+            userService.update(presentUser);
         }
     }
 

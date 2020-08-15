@@ -12,8 +12,12 @@ import java.util.Date;
 @EnableScheduling
 public class CronJob {
 
-    @Autowired
+    final
     MatchService matchService;
+
+    public CronJob(MatchService matchService) {
+        this.matchService = matchService;
+    }
 
     @Scheduled(fixedRateString = "${royal.rumble.cron.time}")
     public void calculateWinnerOfRoyalRumble() {

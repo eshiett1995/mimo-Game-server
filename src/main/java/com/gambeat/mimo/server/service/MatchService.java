@@ -32,6 +32,7 @@ public interface MatchService {
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatchFromStringArray(ArrayList<String> pendingMatchIds, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);
     void endRoyalRumbleMatchesCronJob();
     void giveMoneyToFirstPositionWinners(Match match);
+    void updatePlayersStats(Match match);
     void updateMatchSeatToHasStarted(Match match, MatchSeat matchSeat);
     void updateMatchSeatToHasFinished(Match match, MatchSeat matchSeat);
 }
