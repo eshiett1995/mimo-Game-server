@@ -20,4 +20,14 @@ public class GambeatSystemServiceImplementation implements GambeatSystemService 
         List<GambeatSystem> gambeatSystems = gambeatSystemRepository.findAll();
         return gambeatSystems.get(0).getUser().getWallet();
     }
+
+    @Override
+    public List<GambeatSystem> findAll() {
+        return gambeatSystemRepository.findAll();
+    }
+
+    @Override
+    public GambeatSystem save(GambeatSystem gambeatSystem) {
+        return gambeatSystemRepository.save(gambeatSystem);
+    }
 }

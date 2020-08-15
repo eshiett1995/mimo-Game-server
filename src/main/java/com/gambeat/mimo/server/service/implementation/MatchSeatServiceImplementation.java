@@ -12,6 +12,10 @@ public class MatchSeatServiceImplementation implements MatchSeatService {
     @Override
     public ArrayList<MatchSeat> givePosition(ArrayList<MatchSeat> matchSeats) {
 
+        if(matchSeats.isEmpty()){
+            return matchSeats;
+        }
+
         Collections.sort(matchSeats);
 
         int highestScore = Collections.max(matchSeats.get(0).getPoints());
@@ -20,7 +24,7 @@ public class MatchSeatServiceImplementation implements MatchSeatService {
 
         for (MatchSeat matchSeat : matchSeats) {
 
-            int highScore = Collections.max(matchSeat.getPoints());
+            int highScore = matchSeat.getPoints().isEmpty() ? 0 : Collections.max(matchSeat.getPoints());
 
             if (lastPosition == 0) {
                 matchSeat.setPosition(lastPosition + 1);
@@ -47,10 +51,12 @@ public class MatchSeatServiceImplementation implements MatchSeatService {
             if (winners.isEmpty()){
                 winners.add(matchSeat);
             }else{
-                if(Collections.max(matchSeat.getPoints()) > Collections.max(winners.get(0).getPoints())){
+                int seatMaxPoint = matchSeat.getPoints().isEmpty() ? 0 : Collections.max(matchSeat.getPoints());
+                int winnerMaxPoint = winners.get(0).getPoints().isEmpty() ? 0 : Collections.max(winners.get(0).getPoints());
+                if(seatMaxPoint > winnerMaxPoint){
                     winners.clear();
                     winners.add(matchSeat);
-                }else if(Collections.max(matchSeat.getPoints()).equals(Collections.max(winners.get(0).getPoints()))){
+                }else if(seatMaxPoint == winnerMaxPoint){
                     winners.add(matchSeat);
                 }
             }

@@ -5,6 +5,7 @@ import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.Wallet;
 import com.gambeat.mimo.server.repository.GambeatSystemRepository;
 import com.gambeat.mimo.server.repository.UserRepository;
+import com.gambeat.mimo.server.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,11 +23,14 @@ import java.util.List;
 @SpringBootApplication
 public class MimoSeverApplication implements CommandLineRunner {
 
-    @Autowired
-    GambeatSystemRepository gambeatSystemRepository;
+	@Autowired
+	GambeatSystemRepository gambeatSystemRepository;
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	WalletRepository walletRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MimoSeverApplication.class, args);
@@ -37,7 +41,7 @@ public class MimoSeverApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-        List<GambeatSystem> gambeatSystems = gambeatSystemRepository.findAll();
+		List<GambeatSystem> gambeatSystems = gambeatSystemRepository.findAll();
 
         if(gambeatSystems.isEmpty()){
 
@@ -46,7 +50,13 @@ public class MimoSeverApplication implements CommandLineRunner {
             user.setFirstName("Gambeat");
             user.setLastName("Gambeat");
             user.setUsername("Gambeat");
-            user.setWallet(new Wallet());
+			Wallet createdWallet = walletRepository.save(new Wallet());
+			user.setWallet(createdWallet);
+			User savedUser = userRepository.save(user);
+
+			GambeatSystem gambeatSystem = new GambeatSystem();
+			gambeatSystem.setUser(savedUser);
+			gambeatSystemRepository.save(gambeatSystem);
 
         }
 
@@ -69,7 +79,7 @@ public class MimoSeverApplication implements CommandLineRunner {
 
 
 class EchoServer extends Thread {
-     //crisp for me
+	//crisp for me
 	private DatagramSocket socket;
 	private boolean running;
 	private byte[] buf = new byte[256];

@@ -74,8 +74,10 @@ public class MatchSeat implements Comparable {
         int score = ((MatchSeat) matchSeat).points.get(0);
 
         Collections.sort(this.getPoints(), Collections.reverseOrder());
-        int presentScore =  this.getPoints().get(0);
-
+        int presentScore = 0;
+        if(!this.getPoints().isEmpty()){
+            presentScore =  this.getPoints().get(0);
+        }
         return score - presentScore;
     }
 }

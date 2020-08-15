@@ -1,5 +1,11 @@
 package com.gambeat.mimo.server.controller;
 
+import com.gambeat.mimo.server.model.GambeatSystem;
+import com.gambeat.mimo.server.model.User;
+import com.gambeat.mimo.server.model.Wallet;
+import com.gambeat.mimo.server.model.response.ResponseModel;
+import com.gambeat.mimo.server.service.GambeatSystemService;
+import com.gambeat.mimo.server.service.UserService;
 import com.gambeat.mimo.server.service.WalletsAfricaService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -12,12 +18,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class WelcomeController {
 
     @Value("${paystack.test.secretkey}")
     private String paystackTestSecretKey;
+
+    final
+    UserService userService;
 
     @Value("${environment}")
     private String environment;
@@ -33,8 +43,9 @@ public class WelcomeController {
 
     private final WalletsAfricaService walletsAfricaService;
 
-    public WelcomeController(WalletsAfricaService walletsAfricaService) {
+    public WelcomeController(WalletsAfricaService walletsAfricaService, UserService userService) {
         this.walletsAfricaService = walletsAfricaService;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/")

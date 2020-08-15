@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class GambeatSystem {
+public class GambeatSystem extends Default{
     @DBRef
     private User user;
 
