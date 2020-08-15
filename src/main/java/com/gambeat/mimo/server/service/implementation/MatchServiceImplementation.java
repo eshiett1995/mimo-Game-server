@@ -256,4 +256,18 @@ public class MatchServiceImplementation implements MatchService {
             transactionService.saveCreditWinnerWithCashPriceTransaction(gambeatWallet,matchSeat.getUser().getWallet(),cashPricePerWinner );
         }
     }
+
+    @Override
+    public void updateMatchSeatToHasStarted(Match match, MatchSeat matchSeat) {
+            int indexOfMatchSeat = match.getMatchSeat().indexOf(matchSeat);
+            match.getMatchSeat().get(indexOfMatchSeat).setHasStarted(true);
+            this.update(match);
+    }
+
+    @Override
+    public void updateMatchSeatToHasFinished(Match match, MatchSeat matchSeat) {
+        int indexOfMatchSeat = match.getMatchSeat().indexOf(matchSeat);
+        match.getMatchSeat().get(indexOfMatchSeat).setHasFinished(true);
+        this.update(match);
+    }
 }

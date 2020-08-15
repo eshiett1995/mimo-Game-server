@@ -22,6 +22,12 @@ public class MatchSeat implements Comparable {
 
     private int position;
 
+    private boolean hasStarted;
+
+    private boolean hasFinished;
+
+
+
     public User getUser() {
         return user;
     }
@@ -44,6 +50,22 @@ public class MatchSeat implements Comparable {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public boolean isHasStarted() {
+        return hasStarted;
+    }
+
+    public void setHasStarted(boolean hasStarted) {
+        this.hasStarted = hasStarted;
+    }
+
+    public boolean isHasFinished() {
+        return hasFinished;
+    }
+
+    public void setHasFinished(boolean hasFinished) {
+        this.hasFinished = hasFinished;
     }
 
     @Override

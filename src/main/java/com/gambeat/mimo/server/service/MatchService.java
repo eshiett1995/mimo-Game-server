@@ -1,6 +1,7 @@
 package com.gambeat.mimo.server.service;
 
 import com.gambeat.mimo.server.model.Match;
+import com.gambeat.mimo.server.model.MatchSeat;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
@@ -31,4 +32,6 @@ public interface MatchService {
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatchFromStringArray(ArrayList<String> pendingMatchIds, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);
     void endRoyalRumbleMatchesCronJob();
     void giveMoneyToFirstPositionWinners(Match match);
+    void updateMatchSeatToHasStarted(Match match, MatchSeat matchSeat);
+    void updateMatchSeatToHasFinished(Match match, MatchSeat matchSeat);
 }

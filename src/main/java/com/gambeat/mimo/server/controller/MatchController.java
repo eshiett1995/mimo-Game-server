@@ -124,6 +124,7 @@ public class MatchController {
               return new ResponseEntity<>(new ResponseModel(false, "User's seat not found in the Match"), HttpStatus.OK);
 
           }else{
+              matchService.updateMatchSeatToHasFinished(foundMatch, matchSeatOptional.get());
               foundMatchSeat = matchSeatOptional.get();
               int index = foundMatch.getMatchSeat().indexOf(foundMatchSeat);
               foundMatchSeat.setPoints(matchPlayedRequest.getScores());
@@ -316,12 +317,12 @@ public class MatchController {
             User foundUser = optionalUser.get();
             Match foundMatch = matchOptional.get();
 
-            System.out.print(foundUser.getId());
-
             Optional<MatchSeat> matchSeatOptional = foundMatch.getMatchSeat().stream().filter(matchSeat -> matchSeat.getUser().getId().equals(foundUser.getId())).findFirst();
 
             if(!matchSeatOptional.isPresent())
                 return new ResponseEntity<>(new GameStageResponse(false, "You don't have a place in this match"), HttpStatus.OK);
+
+            matchService.updateMatchSeatToHasStarted(foundMatch, matchSeatOptional.get());
 
             Optional<GameStage> gameStageOptional = gameStageService.getGameStageByMatchId(match_id);
             if(gameStageOptional.isPresent()){
