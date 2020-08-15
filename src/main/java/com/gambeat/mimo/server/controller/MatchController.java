@@ -258,7 +258,7 @@ public class MatchController {
             Page<Match> matchPage = matchService.getActiveRoyalRumbleMatches(PageRequest.of(page,20), royalRumbleSearchRequest);
             System.out.println(page);
             System.out.println(matchPage.getContent().size());
-            RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(matchPage);
+            RoyalRumbleSearchResponse royalRumbleSearchResponse = new RoyalRumbleSearchResponse(optionalUser.get(), matchPage);
             /*
               this adds registered(true) to matches the user has been registered to.
              */

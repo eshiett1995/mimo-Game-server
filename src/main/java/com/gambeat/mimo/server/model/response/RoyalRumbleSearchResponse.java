@@ -3,11 +3,13 @@ package com.gambeat.mimo.server.model.response;
 import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.Match;
 import com.gambeat.mimo.server.model.MatchSeat;
+import com.gambeat.mimo.server.model.User;
 import com.google.gson.Gson;
 import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RoyalRumbleSearchResponse  extends ResponseModel{
     private int number;
@@ -24,7 +26,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
 
     public RoyalRumbleSearchResponse(){}
 
-    public RoyalRumbleSearchResponse(Page<Match> matches){
+    public RoyalRumbleSearchResponse(User user, Page<Match> matches){
         super(true, "Successful");
         this.number = matches.getNumber();
         this.size =  matches.getSize();
@@ -33,7 +35,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         //matches.getContent().forEach(match -> this.content.add(new FormattedMatch(match)));
 
         for(int index = 0; index < matches.getContent().size(); index++){
-           this.content.add(new FormattedMatch(matches.getContent().get(index)));
+           this.content.add(new FormattedMatch(user, matches.getContent().get(index)));
         }
         this.hasContent = matches.hasContent();
         this.isFirst = matches.isFirst();
@@ -148,6 +150,8 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         private int numberOfCompetitors;
         private int competitorLimit;
         private String winners;
+        private boolean hasStarted;
+        private boolean hasFinished;
 
         private FormattedMatch(){
             this.id = "";
@@ -161,7 +165,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
             this.winners = "";
         }
 
-        private FormattedMatch(Match match) {
+        private FormattedMatch(User user, Match match) {
 
             this.id = match.getId();
             this.name = match.getName();
@@ -172,7 +176,13 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
             this.numberOfCompetitors = match.getMatchSeat().size();
             this.winners =  parseWinners(match.getWinners());
             this.competitorLimit = match.getCompetitorLimit();
+            Optional<MatchSeat> matchSeatOptional = match.getMatchSeat().stream().
+                    filter(ms -> ms.getUser().getId().equals(user.getId())).findFirst();
 
+            if(matchSeatOptional.isPresent()){
+                hasStarted = matchSeatOptional.get().isHasStarted();
+                hasFinished = matchSeatOptional.get().isHasFinished();
+            }
         }
 
         private String parseWinners(List<MatchSeat> matchSeats){
@@ -261,6 +271,22 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
 
         public void setStartTime(long startTime) {
             this.startTime = startTime;
+        }
+
+        public boolean isHasStarted() {
+            return hasStarted;
+        }
+
+        public void setHasStarted(boolean hasStarted) {
+            this.hasStarted = hasStarted;
+        }
+
+        public boolean isHasFinished() {
+            return hasFinished;
+        }
+
+        public void setHasFinished(boolean hasFinished) {
+            this.hasFinished = hasFinished;
         }
     }
 }
