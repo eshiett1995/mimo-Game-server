@@ -7,10 +7,7 @@ import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.MatchEntryRequest;
 import com.gambeat.mimo.server.model.request.MatchPlayedRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
-import com.gambeat.mimo.server.model.response.GameStageResponse;
-import com.gambeat.mimo.server.model.response.MatchEntryResponse;
-import com.gambeat.mimo.server.model.response.ResponseModel;
-import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
+import com.gambeat.mimo.server.model.response.*;
 import com.gambeat.mimo.server.service.*;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
@@ -340,6 +337,29 @@ public class MatchController {
 
         }catch (Exception exception){
             return new ResponseEntity<>(new GameStageResponse(false, "Error occurred while fetching stage"), HttpStatus.OK);
+        }
+    }
+
+
+
+    @GetMapping(value = "/royal-rumble/players/{match_id}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<PlayersInMatchResponse> getPlayersInMatch(@PathVariable("match_id") String match_id, HttpServletRequest request) {
+
+        try{
+            Optional<Match> matchOptional = matchService.findById(match_id);
+            if(!matchOptional.isPresent())
+                return new ResponseEntity<>(new PlayersInMatchResponse(false, "No match found"), HttpStatus.OK);
+
+            Match foundMatch = matchOptional.get();
+
+            PlayersInMatchResponse playersInMatchResponse = new PlayersInMatchResponse(foundMatch);
+            playersInMatchResponse.setSuccessful(true);
+            playersInMatchResponse.setMessage("Successful");
+            return new ResponseEntity<>(playersInMatchResponse, HttpStatus.OK);
+
+        }catch (Exception exception){
+            return new ResponseEntity<>(new PlayersInMatchResponse(false, "Error occurred while fetching players"), HttpStatus.OK);
         }
     }
 }
