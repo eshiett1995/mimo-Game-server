@@ -18,7 +18,7 @@ public class MatchSeatServiceImplementation implements MatchSeatService {
 
         Collections.sort(matchSeats);
 
-        int highestScore = Collections.max(matchSeats.get(0).getPoints());
+        int highestScore = matchSeats.get(0).getPoints().isEmpty() ? 0 :Collections.max(matchSeats.get(0).getPoints());
         int lastScore = highestScore;
         int lastPosition = 0;
 

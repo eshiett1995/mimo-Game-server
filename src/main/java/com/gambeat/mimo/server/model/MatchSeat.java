@@ -71,7 +71,12 @@ public class MatchSeat implements Comparable {
     @Override
     public int compareTo(Object matchSeat) {
         Collections.sort(((MatchSeat)matchSeat).getPoints(), Collections.reverseOrder());
-        int score = ((MatchSeat) matchSeat).points.get(0);
+        int score;
+        if(!((MatchSeat) matchSeat).points.isEmpty()){
+            score = ((MatchSeat) matchSeat).points.get(0);
+        }else{
+            score = 0;
+        }
 
         Collections.sort(this.getPoints(), Collections.reverseOrder());
         int presentScore = 0;
