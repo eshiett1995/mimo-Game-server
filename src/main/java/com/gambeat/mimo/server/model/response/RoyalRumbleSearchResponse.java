@@ -163,8 +163,8 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         private FormattedMatch(){
             this.id = "";
             this.name = "";
-            this.entryFee = 0l;
-            this.startTime = 0l;
+            this.entryFee = 0L;
+            this.startTime = 0L;
             this.matchStatus = Enum.MatchStatus.Started;
             this.matchState = Enum.MatchState.Open;
             this.numberOfCompetitors = 0;
