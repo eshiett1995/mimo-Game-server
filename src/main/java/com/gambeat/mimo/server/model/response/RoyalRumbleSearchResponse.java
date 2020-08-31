@@ -5,13 +5,19 @@ import com.gambeat.mimo.server.model.Match;
 import com.gambeat.mimo.server.model.MatchSeat;
 import com.gambeat.mimo.server.model.User;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public class RoyalRumbleSearchResponse  extends ResponseModel{
+
+    @Value("${royal.rumble.time.limit.seconds}")
+    private long royalRumbleTimeLimitSeconds;
+
     private int number;
     private int size;
     private int numberOfElements;
@@ -152,6 +158,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
         private String winners;
         private boolean hasStarted;
         private boolean hasFinished;
+        private boolean matchEnded = false;
 
         private FormattedMatch(){
             this.id = "";
@@ -163,6 +170,7 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
             this.numberOfCompetitors = 0;
             this.competitorLimit = 0;
             this.winners = "";
+            this.matchEnded = false;
         }
 
         private FormattedMatch(User user, Match match) {
@@ -183,6 +191,10 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
                 hasStarted = matchSeatOptional.get().isHasStarted();
                 hasFinished = matchSeatOptional.get().isHasFinished();
             }
+
+            long startTime = match.getStartTime();
+            long presentTime = new Date().getTime();
+            this.matchEnded = startTime == 0 || (presentTime - startTime) / 1000 >= royalRumbleTimeLimitSeconds;
         }
 
         private String parseWinners(List<MatchSeat> matchSeats){
@@ -287,6 +299,14 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
 
         public void setHasFinished(boolean hasFinished) {
             this.hasFinished = hasFinished;
+        }
+
+        public boolean isMatchEnded() {
+            return matchEnded;
+        }
+
+        public void setMatchEnded(boolean matchEnded) {
+            this.matchEnded = matchEnded;
         }
     }
 }
