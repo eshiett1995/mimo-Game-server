@@ -10,6 +10,7 @@ public class Match extends Default {
     private String name;
     private boolean isCompetition;
     private long startTime;
+    private long timeLimit;
     private Long entryFee;
     private int competitorLimit;
     private Enum.MatchType matchType;
@@ -96,5 +97,13 @@ public class Match extends Default {
 
     public void setCompetitorLimit(int competitorLimit) {
         this.competitorLimit = competitorLimit;
+    }
+
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
     }
 }

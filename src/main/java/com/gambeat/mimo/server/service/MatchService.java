@@ -25,7 +25,7 @@ public interface MatchService {
     Boolean hasExceedDuration(Match match);
     Boolean hasPendingMatch(User user);
     Optional<Match> getPlayableRoyalRumbleMatch(long entryFee);
-    Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest);
+    Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest, long royalRumbleTimeLimitSeconds);
     Page<Match> getActiveRoyalRumbleMatches(Pageable pageable);
     Page<Match> getActiveRoyalRumbleMatches(Pageable pageable, RoyalRumbleSearchRequest royalRumbleSearchRequest);
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatch(ArrayList<String> pendingMatch, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);

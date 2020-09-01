@@ -26,6 +26,9 @@ import java.util.Optional;
 @RequestMapping("/match")
 public class MatchController {
 
+    @Value("${royal.rumble.time.limit.seconds}")
+    private long royalRumbleTimeLimitSeconds;
+
     final
     JwtService jwtService;
 
@@ -159,7 +162,7 @@ public class MatchController {
                 return new ResponseEntity<>(new MatchEntryResponse(false, "Insufficient wallet balance"), HttpStatus.OK);
             }
 
-            Match savedMatch = matchService.createRoyalRumbleMatch(optionalUser.get(), matchCreationRequest);
+            Match savedMatch = matchService.createRoyalRumbleMatch(optionalUser.get(), matchCreationRequest, royalRumbleTimeLimitSeconds);
             optionalUser.get().getPendingMatch().add(savedMatch.getId());
             boolean debitSuccessful = walletService.debit(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee() + gambeatFee);
             transactionService.saveEntryFeeTransaction(optionalUser.get().getWallet(), matchCreationRequest.getEntryFee());

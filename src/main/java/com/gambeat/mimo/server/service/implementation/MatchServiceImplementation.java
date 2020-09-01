@@ -130,13 +130,14 @@ public class MatchServiceImplementation implements MatchService {
     }
 
     @Override
-    public Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest) {
+    public Match createRoyalRumbleMatch(User user, MatchCreationRequest matchCreationRequest, long timeLimit) {
         MatchSeat matchSeat = new MatchSeat();
         matchSeat.setUser(user);
 
         Match match = new Match();
         match.setCompetition(false);
         match.setEntryFee(matchCreationRequest.getEntryFee());
+        match.setTimeLimit(timeLimit);
         match.setStartTime(new Date().getTime());
         match.getMatchSeat().add(matchSeat);
         match.setCompetitorLimit(matchCreationRequest.getMaxPlayers());

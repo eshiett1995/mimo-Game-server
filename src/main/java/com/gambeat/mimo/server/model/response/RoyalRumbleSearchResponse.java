@@ -15,8 +15,6 @@ import java.util.Optional;
 
 public class RoyalRumbleSearchResponse  extends ResponseModel{
 
-    @Value("${royal.rumble.time.limit.seconds}")
-    private long royalRumbleTimeLimitSeconds;
 
     private int number;
     private int size;
@@ -194,7 +192,9 @@ public class RoyalRumbleSearchResponse  extends ResponseModel{
 
             long startTime = match.getStartTime();
             long presentTime = new Date().getTime();
-            this.matchEnded = startTime == 0 || (presentTime - startTime) / 1000 >= royalRumbleTimeLimitSeconds;
+            this.matchEnded = startTime == 0 || (presentTime - startTime) / 1000 >= match.getTimeLimit();
+
+            System.out.println("match.getTimeLimit " + match.getTimeLimit());
         }
 
         private String parseWinners(List<MatchSeat> matchSeats){
