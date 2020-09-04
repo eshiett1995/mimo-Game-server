@@ -116,7 +116,7 @@
                 initTransaction(requestBody, function (isSuccessful, data) {
                     if(isSuccessful){
                         toast({icon:"success", title: data.message , timer:3000});
-                        this.payantOnSuccess(String(this.amount));
+                        this.payantOnSuccess(this.amount);
                     }else{
                         toast({icon:"error", title: data.message , timer:3000});
                         this.payantOnError();
@@ -130,8 +130,8 @@
 
         handler.openIframe();
     }
-    function payantOnSuccess(amountString){
-        Android.payantOnSuccess(amountString);
+    function payantOnSuccess(amount){
+        Android.payantOnSuccess(amount);
     }
     function payantOnError(){
         Android.payantOnError();
