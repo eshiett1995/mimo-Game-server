@@ -65,7 +65,7 @@
     </footer>
 </div>
 
-<script src="https://api.demo.payant.ng/assets/js/inline.min.js"></script>
+<script src="https://api.payant.ng/assets/js/inline.min.js"></script>
 
 
 <script th:inline="javascript">
@@ -116,8 +116,10 @@
                 initTransaction(requestBody, function (isSuccessful, data) {
                     if(isSuccessful){
                         toast({icon:"success", title: data.message , timer:3000});
+                        this.payantOnSuccess(String(this.amount));
                     }else{
                         toast({icon:"error", title: data.message , timer:3000});
+                        this.payantOnError();
                     }
                 });
             },
@@ -127,6 +129,12 @@
         });
 
         handler.openIframe();
+    }
+    function payantOnSuccess(amountString){
+        Android.payantOnSuccess(amountString);
+    }
+    function payantOnError(){
+        Android.payantOnError();
     }
     function initTransaction(payload,callback){
         $.ajax({
