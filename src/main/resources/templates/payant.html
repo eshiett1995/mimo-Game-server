@@ -131,10 +131,10 @@
         handler.openIframe();
     }
     function payantOnSuccess(amount){
-        Android.payantOnSuccess(amount);
+        window.Android.payantOnSuccess(amount);
     }
     function payantOnError(){
-        Android.payantOnError();
+        window.Android.payantOnError();
     }
     function initTransaction(payload,callback){
         $.ajax({
