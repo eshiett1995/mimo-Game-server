@@ -5,10 +5,10 @@ import com.gambeat.mimo.server.model.*;
 import com.gambeat.mimo.server.model.Enum;
 import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
+import com.gambeat.mimo.server.model.response.MatchSearchResponse;
 import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import com.gambeat.mimo.server.repository.MatchRepository;
 import com.gambeat.mimo.server.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,33 +33,53 @@ public class MatchServiceImplementation implements MatchService {
     @Value("${royal.rumble.time.limit.seconds}")
     private long royalRumbleTimeLimitSeconds;
 
-    @Autowired
+    final
     MongoTemplate mongoTemplate;
 
-    @Autowired
+    final
     MatchRepository matchRepository;
 
-    @Autowired
+    final
     UserService userService;
 
-    @Autowired
+    final
     MatchSeatService matchSeatService;
 
-    @Autowired
+    final
     GameStageService gameStageService;
 
-    @Autowired
+    final
     WalletService walletService;
 
-    @Autowired
+    final
     TransactionService transactionService;
 
-    @Autowired
+    final
     GambeatSystemService gambeatSystemService;
+
+    public MatchServiceImplementation(MongoTemplate mongoTemplate, MatchRepository matchRepository, UserService userService, MatchSeatService matchSeatService, GameStageService gameStageService, WalletService walletService, TransactionService transactionService, GambeatSystemService gambeatSystemService) {
+        this.mongoTemplate = mongoTemplate;
+        this.matchRepository = matchRepository;
+        this.userService = userService;
+        this.matchSeatService = matchSeatService;
+        this.gameStageService = gameStageService;
+        this.walletService = walletService;
+        this.transactionService = transactionService;
+        this.gambeatSystemService = gambeatSystemService;
+    }
 
     @Override
     public Optional<Match> findById(String id) {
         return matchRepository.findById(id);
+    }
+
+    @Override
+    public ArrayList<Match> findById(ArrayList<String> ids) {
+        try {
+            return (ArrayList<Match>) matchRepository.findAllById(ids);
+        }catch (Exception exception){
+            return new ArrayList<Match>();
+        }
     }
 
     @Override
@@ -195,6 +215,14 @@ public class MatchServiceImplementation implements MatchService {
             final int tempIndex = index;
             Optional<String> OptionalId = pendingMatch.stream().filter(pm -> pm.equals(matches.get(tempIndex).getId())).findFirst();
             matches.get(tempIndex).setRegistered(OptionalId.isPresent());
+        }
+        return matches;
+    }
+
+    @Override
+    public ArrayList<MatchSearchResponse.FormattedMatch> tagMatch(ArrayList<MatchSearchResponse.FormattedMatch> matches) {
+        for (MatchSearchResponse.FormattedMatch match : matches) {
+            match.setRegistered(true);
         }
         return matches;
     }

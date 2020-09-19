@@ -12,14 +12,16 @@ import com.gambeat.mimo.server.service.*;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -48,6 +50,7 @@ public class MatchController {
 
     @Value("${gambeat.fee}")
     private long gambeatFee;
+
 
     public MatchController(JwtService jwtService, UserService userService, MatchService matchService, WalletService walletService, GameStageService gameStageService, TransactionService transactionService) {
         this.jwtService = jwtService;
@@ -90,6 +93,54 @@ public class MatchController {
 //          return new ResponseEntity<>(new MatchEntryResponse(true, "Error fetching existing match"), HttpStatus.OK);
 //      }
 //  }
+
+    @GetMapping(value = "/entered", produces = "application/json")
+    public @ResponseBody ResponseEntity<MatchSearchResponse> getFirstMatch(HttpServletRequest request) {
+
+      if(request.getHeader("Authorization") == null) {
+          return new ResponseEntity<>(new MatchSearchResponse(false, "User not authorized"), HttpStatus.OK);
+      }
+
+      try {
+          Claims claims = jwtService.decodeToken(request.getHeader("Authorization"));
+
+          Optional<User> optionalUser = userService.getUserByEmail((String) claims.get("email"));
+
+          if(!optionalUser.isPresent()) return new ResponseEntity<>(new MatchSearchResponse(false, "User not found"), HttpStatus.OK);
+
+          User user = optionalUser.get();
+
+          ArrayList<String> matchIdList = user.getPendingMatch();
+
+          ArrayList<Match> matchList = new ArrayList<>();
+
+          if(matchIdList.isEmpty()){
+              Page<Match> pages = new PageImpl<Match>(matchList, PageRequest.of(0, 20) , 0);
+              MatchSearchResponse matchSearchResponse = new MatchSearchResponse(optionalUser.get(), pages);
+              matchSearchResponse.setContent(matchService.tagMatch(matchSearchResponse.getContent()));
+              matchSearchResponse.setSuccessful(true);
+              matchSearchResponse.setMessage("Royal rumble match successfully retrieved");
+              return new ResponseEntity<>(matchSearchResponse, HttpStatus.OK);
+
+          }else {
+              matchList = matchService.findById(matchIdList);
+              Sort sortByStartTime = Sort.by(Sort.Direction.ASC,"startTime");
+              Pageable pageable = PageRequest.of(0, 20, sortByStartTime);
+              Page<Match> pages = new PageImpl<Match>(matchList, pageable, matchList.size());
+
+              MatchSearchResponse matchSearchResponse = new MatchSearchResponse(optionalUser.get(), pages);
+              matchSearchResponse.setContent(matchService.tagMatch(matchSearchResponse.getContent()));
+              matchSearchResponse.setSuccessful(true);
+              matchSearchResponse.setMessage("Royal rumble match successfully retrieved");
+              return new ResponseEntity<>(matchSearchResponse, HttpStatus.OK);
+          }
+
+      }catch (Exception exception) {
+
+          return new ResponseEntity<>(new MatchSearchResponse(false, "Error occurred while fetching matches"), HttpStatus.OK);
+      }
+  }
+
 
 
     @PostMapping(value = "/royal-rumble/submit", produces = "application/json")

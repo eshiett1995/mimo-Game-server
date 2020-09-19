@@ -5,6 +5,7 @@ import com.gambeat.mimo.server.model.MatchSeat;
 import com.gambeat.mimo.server.model.User;
 import com.gambeat.mimo.server.model.request.MatchCreationRequest;
 import com.gambeat.mimo.server.model.request.RoyalRumbleSearchRequest;
+import com.gambeat.mimo.server.model.response.MatchSearchResponse;
 import com.gambeat.mimo.server.model.response.RoyalRumbleSearchResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 public interface MatchService {
     Optional<Match> findById(String id);
+    ArrayList<Match> findById(ArrayList<String> ids);
     String generateMatchName(User user);
     Match save(Match match);
     Match update(Match match);
@@ -29,6 +31,7 @@ public interface MatchService {
     Page<Match> getActiveRoyalRumbleMatches(Pageable pageable);
     Page<Match> getActiveRoyalRumbleMatches(Pageable pageable, RoyalRumbleSearchRequest royalRumbleSearchRequest);
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatch(ArrayList<String> pendingMatch, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);
+    ArrayList<MatchSearchResponse.FormattedMatch> tagMatch(ArrayList<MatchSearchResponse.FormattedMatch> matches);
     ArrayList<RoyalRumbleSearchResponse.FormattedMatch> tagRegisteredMatchFromStringArray(ArrayList<String> pendingMatchIds, ArrayList<RoyalRumbleSearchResponse.FormattedMatch> matches);
     void endRoyalRumbleMatchesCronJob();
     void giveMoneyToFirstPositionWinners(Match match);
