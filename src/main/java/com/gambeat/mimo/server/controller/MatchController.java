@@ -94,8 +94,8 @@ public class MatchController {
 //      }
 //  }
 
-    @GetMapping(value = "/entered", produces = "application/json")
-    public @ResponseBody ResponseEntity<MatchSearchResponse> getFirstMatch(HttpServletRequest request) {
+    @GetMapping(value = "/entered/{page}", produces = "application/json")
+    public @ResponseBody ResponseEntity<MatchSearchResponse> getFirstMatch(HttpServletRequest request, @PathVariable("page") int page) {
 
       if(request.getHeader("Authorization") == null) {
           return new ResponseEntity<>(new MatchSearchResponse(false, "User not authorized"), HttpStatus.OK);
@@ -115,7 +115,7 @@ public class MatchController {
           ArrayList<Match> matchList = new ArrayList<>();
 
           if(matchIdList.isEmpty()){
-              Page<Match> pages = new PageImpl<Match>(matchList, PageRequest.of(0, 20) , 0);
+              Page<Match> pages = new PageImpl<Match>(matchList, PageRequest.of(page, 20) , 0);
               MatchSearchResponse matchSearchResponse = new MatchSearchResponse(optionalUser.get(), pages);
               matchSearchResponse.setContent(matchService.tagMatch(matchSearchResponse.getContent()));
               matchSearchResponse.setSuccessful(true);
@@ -125,8 +125,8 @@ public class MatchController {
           }else {
               matchList = matchService.findById(matchIdList);
               Sort sortByStartTime = Sort.by(Sort.Direction.ASC,"startTime");
-              Pageable pageable = PageRequest.of(0, 20, sortByStartTime);
-              Page<Match> pages = new PageImpl<Match>(matchList, pageable, matchList.size());
+              Pageable pageable = PageRequest.of(page, 20, sortByStartTime);
+              Page<Match> pages = new PageImpl<>(matchList, pageable, matchList.size());
 
               MatchSearchResponse matchSearchResponse = new MatchSearchResponse(optionalUser.get(), pages);
               matchSearchResponse.setContent(matchService.tagMatch(matchSearchResponse.getContent()));
