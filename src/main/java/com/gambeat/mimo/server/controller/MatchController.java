@@ -94,7 +94,7 @@ public class MatchController {
 //      }
 //  }
 
-    @GetMapping(value = "/entered/{page}", produces = "application/json")
+    @GetMapping(value = "/entered", produces = "application/json")
     public @ResponseBody ResponseEntity<MatchSearchResponse> getFirstMatch(HttpServletRequest request, @PathVariable("page") int page) {
 
       if(request.getHeader("Authorization") == null) {
@@ -115,7 +115,7 @@ public class MatchController {
           ArrayList<Match> matchList = new ArrayList<>();
 
           if(matchIdList.isEmpty()){
-              Page<Match> pages = new PageImpl<Match>(matchList, PageRequest.of(page, 20) , 0);
+              Page<Match> pages = new PageImpl<Match>(matchList, PageRequest.of(page, 50) , 0);
               MatchSearchResponse matchSearchResponse = new MatchSearchResponse(optionalUser.get(), pages);
               matchSearchResponse.setContent(matchService.tagMatch(matchSearchResponse.getContent()));
               matchSearchResponse.setSuccessful(true);
