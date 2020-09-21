@@ -151,6 +151,7 @@ public class MatchSearchResponse  extends ResponseModel{
         private int numberOfCompetitors;
         private int competitorLimit;
         private String winners;
+        private boolean isWinner;
         private boolean hasStarted;
         private boolean hasFinished;
         private boolean matchEnded = false;
@@ -165,6 +166,7 @@ public class MatchSearchResponse  extends ResponseModel{
             this.numberOfCompetitors = 0;
             this.competitorLimit = 0;
             this.winners = "";
+            this.isWinner = false;
             this.matchEnded = false;
         }
 
@@ -178,6 +180,7 @@ public class MatchSearchResponse  extends ResponseModel{
             this.startTime = match.getStartTime();
             this.numberOfCompetitors = match.getMatchSeat().size();
             this.winners =  parseWinners(match.getWinners());
+            this.isWinner = isAWinner(user, match);
             this.competitorLimit = match.getCompetitorLimit();
             Optional<MatchSeat> matchSeatOptional = match.getMatchSeat().stream().
                     filter(ms -> ms.getUser().getId().equals(user.getId())).findFirst();
@@ -190,8 +193,6 @@ public class MatchSearchResponse  extends ResponseModel{
             long startTime = match.getStartTime();
             long presentTime = new Date().getTime();
             this.matchEnded = startTime == 0 || (presentTime - startTime) / 1000 >= match.getTimeLimit();
-
-            System.out.println("match.getTimeLimit " + match.getTimeLimit());
         }
 
         private String parseWinners(List<MatchSeat> matchSeats){
@@ -200,6 +201,17 @@ public class MatchSearchResponse  extends ResponseModel{
                 winners.concat(matchSeat.getUser().getEmail() + "");
             });
             return winners;
+        }
+
+        private boolean isAWinner(User user, Match match){
+            boolean isWinner = false;
+            for (MatchSeat matchSeat: match.getWinners()) {
+                 if(matchSeat.getUser().getId().equals(user.getId())){
+                     isWinner = true;
+                     break;
+                 }
+            }
+            return isWinner;
         }
 
         public String getId() {
@@ -304,6 +316,14 @@ public class MatchSearchResponse  extends ResponseModel{
 
         public void setMatchEnded(boolean matchEnded) {
             this.matchEnded = matchEnded;
+        }
+
+        public boolean isWinner() {
+            return isWinner;
+        }
+
+        public void setWinner(boolean winner) {
+            isWinner = winner;
         }
     }
 }
